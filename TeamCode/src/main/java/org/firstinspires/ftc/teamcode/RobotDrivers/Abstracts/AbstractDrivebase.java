@@ -6,9 +6,9 @@ package org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts;
  * */
 public abstract class AbstractDrivebase {
 
-    public abstract void setRightPow(double pow);
+    public abstract void setFowardBackPower(double pow);
 
-    public abstract void setLeftPow(double pow);
+    public abstract void setLeftRightPower(double pow);
 
 
 }

@@ -13,6 +13,11 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractDrivebase;
 public class TankDrivebase extends AbstractDrivebase {
     DcMotor leftDriveMotor0, leftDriveMotor1, rightDriveMotor0, rightDriveMotor1;
     HardwareMap hwmp;
+    double leftPower = 0;
+    double rightPower = 0;
+
+    double rightAdjustment = 0;
+    double leftAdjustment = 0;
 
     /**
      * @param ldm0 The name of the first left drive motor.
@@ -41,5 +46,26 @@ public class TankDrivebase extends AbstractDrivebase {
     public void setLeftPow (double pow){
         this.leftDriveMotor0.setPower(-pow);
         this.leftDriveMotor1.setPower(-pow);
+    }
+    /**
+     * @param pow double between -1 and one specifying how fast you want to drive
+     * */
+    public void setFowardBackPower(double pow){
+        this.leftPower = pow;
+        this.rightPower = pow;
+
+        this.setLeftPow(pow + leftAdjustment);
+        this.setRightPow(pow + rightAdjustment);
+    }
+    /**
+     * @param pow The speed at which you want to turn
+     * */
+    public void setLeftRightPower(double pow){
+        this.leftAdjustment = pow / 2;
+        this.rightAdjustment = -pow / 2;
+
+
+        this.setLeftPow((leftPower + leftAdjustment) / (1 + leftAdjustment));
+        this.setRightPow((rightPower + rightAdjustment) / (1 + rightAdjustment));
     }
 }
