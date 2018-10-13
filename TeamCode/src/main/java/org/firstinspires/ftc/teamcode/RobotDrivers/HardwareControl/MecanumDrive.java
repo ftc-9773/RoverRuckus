@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
 
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
 @Deprecated
