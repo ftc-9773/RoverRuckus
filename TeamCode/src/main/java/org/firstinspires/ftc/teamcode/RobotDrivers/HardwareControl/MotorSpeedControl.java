@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
-@Deprecated
 public class MotorSpeedControl {
 
     private static boolean DEBUG = true;
@@ -23,7 +22,7 @@ public class MotorSpeedControl {
     private SafeJsonReader myJsonReader;
 
 
-    MotorSpeedControl (HardwareMap hwMap, String motorName) {
+    public MotorSpeedControl (HardwareMap hwMap, String motorName) {
 
 
         motor = hwMap.get(DcMotorEx.class, motorName);

@@ -11,9 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 /**
- * Supposed to
+ *
  * */
-@Deprecated
 public class SmartGyro {
 
 
