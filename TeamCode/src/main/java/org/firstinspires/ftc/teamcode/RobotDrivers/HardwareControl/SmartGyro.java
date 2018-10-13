@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.HardwareControl;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
 
 import android.util.Log;
 
@@ -10,6 +10,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
+/**
+ * Supposed to
+ * */
+@Deprecated
 public class SmartGyro {
 
 
@@ -98,11 +102,9 @@ public class SmartGyro {
     }
 
     // Alias
-    public double getHeading() { return getHeading(false); }
+    //public double getHeading() { return getHeading(false); }
 
-    public void setZeroPosition() {
-        zeroPosition = getHeading(true);
-    }
+    //public void setZeroPosition() {zeroPosition = getHeading(true);}
 
     public void recordHeading() {
         jsonZero.modifyDouble("currentAngle", getHeading());

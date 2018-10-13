@@ -4,7 +4,6 @@ package org.firstinspires.ftc.teamcode.Utilities.misc;
  * @author Nicky
  * Timer to track how much time has elapsed.
  */
-@Deprecated
 public class Timer {
     private long delayTimeMillis = 0;
     private long startTimeMillis = 0;

@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.HardwareControl;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
+
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
+@Deprecated
 public class MecanumDrive {
 
     private static final String TAG = "9773 Mecanum Drive";
