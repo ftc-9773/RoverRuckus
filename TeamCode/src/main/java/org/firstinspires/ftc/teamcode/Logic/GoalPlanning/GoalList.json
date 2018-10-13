@@ -1,0 +1,4 @@
+{
+  "SingularGoals" : {"0" : {"Jewel": 15}, "1" : {"Artifact" : 12}},
+  "RepeatingGoals" : {"0" : {"Cube" : 10 /*Point value*/}}
+}
