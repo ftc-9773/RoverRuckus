@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.HardwareControl;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
 
 
 import android.util.Log;
@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
+@Deprecated
 public class MotorSpeedControl {
 
     private static boolean DEBUG = true;
@@ -51,5 +52,5 @@ public class MotorSpeedControl {
 
     public void motorForward() { motor.setDirection(DcMotorSimple.Direction.FORWARD); }
 
-    public double getSpeed() {motor.getVelocity(AngleUnit.RADIANS);}
+    public double getSpeed() {return motor.getVelocity(AngleUnit.RADIANS);}
 }

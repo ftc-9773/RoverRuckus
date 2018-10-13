@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.HardwareControl;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
 
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
+@Deprecated
 public class DriveStraight {
 
     // Useful objects / PID stuff
