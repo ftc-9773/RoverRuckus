@@ -38,7 +38,7 @@ public class RitDv2 extends LinearOpMode {
             //Opmode
 
             //Driving
-            drivebase.setFowardBackPower(gamepad1.left_stick_y);
+            drivebase.setForwardBackPower(gamepad1.left_stick_y);
             drivebase.setLeftRightPower(gamepad1.right_stick_y);
 
             //Set lift power
