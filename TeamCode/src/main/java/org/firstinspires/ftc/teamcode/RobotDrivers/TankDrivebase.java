@@ -50,7 +50,7 @@ public class TankDrivebase extends AbstractDrivebase {
     /**
      * @param pow double between -1 and one specifying how fast you want to drive
      * */
-    public void setFowardBackPower(double pow){
+    public void setForwardBackPower(double pow){
         this.leftPower = pow;
         this.rightPower = pow;
 
