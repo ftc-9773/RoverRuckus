@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractDrivebase;
+import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
 /**
  * @version 1.0
  * @author Cadence
  * driver for the tank drive on the robot in three days robot.
  * */
-public class TankDrivebase extends AbstractDrivebase {
+public class TankDrivebase {
     DcMotor leftDriveMotor0, leftDriveMotor1, rightDriveMotor0, rightDriveMotor1;
     HardwareMap hwmp;
     double leftPower = 0;
@@ -67,5 +68,9 @@ public class TankDrivebase extends AbstractDrivebase {
 
         this.setLeftPow((leftPower + leftAdjustment) / (1 + leftAdjustment));
         this.setRightPow((rightPower + rightAdjustment) / (1 + rightAdjustment));
+    }
+
+    public void driveDist(Vector driveVector, double rotateAngle) {
+        return;
     }
 }
