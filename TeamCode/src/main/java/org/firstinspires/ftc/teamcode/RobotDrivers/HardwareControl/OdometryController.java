@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.HardwareControl;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-
+/***
 public class OdometryController {
 
     // Encoders
@@ -84,7 +84,7 @@ public class OdometryController {
         // Updating X, Y, and Ang
         curX += inverseMatrix[0][0] * d1 + inverseMatrix[0][1] * d2 + inverseMatrix[0][2] * d3;
         curY += inverseMatrix[1][0] * d1 + inverseMatrix[1][1] * d2 + inverseMatrix[1][2] * d3;
-        curAng += inverseMatrix[2][0] * d1 + inverseMatrix[2][1] * d2 + inverseMatrix[2][2] * d3
+        curAng += inverseMatrix[2][0] * d1 + inverseMatrix[2][1] * d2 + inverseMatrix[2][2] * d3;
 
 
         // Current Velocity, Acceleration, Jerk
@@ -130,3 +130,4 @@ public class OdometryController {
     }
     }
 }
+***/
