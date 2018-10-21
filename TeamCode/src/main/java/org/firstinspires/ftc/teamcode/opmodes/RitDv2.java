@@ -18,10 +18,9 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.TankDrivebase;
  * Implements Zach's Robot in three days code with separate classes.
  * @author Cadence
  * */
-/***
 @TeleOp(name = "RobotInThreeDays", group = "AAA robotInThreeDays")
 public class RitDv2 extends LinearOpMode {
-/***
+
     public void runOpMode(){
         // init
         RitDLift lift = new RitDLift("liftMotorA", "liftMotorB", hardwareMap);
@@ -79,10 +78,8 @@ public class RitDv2 extends LinearOpMode {
     /**
      * Checks to make sure all classes are extending the abstract classes
      * */
-/**
     public boolean validateClasses(AbstractDrivebase drivebase, AbstractIntake intake, AbstractLift lift, AbstractScorer scorer){
         return true;
     }
 
 }
- ***/
