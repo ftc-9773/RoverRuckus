@@ -29,12 +29,13 @@ public class Arc {
     }
     public Point getCenter(){
         if(isStraight) return null;
+        Point center;
         if(heading % TAU > theta % TAU){
-            Point center = new Point(0,0);
+            center = new Point(0,0);
             center.xCord = start.xCord + Math.cos(heading- Math.PI*0.5)*radius;
             center.yCord = start.yCord + Math.sin(heading- Math.PI*0.5)*radius;
         } else {
-            Point center = new Point(0,0);
+            center = new Point(0,0);
             center.xCord = start.xCord + Math.cos(heading + Math.PI*0.5)*radius;
             center.yCord = start.yCord + Math.sin(heading + Math.PI*0.5)*radius;
         }
@@ -52,5 +53,6 @@ public class Arc {
     public double getLength(){
         if(isStraight)
         return radius * 2 * (heading - theta);
+        return 0;
     }
 }
