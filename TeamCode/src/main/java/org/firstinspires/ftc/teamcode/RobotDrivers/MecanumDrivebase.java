@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.RobotDrivers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractDrivebase;
-import org.firstinspires.ftc.teamcode.RobotDrivers.OldHardwareControl.SmartGyro;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
 /**
@@ -15,9 +14,8 @@ public class MecanumDrivebase extends AbstractDrivebase {
 
     private static final double ROTATION_CONSTANT = 5.207;// Robot radius / wheel radius. Needs to be found
     private static double MAX_MOTOR_SPEED = 1;
-    private MotorDriver[] motors;
-    private double motorPowers[];
-    private SmartGyro myGyro;
+    private MotorDriver[] motors = new MotorDriver[4];
+    private double motorPowers[] = new double[4];
 
     private boolean fieldCentric;
     private boolean isTempCall = true;
@@ -45,7 +43,6 @@ public class MecanumDrivebase extends AbstractDrivebase {
         motorPowers[2] = 0;
         motorPowers[3] = 0;
 
-        myGyro = new SmartGyro(hwmp);
         fieldCentric = false;
 
     }
@@ -111,7 +108,7 @@ public class MecanumDrivebase extends AbstractDrivebase {
 
     public void setVelocity(Vector velocityVector){
         if(fieldCentric) {
-            velocityVector.rotateVector(-myGyro.getHeading());
+            //velocityVector.rotateVector(-myGyro.getHeading());
         }
         isTempCall = true;
         this.setForwardBackPower(velocityVector.getX());
@@ -134,6 +131,11 @@ public class MecanumDrivebase extends AbstractDrivebase {
     @Override
     public void turnPow(double pow){
 
+    }
+    public void zero(){
+        for (MotorDriver motor:motors) {
+            motor.setPow(0);
+        }
     }
 
 }
