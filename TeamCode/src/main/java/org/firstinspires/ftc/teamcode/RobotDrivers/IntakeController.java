@@ -18,7 +18,8 @@ public class IntakeController extends AbstractIntake {
     SafeJsonReader reader = new SafeJsonReader("ServoPositions.json");
 
     JSONObject servoPositions=  reader.getJSONObject("IntakeServoPositions");
-
+    //potentially swap for json values
+    double BucketServoPosition = .5;
 
     public void IntakeController(HardwareMap hwmp, String lsn, String rsn, String bsn, String dsn, String amn){
         leftServo = hwmp.get(Servo.class, lsn);
@@ -34,26 +35,37 @@ public class IntakeController extends AbstractIntake {
     }
     @Override
     public void intakeOff() {
-
+        leftServo.setPosition(0);
+        rightServo.setPosition(0);
     }
 
     @Override
     public void intakeOn() {
-
+        leftServo.setPosition(.85);  //!correct values needed!
+        rightServo.setPosition(.85);
     }
 
     @Override
     public void intakeState() {
-
+        bucketServo.setPosition(.5);
     }
 
     @Override
     public void storeState() {
-
+        bucketServo.setPosition(0);
     }
 
     @Override
     public void transferState() {
-
+        bucketServo.setPosition(.5);
+    }
+    public void armDcOnOut (){
+        armMotor.setPower(.5);
+    }
+    public void armDcOnIn (){
+        armMotor.setPower(-0.5);
+    }
+    public void armDcOff(){
+        armMotor.setPower(0);
     }
 }
