@@ -34,15 +34,14 @@ import java.io.FileWriter;
         4) get a file from the phone
         adb pull  /sdcard/FIRST/team9773/json18/myfile.json
 */
-@Deprecated
 public class SafeJsonReader {
-    private static final String baseDir = "/sdcard/FIRST/team9773/json18"; // must end with a name
+    private static final String baseDir = "/sdcard/FIRST/team9773/json19"; // must end with a name
     private static final String TAG = "ftc9773 SafeJasonReader";
     private static final boolean DEBUG = false;
 
     private String fileName;
     private boolean modified;
-    public String jsonStr;
+    private String jsonStr;
     public JSONObject jsonRoot;
 
     private String FullName() {
