@@ -1,0 +1,9 @@
+{
+  "IntakeServoPositions" : {"RightIntakeServoPosition" : 0,
+                            "LeftIntakeServoPosition"  : 0,
+                            "BucketServoPosition"      : 0,
+                            "DownServoPosition"        : 0},
+  "ScorerServoPositions" : {},
+  "HangingServoPositions": {}
+
+}

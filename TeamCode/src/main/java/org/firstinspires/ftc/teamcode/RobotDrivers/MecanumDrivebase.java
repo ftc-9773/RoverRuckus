@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.RobotDrivers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractDrivebase;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.SmartGyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.OldHardwareControl.SmartGyro;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
 /**
@@ -20,6 +20,7 @@ public class MecanumDrivebase extends AbstractDrivebase {
     private SmartGyro myGyro;
 
     private boolean fieldCentric;
+    private boolean isTempCall = true;
 
     private Vector driveVector = new Vector(true, 0,0);
 
@@ -56,15 +57,22 @@ public class MecanumDrivebase extends AbstractDrivebase {
     public void setFieldCentric(boolean state){this.fieldCentric = state;}
 
     /**
-     * @param pow Speed to move forward at
+     * @param speed Speed to move forward at
      * */
-    public void setForwardBackPower(double pow){
+    public void setForwardBackPower(double speed){
         //Use x direction
+        if (fieldCentric && !isTempCall){
+            Vector velocityVector = new Vector(true, speed, 0);
+            this.setVelocity(velocityVector);
+
+            this.isTempCall = true;
+            return;
+        }
         double maxMax = 1;
         for (int i=0;i < 4; i++){
             MotorDriver motor = motors[i];
             double currPow = motor.getPow();
-            currPow += pow;
+            currPow += speed;
             if (Math.abs(currPow) > maxMax){maxMax = Math.abs(currPow);}
             motorPowers[i] = currPow;
         }
@@ -80,6 +88,12 @@ public class MecanumDrivebase extends AbstractDrivebase {
      * */
     public void setLeftRightPower(double speed){
         //Use y direction
+        if (fieldCentric && !isTempCall){
+            Vector velocityVector = new Vector(true, speed, 0);
+            this.setVelocity(velocityVector);
+            this.isTempCall = true;
+            return;
+        }
         double maxMax = 1;
         for (int i=0;i < 4; i++){
             MotorDriver motor = motors[i];
@@ -95,10 +109,19 @@ public class MecanumDrivebase extends AbstractDrivebase {
         }
     }
 
+    public void setVelocity(Vector velocityVector){
+        if(fieldCentric) {
+            velocityVector.rotateVector(-myGyro.getHeading());
+        }
+        isTempCall = true;
+        this.setForwardBackPower(velocityVector.getX());
+        this.setLeftRightPower(velocityVector.getY());
+        isTempCall = false;
+    }
+
     /**
      * @param driveVector distance to drive in x and y direction
      * */
-
     @Override
     public void driveDist(Vector driveVector, double rotationRadians) {
 
