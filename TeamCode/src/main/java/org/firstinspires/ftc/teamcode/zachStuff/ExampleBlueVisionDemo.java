@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.zachStuff;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -45,7 +46,7 @@ import java.util.Locale;
  *
  * Additionally, the centers of the bounding rectangles of the contours are sent to telemetry.
  */
-@TeleOp(name="Example: Blue Vision Demo")
+@Autonomous(name = "visionTest")
 public class ExampleBlueVisionDemo extends OpMode {
     private ExampleBlueVision blueVision;
     @Override
@@ -61,7 +62,7 @@ public class ExampleBlueVisionDemo extends OpMode {
     @Override
     public void loop() {
         // update the settings of the vision pipeline
-        blueVision.setShowCountours(gamepad1.x);
+        blueVision.setShowCountours(true);
 
         // get a list of contours from the vision system
         List<MatOfPoint> contours = blueVision.getContours();

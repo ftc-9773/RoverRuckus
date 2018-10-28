@@ -5,6 +5,7 @@ import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -51,6 +52,7 @@ public class ExampleBlueVision extends OpenCVPipeline {
     // we declare the Mats up here and reuse them. This is easier on the garbage collector.
     private Mat hsv = new Mat();
     private Mat thresholded = new Mat();
+    private Mat dialated ;
 
     // this is just here so we can expose it later thru getContours.
     private List<MatOfPoint> contours = new ArrayList<>();
@@ -81,8 +83,11 @@ public class ExampleBlueVision extends OpenCVPipeline {
         // that we can find. We can iterate over them to find objects of interest.
         // the Imgproc module has many functions to analyze individual contours by their area, avg position, etc.
         contours = new ArrayList<>();
+
+        dialated = thresholded;
         // this function fills our contours variable with the outlines of blue objects we found
-        Imgproc.findContours(thresholded, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.dilate(thresholded,dialated,new Mat(), new Point(-1, -1), 11);
+        Imgproc.findContours(dialated, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         // Then we display our nice little binary threshold on screen
         if (showContours) {
             // this draws the outlines of the blue contours over our original image.
