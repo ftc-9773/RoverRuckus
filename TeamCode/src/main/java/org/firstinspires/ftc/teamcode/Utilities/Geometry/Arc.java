@@ -8,9 +8,9 @@ public class Arc {
     Point start;
     Point end;
     double heading;
-    boolean isStraight = false;
-    double radius;
-    double theta;
+    public boolean isStraight = false;
+    public double radius;
+    public double theta;
 
     public Arc(Point start, Point end, double heading){
         this.start = start;
@@ -53,6 +53,6 @@ public class Arc {
     public double getLength(){
         if(isStraight)
         return radius * 2 * (heading - theta);
-        return 0;
+        return radius * TAU * heading / (Math.PI / 2);
     }
 }

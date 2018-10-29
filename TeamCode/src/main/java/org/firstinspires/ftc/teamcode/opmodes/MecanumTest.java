@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumDrivebase;
 @TeleOp(name = "MecanumTest")
 public class MecanumTest extends LinearOpMode {
 
@@ -15,6 +14,8 @@ public class MecanumTest extends LinearOpMode {
 
         //init
         MecanumCont drivebase = new MecanumCont(hardwareMap);
+
+
         waitForStart();
 
         while(opModeIsActive()){

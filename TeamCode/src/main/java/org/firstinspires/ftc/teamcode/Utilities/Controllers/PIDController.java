@@ -26,8 +26,7 @@ public class PIDController {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
-        this.KE = KE;
-        useExponential = true;
+
     }
 
     public PIDController( double KP, double KI, double KD) {
