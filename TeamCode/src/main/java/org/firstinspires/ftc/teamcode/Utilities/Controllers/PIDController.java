@@ -11,7 +11,7 @@ public class PIDController {
     private double KE;
     private double integral;
     private double derivative;
-    private double prevError;
+    public double prevError;
     private double output;
     private long lastTime;
     private long deltaTime;

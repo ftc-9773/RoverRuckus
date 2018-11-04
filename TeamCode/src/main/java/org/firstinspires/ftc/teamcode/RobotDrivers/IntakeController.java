@@ -14,12 +14,19 @@ public class IntakeController extends AbstractIntake {
     Servo bucketServo;
     Servo downServo;
 
+    boolean isDown = false;
+
     DcMotor armMotor;
     SafeJsonReader reader = new SafeJsonReader("ServoPositions.json");
 
-    JSONObject servoPositions=  reader.getJSONObject("IntakeServoPositions");
+    JSONObject servoPositions =  reader.getJSONObject("IntakeServoPositions");
+
     //potentially swap for json values
-    double BucketServoPosition = .5;
+    double bucketServoTransferPosition = reader.getDouble(servoPositions, "BucketServoTransferPosition");
+    double bucketServoIntakePosition = reader.getDouble(servoPositions, "BucketServoIntakePosition");
+
+    double downPosition = reader.getDouble(servoPositions, "DownServoPosition");
+
 
     public void IntakeController(HardwareMap hwmp, String lsn, String rsn, String bsn, String dsn, String amn){
         leftServo = hwmp.get(Servo.class, lsn);
@@ -41,23 +48,30 @@ public class IntakeController extends AbstractIntake {
 
     @Override
     public void intakeOn() {
-        leftServo.setPosition(.85);  //!correct values needed!
+        leftServo.setPosition(.85);
         rightServo.setPosition(.85);
     }
 
     @Override
     public void intakeState() {
-        bucketServo.setPosition(.5);
+        bucketServo.setPosition(bucketServoIntakePosition);
+        if(!isDown){
+            downServo.setPosition(this.downPosition);
+        }
     }
 
     @Override
     public void storeState() {
         bucketServo.setPosition(0);
+
     }
 
     @Override
     public void transferState() {
-        bucketServo.setPosition(.5);
+        bucketServo.setPosition(this.bucketServoTransferPosition);
+        if(!isDown){
+            downServo.setPosition(this.downPosition);
+        }
     }
     public void armDcOnOut (){
         armMotor.setPower(.5);

@@ -18,17 +18,17 @@ public class MecanumCont {
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
     static final double MAX_ROTATIONAL_SPEED = 1.0;
 
-    public DcMotorEx[] driveMotors;
+    public DcMotor[] driveMotors;
 
 
     public MecanumCont(HardwareMap hwMap) {
         // init wheels
 
-        driveMotors = new DcMotorEx[4];
-        driveMotors[0] = hwMap.get(DcMotorEx.class, "fldrive");
-        driveMotors[1] = hwMap.get(DcMotorEx.class, "frdrive");
-        driveMotors[2] = hwMap.get(DcMotorEx.class, "bldrive");
-        driveMotors[3] = hwMap.get(DcMotorEx.class, "brdrive");
+        driveMotors = new DcMotor[4];
+        driveMotors[0] = hwMap.get(DcMotor.class, "fldrive");
+        driveMotors[1] = hwMap.get(DcMotor.class, "frdrive");
+        driveMotors[2] = hwMap.get(DcMotor.class, "bldrive");
+        driveMotors[3] = hwMap.get(DcMotor.class, "brdrive");
 
         noEncoders();
     }
@@ -94,7 +94,7 @@ public class MecanumCont {
         // Set motor powers
         for (int i = 0; i < 4; i++) {
             driveMotors[i].setTargetPosition(pos[i]);
-            driveMotors[i].setVelocity(radpsec, AngleUnit.RADIANS);
+            driveMotors[i].setPower(0.8);
         }
     }
 
