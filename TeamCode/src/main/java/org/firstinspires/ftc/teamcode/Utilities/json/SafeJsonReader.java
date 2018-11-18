@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
@@ -34,11 +35,10 @@ import java.io.FileWriter;
         4) get a file from the phone
         adb pull  /sdcard/FIRST/team9773/json18/myfile.json
 */
-@Deprecated
 public class SafeJsonReader {
     private static final String baseDir = "/sdcard/FIRST/team9773/json18"; // must end with a name
     private static final String TAG = "ftc9773 SafeJasonReader";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private String fileName;
     private boolean modified;
@@ -50,7 +50,7 @@ public class SafeJsonReader {
     }
 
     // fileName is local name, baseDir will be appended to create full path name
-    public SafeJsonReader(String fileName) {
+    public SafeJsonReader(String fileName) throws IOException, JSONException {
         this.fileName = fileName;
         this.modified = false;
         // read file
@@ -67,6 +67,7 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to open the json file" + filePath, e);
+            if (DEBUG) throw e;
         }
 
         // Read the file and append to the string builder
@@ -79,6 +80,7 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to reading the json file" + filePath, e);
+            if (DEBUG) throw e;
         }
 
         // construct the json root object
@@ -87,6 +89,7 @@ public class SafeJsonReader {
         }
         catch (JSONException e) {
             Log.e(TAG, "Error while trying to parsing the json file" + fileName, e);
+            if (DEBUG) throw e;
         }
 
         // cleanup file
@@ -94,11 +97,11 @@ public class SafeJsonReader {
             fileReader.close();
         } catch (IOException e) {
             Log.e(TAG, "Error while trying to closing the file" + filePath, e);
+            if (DEBUG) throw e;
         }
     }
 
-    public void updateFile()
-    {
+    public void updateFile() throws IOException {
         if (! this.modified) return;
 
         // file path (same as reading)
@@ -111,6 +114,7 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to open the json file" + this.fileName + " in write mode", e);
+            if (DEBUG) throw e;
         }
         // write file
         try {
@@ -118,12 +122,14 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to write the json file" + this.fileName, e);
+            if (DEBUG) throw e;
         }
         // cleanup file
         try {
             fileWriter.close();
         } catch (IOException e) {
             Log.e(TAG, "Error while trying to closing the file" + filePath, e);
+            if (DEBUG) throw e;
         }
         this.modified = false;
 
@@ -143,7 +149,7 @@ public class SafeJsonReader {
     }
 
     // read string while ignoring caps in name
-    public String getString(JSONObject obj, String name)
+    public String getString(JSONObject obj, String name) throws JSONException
     {
         String value=null;
         try {
@@ -151,16 +157,17 @@ public class SafeJsonReader {
             value = obj.getString(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting string value for key " + name + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         if (DEBUG) {
             if (value!=null) Log.d(TAG, "read string for key " + name + " and got " + value);
             else Log.e(TAG, "read string for key " + name + " and got null");
+            if (DEBUG) throw e;
         }
         return (value);
     }
 
-    public void modifyString(String name, String newValue)
-    {
+    public void modifyString(String name, String newValue) throws JSONException {
         try {
             String key = getRealKeyIgnoreCase(jsonRoot, name);
             String oldValue = this.jsonRoot.getString(key);
@@ -171,23 +178,25 @@ public class SafeJsonReader {
             }
         } catch (JSONException e) {
             Log.d(TAG, "Error while setting string value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
 
     }
     // read int while ignoring caps in name
-    public int getInt(JSONObject obj, String name) {
+    public int getInt(JSONObject obj, String name) throws JSONException {
         int value=0;
         try {
             String key = getRealKeyIgnoreCase(obj, name);
             value = obj.getInt(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting int value for key " + name + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         if (DEBUG) Log.d(TAG, "read int for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyInt(String name, int newValue) {
+    public void modifyInt(String name, int newValue) throws JSONException {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             int oldValue = this.jsonRoot.getInt(key);
@@ -199,12 +208,13 @@ public class SafeJsonReader {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error while modifying int value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
     }
 
 
     // read int while ignoring caps in name
-    public double getDouble(JSONObject obj, String name) {
+    public double getDouble(JSONObject obj, String name) throws JSONException {
         String key;
         double value=0.0;
         try {
@@ -212,12 +222,13 @@ public class SafeJsonReader {
             value = obj.getDouble(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting double value for key " + name + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         if (DEBUG) Log.d(TAG, "read double for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyDouble(String name, double newValue) {
+    public void modifyDouble(String name, double newValue) throws JSONException {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             double oldValue = this.jsonRoot.getDouble(key);
@@ -228,11 +239,12 @@ public class SafeJsonReader {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error while modifying double value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
     }
 
     // read boolean while ignoring caps in name
-    public boolean getBoolean(JSONObject obj, String name) {
+    public boolean getBoolean(JSONObject obj, String name) throws JSONException {
         String key;
         boolean value=false;
         try {
@@ -240,12 +252,13 @@ public class SafeJsonReader {
             value = obj.getBoolean(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting boolean value for key " + name + " in jason file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         if (DEBUG) Log.d(TAG, "read boolean for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyBoolean(String name, boolean newValue) {
+    public void modifyBoolean(String name, boolean newValue) throws JSONException {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             boolean oldValue = this.jsonRoot.getBoolean(key);
@@ -257,11 +270,12 @@ public class SafeJsonReader {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error while modifying boolean value for key " + name + " to " + newValue + " in json file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
     }
 
     // read json object while ignoring caps in name
-    public JSONObject getJSONObject(JSONObject obj, String name) {
+    public JSONObject getJSONObject(JSONObject obj, String name) throws JSONException {
         String key;
         JSONObject value=null;
         try {
@@ -269,12 +283,13 @@ public class SafeJsonReader {
             value = obj.getJSONObject(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting json object value for key " + name + " in json file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         return (value);
     }
 
     // read json array while ignoring caps in name
-    public JSONArray getJSONArray(JSONObject obj, String name) {
+    public JSONArray getJSONArray(JSONObject obj, String name) throws JSONException {
         String key;
         JSONArray value=null;
         try {
@@ -282,16 +297,16 @@ public class SafeJsonReader {
             value = obj.getJSONArray(key);
         } catch (JSONException e) {
             Log.e(TAG, "Error while getting json array value for key " + name + " in json file " + this.fileName, e);
+            if (DEBUG) throw e;
         }
         return (value);
     }
 
     // aliases
-    public String getString(String name) { return getString(jsonRoot, name); }
-    public int getInt(String name) { return getInt(jsonRoot, name); }
-    public double getDouble(String name) { return getDouble(jsonRoot, name); }
-    public boolean getBoolean(String name) { return getBoolean(jsonRoot, name); }
-    public JSONObject getJSONObject(String name) { return getJSONObject(jsonRoot, name); }
-    public JSONArray getJSONArray(String name) { return getJSONArray(jsonRoot, name); }
-
+    public String getString(String name) throws JSONException { return getString(jsonRoot, name); }
+    public int getInt(String name) throws JSONException { return getInt(jsonRoot, name); }
+    public double getDouble(String name) throws JSONException { return getDouble(jsonRoot, name); }
+    public boolean getBoolean(String name) throws JSONException { return getBoolean(jsonRoot, name); }
+    public JSONObject getJSONObject(String name) throws JSONException { return getJSONObject(jsonRoot, name); }
+    public JSONArray getJSONArray(String name) throws JSONException { return getJSONArray(jsonRoot, name); }
 }
