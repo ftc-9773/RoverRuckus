@@ -20,9 +20,9 @@ public class MecanumTest extends LinearOpMode {
         //init
         Gyro gyro = new Gyro(hardwareMap);
         MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
-        //OdometryController oc = new OdometryController(hardwareMap);
+        OdometryController oc = new OdometryController(hardwareMap);
 
-        MecanumRobot robot = new MecanumRobot(drivebase, gyro);
+        MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc);
 
         waitForStart();
 
@@ -42,6 +42,7 @@ public class MecanumTest extends LinearOpMode {
             if(vt == 0){
                 vt += tPId.getPIDCorrection(last_heading - robot.getHeading());
             }
+            else tPId.resetPID();
 
             robot.update();
             last_heading = robot.getHeading();

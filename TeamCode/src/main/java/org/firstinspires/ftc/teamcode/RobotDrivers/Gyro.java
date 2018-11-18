@@ -95,6 +95,10 @@ public class Gyro {
     public void setZeroPosition() {
         zeroPosition = getHeading(true);
     }
+
+    public boolean  isUpdated(){
+        return System.currentTimeMillis() - lastReadTime > minReadDeltaTime;
+    }
 /*
     public void recordHeading() {
         jsonZero.modifyDouble("currentAngle", getHeading());
