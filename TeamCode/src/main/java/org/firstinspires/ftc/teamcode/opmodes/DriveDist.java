@@ -20,7 +20,7 @@ public class DriveDist extends LinearOpMode {
         Gyro gyro = new Gyro(hardwareMap);
         MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
         OdometryController oc = new OdometryController(hardwareMap);
-        MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc);
+        MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc, telemetry);
 
         Button a = new Button();
         waitForStart();

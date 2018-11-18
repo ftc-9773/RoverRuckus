@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers;
 
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractIntake;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
@@ -12,18 +13,19 @@ public class MecanumRobot {
     Gyro gyro0;
 
     public double heading = 0;
-
+    Telemetry telemetry;
     Point pos;
     double x = 0;
     double y = 0;
 
-    public MecanumRobot(MecanumCont drivebase, Gyro gyro, OdometryController odometryController) {
+    public MecanumRobot(MecanumCont drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
         this.OC = odometryController;
         this.gyro0 = gyro;
         gyro0.setZeroPosition();
+        this.telemetry = telemetry;
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
@@ -55,6 +57,9 @@ public class MecanumRobot {
         this.pos = new Point(x, y);
         this.heading = ocPos[2];
         if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
+        telemetry.addData("Got Positions from OC:", ocPos);
+        if (gyro0.isUpdated()) telemetry.addData("Got heading from Gyro", this.heading);
+
     }
 
 

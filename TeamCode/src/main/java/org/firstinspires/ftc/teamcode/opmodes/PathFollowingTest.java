@@ -25,7 +25,7 @@ public class PathFollowingTest extends LinearOpMode {
         double startheading = Math.PI / 2;
         OdometryController OC = new OdometryController(hardwareMap);
 
-        MecanumRobot robot = new MecanumRobot(drivebase, gyro, OC);
+        MecanumRobot robot = new MecanumRobot(drivebase, gyro, OC, telemetry);
 
         Arc arc = new Arc(new Point(0,0),new Point(0,10),startheading);
         ArcFollower follower = new ArcFollower(robot);
