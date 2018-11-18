@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractIntake;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
+import java.util.Arrays;
+
 public class MecanumRobot {
     MecanumCont drivebase;
     AbstractIntake intake;
@@ -57,7 +59,7 @@ public class MecanumRobot {
         this.pos = new Point(x, y);
         this.heading = ocPos[2];
         if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
-        telemetry.addData("Got Positions from OC:", ocPos);
+        telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
         if (gyro0.isUpdated()) telemetry.addData("Got heading from Gyro", this.heading);
 
     }

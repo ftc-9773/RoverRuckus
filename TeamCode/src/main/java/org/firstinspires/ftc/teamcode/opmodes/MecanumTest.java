@@ -18,12 +18,24 @@ public class MecanumTest extends LinearOpMode {
     public void runOpMode() {
 
         //init
+        telemetry.addData("init", 0);
+        telemetry.update();
         Gyro gyro = new Gyro(hardwareMap);
+
+        telemetry.addData("gyro", 0);
+        telemetry.update();
         MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
+
+        telemetry.addData("drivebase", 0);
+        telemetry.update();
         OdometryController oc = new OdometryController(hardwareMap);
 
+        telemetry.addData("oc", 0);
+        telemetry.update();
         MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc, telemetry);
 
+        telemetry.addData("robot", 0);
+        telemetry.update();
         waitForStart();
 
         /*
@@ -42,7 +54,7 @@ public class MecanumTest extends LinearOpMode {
             }
             else tPId.resetPID();
                */
-            //robot.update();
+            robot.update();
             //last_heading = robot.getHeading();
             robot.driveVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             telemetry.update();
