@@ -28,16 +28,23 @@ public class MecanumTest extends LinearOpMode {
         double vy = 0;
         double vt = 0;
         double last_heading = robot.getHeading();
-
+        double last_sample_time = System.currentTimeMillis();
+        double dth = 0;
         PIDController tPId = new PIDController(0.1, 0.1, 0.1);
 
         while(opModeIsActive()) {
+
             vx = gamepad1.left_stick_x;
             vy = gamepad1.left_stick_y;
             vt = gamepad1.left_stick_y;
-            last_heading = robot.getHeading();
+            if(vt == 0){
+                vt += tPId.getPIDCorrection(last_heading - robot.getHeading());
+            }
 
-            robot.driveVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            robot.update();
+            last_heading = robot.getHeading();
+            robot.driveVelocity(vx, vy, vt);
+
         }
 
     }

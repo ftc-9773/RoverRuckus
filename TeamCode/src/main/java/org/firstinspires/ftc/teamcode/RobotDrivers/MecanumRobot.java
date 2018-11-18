@@ -10,7 +10,7 @@ public class MecanumRobot {
     AbstractIntake intake;
     //OdometryController OC;
 
-    double heading = 0;
+    public double heading = 0;
 
     Point pos;
 
@@ -44,11 +44,7 @@ public class MecanumRobot {
     }
 
     public void update(){
-        /*
-        double[] p = OC.getPosition();
-        this.pos = new Point(p[0], p[1]);
-        this.heading = p[2];
-        */
+
     }
 
 
