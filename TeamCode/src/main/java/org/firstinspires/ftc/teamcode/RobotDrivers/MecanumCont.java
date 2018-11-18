@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
@@ -20,21 +21,30 @@ public class MecanumCont {
 
     public DcMotor[] driveMotors;
 
+    Telemetry telemetry;
 
-    public MecanumCont(HardwareMap hwMap) {
+    public MecanumCont(HardwareMap hwMap, Telemetry telem) {
         // init wheels
-
+        this.telemetry = telem;
         driveMotors = new DcMotor[4];
         driveMotors[0] = hwMap.get(DcMotor.class, "fldrive");
         driveMotors[1] = hwMap.get(DcMotor.class, "frdrive");
         driveMotors[2] = hwMap.get(DcMotor.class, "bldrive");
         driveMotors[3] = hwMap.get(DcMotor.class, "brdrive");
 
+        for (DcMotor motor:driveMotors) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+
+
         noEncoders();
     }
 
     public void noEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
-    public void useEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_TO_POSITION);}}
+    public void useEncoders(){for(DcMotor d:driveMotors){
+        d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        d.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }}
 
     public void drive(double theta, double velocity, double rotation) {
         noEncoders();
@@ -89,6 +99,7 @@ public class MecanumCont {
         pos[1] *= -1;
         pos[3] *= -1;
 
+        telemetry.addData("Positions:", pos);
 
         double radpsec = speed / WHEEL_DIAMETER_INCHES * 2; //Converts inches per second into radians per second
         // Set motor powers

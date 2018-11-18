@@ -13,7 +13,7 @@ public class ArcFollower {
     ArrayList<Arc> arcQueue = new ArrayList<>();
     Arc currArc;
 
-    SafeJsonReader reader = new SafeJsonReader("PIDCoefficients");
+    //SafeJsonReader reader = new SafeJsonReader("PIDCoefficients");
 
     double tolerance = 0.5;
     /*

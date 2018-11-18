@@ -16,7 +16,7 @@ public class PathFollowingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumCont drivebase = new MecanumCont(hardwareMap);
+        MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
 
         //SafeJsonReader reader = new SafeJsonReader("ArcPositions");
 
@@ -26,26 +26,18 @@ public class PathFollowingTest extends LinearOpMode {
 
         MecanumRobot robot = new MecanumRobot(drivebase);
 
-        Arc arc = new Arc(new Point(0,0),new Point(10,0),startheading);
+        Arc arc = new Arc(new Point(0,0),new Point(0,10),startheading);
         ArcFollower follower = new ArcFollower(robot);
 
         double speed = 5;
         waitForStart();
 
-        double out[];
         while(opModeIsActive()) {
             Arc arc1 = new Arc(new Point(0,0), new Point(0,10), 0);
             follower.updateArc(arc1);
             while(!robot.getPos().AreSame(arc.getEndPoint(), 0.5)){
                 follower.next();
             }
-
-
-        }
-    }
-    public void getInput(){
-        while (!gamepad1.b){
-            continue;
         }
     }
 }
