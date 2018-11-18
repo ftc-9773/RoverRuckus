@@ -1,0 +1,16 @@
+/*
+x = X position pid coeffecients
+y = Y position pid coeffecients
+θ = Rotation pid coeffecients
+*/
+{
+  "KPx" : 0.1,
+  "KDx" : 0.1,
+  "KIx" : 0.1,
+  "KPy" : 0.1,
+  "KDy" : 0.1,
+  "KIy" : 0.1,
+  "KPθ" : 0.1,
+  "KDθ" : 0.1,
+  "KIθ" : 0.1
+}

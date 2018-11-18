@@ -25,14 +25,14 @@ import java.io.FileWriter;
         cd TeamCode/src/main/java/org/firstinspires/ftc/teamcode/json/
 
         3) push a file to the phone:
-        adb push myfile.json /sdcard/FIRST/team9773/json18/
+        adb push myfile.json /sdcard/FIRST/team9773/json19/
 
         location of adb on mac: $HOME/Library/Android/sdk/platform-tools
           where you can get the $HOME value by typing "echo $HOME" in a terminal
           export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 
         4) get a file from the phone
-        adb pull  /sdcard/FIRST/team9773/json18/myfile.json
+        adb pull  /sdcard/FIRST/team9773/json19/myfile.json
 */
 public class SafeJsonReader {
     private static final String baseDir = "/sdcard/FIRST/team9773/json19"; // must end with a name

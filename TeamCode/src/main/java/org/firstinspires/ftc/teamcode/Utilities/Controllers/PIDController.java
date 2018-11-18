@@ -11,7 +11,7 @@ public class PIDController {
     private double KE;
     private double integral;
     private double derivative;
-    private double prevError;
+    public double prevError;
     private double output;
     private long lastTime;
     private long deltaTime;
@@ -26,8 +26,7 @@ public class PIDController {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
-        this.KE = KE;
-        useExponential = true;
+
     }
 
     public PIDController( double KP, double KI, double KD) {

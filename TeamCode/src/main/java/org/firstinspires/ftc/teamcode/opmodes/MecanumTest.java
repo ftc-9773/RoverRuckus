@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
+import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
+import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
+
 @TeleOp(name = "MecanumTest")
 public class MecanumTest extends LinearOpMode {
 
@@ -14,15 +17,35 @@ public class MecanumTest extends LinearOpMode {
     public void runOpMode() {
 
         //init
-        MecanumCont drivebase = new MecanumCont(hardwareMap);
+        MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
+        //OdometryController oc = new OdometryController(hardwareMap);
+
+        MecanumRobot robot = new MecanumRobot(drivebase);
+
         waitForStart();
 
-        while(opModeIsActive()){
-            drivebase.arcadeDrive(gamepad1.left_stick_x,gamepad1.left_stick_y,gamepad1.right_stick_x);
+        double vx = 0;
+        double vy = 0;
+        double vt = 0;
+        double last_heading = robot.getHeading();
+        double last_sample_time = System.currentTimeMillis();
+        double dth = 0;
+        PIDController tPId = new PIDController(0.1, 0.1, 0.1);
+
+        while(opModeIsActive()) {
+
+            vx = gamepad1.left_stick_x;
+            vy = gamepad1.left_stick_y;
+            vt = gamepad1.left_stick_y;
+            if(vt == 0){
+                vt += tPId.getPIDCorrection(last_heading - robot.getHeading());
+            }
+
+            robot.update();
+            last_heading = robot.getHeading();
+            robot.driveVelocity(vx, vy, vt);
+
         }
-
-
-
 
     }
 }

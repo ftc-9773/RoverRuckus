@@ -31,7 +31,7 @@ public class Point{
     public String toString(){
         return "------------\nPoint\nX:"+this.xCord+"\nY:"+this.yCord+"\n------------\n";
     }
-    public boolean AreSame(Point compare, float tolerance){
+    public boolean AreSame(Point compare, double tolerance){
         if (Math.abs(this.xCord - compare.xCord) < tolerance && Math.abs(this.yCord - compare.yCord) < tolerance){
             return true;
         }

@@ -8,15 +8,15 @@ public class Arc {
     Point start;
     Point end;
     double heading;
-    boolean isStraight = false;
-    double radius;
-    double theta;
+    public boolean isStraight = false;
+    public double radius;
+    public double theta;
 
     public Arc(Point start, Point end, double heading){
         this.start = start;
         this.end = end;
         this.heading = heading;
-        if (Math.abs(heading) == Math.PI / 2) {
+        if (Math.abs(heading) == 0) {
             isStraight = true;
             radius = Double.POSITIVE_INFINITY;
         }
@@ -31,11 +31,11 @@ public class Arc {
         if(isStraight) return null;
         Point center;
         if(heading % TAU > theta % TAU){
-            center = new Point(0,0);
+             center = new Point(0,0);
             center.xCord = start.xCord + Math.cos(heading- Math.PI*0.5)*radius;
             center.yCord = start.yCord + Math.sin(heading- Math.PI*0.5)*radius;
         } else {
-            center = new Point(0,0);
+             center = new Point(0,0);
             center.xCord = start.xCord + Math.cos(heading + Math.PI*0.5)*radius;
             center.yCord = start.yCord + Math.sin(heading + Math.PI*0.5)*radius;
         }
@@ -53,6 +53,6 @@ public class Arc {
     public double getLength(){
         if(isStraight)
         return radius * 2 * (heading - theta);
-        return 0;
+        return radius * TAU * heading / (Math.PI / 2);
     }
 }
