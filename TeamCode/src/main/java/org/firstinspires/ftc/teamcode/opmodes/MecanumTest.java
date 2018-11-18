@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.RobotDrivers.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
 import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
@@ -17,10 +18,11 @@ public class MecanumTest extends LinearOpMode {
     public void runOpMode() {
 
         //init
+        Gyro gyro = new Gyro(hardwareMap);
         MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
         //OdometryController oc = new OdometryController(hardwareMap);
 
-        MecanumRobot robot = new MecanumRobot(drivebase);
+        MecanumRobot robot = new MecanumRobot(drivebase, gyro);
 
         waitForStart();
 

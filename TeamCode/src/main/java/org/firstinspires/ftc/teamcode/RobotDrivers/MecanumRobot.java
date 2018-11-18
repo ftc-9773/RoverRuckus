@@ -9,16 +9,19 @@ public class MecanumRobot {
     MecanumCont drivebase;
     AbstractIntake intake;
     //OdometryController OC;
+    Gyro gyro0;
 
     public double heading = 0;
 
     Point pos;
 
-    public MecanumRobot(MecanumCont drivebase) {
+    public MecanumRobot(MecanumCont drivebase, Gyro gyro) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
         //this.OC = odometryController;
+        this.gyro0 = gyro;
+        gyro0.setZeroPosition();
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
@@ -30,21 +33,21 @@ public class MecanumRobot {
         this.pos.xCord += x;
         this.pos.yCord += y;
         this.heading += rotation;
-        update();
+        //update();
     }
 
     public Point getPos(){
-        update();
+        //update();
         return this.pos;
     }
 
     public double getHeading() {
-        update();
+        //update();
         return heading;
     }
 
     public void update(){
-
+        this.heading = gyro0.getHeading();
     }
 
 

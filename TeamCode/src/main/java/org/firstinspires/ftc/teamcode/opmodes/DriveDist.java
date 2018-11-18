@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.RobotDrivers.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
@@ -13,8 +14,9 @@ public class DriveDist extends LinearOpMode {
     @Override
 
     public void runOpMode() {
+        Gyro gyro = new Gyro(hardwareMap);
         MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
-        MecanumRobot robot = new MecanumRobot(drivebase);
+        MecanumRobot robot = new MecanumRobot(drivebase, gyro);
 
         Button a = new Button();
         waitForStart();
