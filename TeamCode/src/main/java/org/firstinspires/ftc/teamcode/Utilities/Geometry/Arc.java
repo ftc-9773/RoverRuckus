@@ -16,7 +16,7 @@ public class Arc {
         this.start = start;
         this.end = end;
         this.heading = heading;
-        if (Math.abs(heading) == Math.PI / 2) {
+        if (Math.abs(heading) == 0) {
             isStraight = true;
             radius = Double.POSITIVE_INFINITY;
         }

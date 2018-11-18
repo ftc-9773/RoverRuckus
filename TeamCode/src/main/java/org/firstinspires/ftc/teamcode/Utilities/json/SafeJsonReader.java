@@ -32,7 +32,7 @@ import java.io.FileWriter;
           export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 
         4) get a file from the phone
-        adb pull  /sdcard/FIRST/team9773/json18/myfile.json
+        adb pull  /sdcard/FIRST/team9773/json19/myfile.json
 */
 public class SafeJsonReader {
     private static final String baseDir = "/sdcard/FIRST/team9773/json19"; // must end with a name

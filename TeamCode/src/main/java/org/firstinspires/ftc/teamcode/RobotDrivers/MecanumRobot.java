@@ -8,16 +8,17 @@ import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 public class MecanumRobot {
     MecanumCont drivebase;
     AbstractIntake intake;
+    //OdometryController OC;
 
-    public double heading = 0;
+    double heading = 0;
 
     Point pos;
 
     public MecanumRobot(MecanumCont drivebase) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
-
         this.drivebase = drivebase;
+        //this.OC = odometryController;
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
@@ -26,14 +27,28 @@ public class MecanumRobot {
 
     public void driveDist(double x, double y, double rotation, double speed){
         drivebase.driveDist(x, y, rotation, speed);
-        Vector temp = this.pos.toVector();
-        temp.addVector(new Vector(true, x, y));
-        this.pos = temp.toPoint();
+        this.pos.xCord += x;
+        this.pos.yCord += y;
         this.heading += rotation;
+        update();
     }
 
     public Point getPos(){
+        update();
         return this.pos;
+    }
+
+    public double getHeading() {
+        update();
+        return heading;
+    }
+
+    public void update(){
+        /*
+        double[] p = OC.getPosition();
+        this.pos = new Point(p[0], p[1]);
+        this.heading = p[2];
+        */
     }
 
 

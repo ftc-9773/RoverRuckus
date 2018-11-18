@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
 public class MecanumCont {
 
-    static private final double     COUNTS_PER_MOTOR_REV    = 538 ;    //
-    static private final double     WHEEL_DIAMETER_INCHES   = 1.0 ;     // For figuring circumference
-    static private final double     ROBOT_DIAMETER_INCHES   = 7.322 * 2; //s
+    static private final double     COUNTS_PER_MOTOR_REV    = 1120;    //
+    static private final double     WHEEL_DIAMETER_INCHES   = 3.94 ;     // For figuring circumference
+    static private final double     ROBOT_DIAMETER_INCHES   = 20.5; // 7.322 * 2 for other robot
     static final double             COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
