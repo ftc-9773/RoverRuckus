@@ -17,12 +17,9 @@ public class Align {
 
     public void Align(){
 
-
-
-
         //math
         double rightDistance = rightSensor.getDistance(DistanceUnit.CM);
-       double leftDistance =  leftSensor.getDistance(DistanceUnit.CM);
+        double leftDistance =  leftSensor.getDistance(DistanceUnit.CM);
         double distanceBetweenSensorsCM = 30.48;
 
         if(rightDistance < leftDistance +1){ //the +1 is to give it some wiggle room so it doesn't ping.
