@@ -66,6 +66,7 @@ public class OdometryController {
     SafeJsonReader InvMatrixDict;
 
     public void readInvMatrix() {
+        /*
         inverseMatrix[0][0] = InvMatrixDict.getDouble("k00");
         inverseMatrix[0][1] = InvMatrixDict.getDouble("k01");
         inverseMatrix[0][2] = InvMatrixDict.getDouble("k02");
@@ -77,6 +78,7 @@ public class OdometryController {
         inverseMatrix[2][0] = InvMatrixDict.getDouble("k20");
         inverseMatrix[2][1] = InvMatrixDict.getDouble("k21");
         inverseMatrix[2][2] = InvMatrixDict.getDouble("k22");
+        */
     }
 
     public OdometryController(HardwareMap hwMap, double X, double Y, double Ang) {

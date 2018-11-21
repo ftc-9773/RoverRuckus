@@ -10,8 +10,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 //import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
+/**
+ * @author ???
+ * Class for interacting with the imu built into the RevHub
+ * */
 public class Gyro {
-
 
     BNO055IMU imuLeft;
     //BNO055IMU imuRight;
@@ -27,11 +30,8 @@ public class Gyro {
 
     private double lastImuAngle;
     private double lastImuVelocity = 0;
-    private double oldImuVelocity = 0;
-    private double lastImuAcceleration = 0;
 
     private long lastReadTime = -1;
-    private long oldReadTime = -1;
     private static final int minReadDeltaTime = 40;
 
 
@@ -63,15 +63,10 @@ public class Gyro {
         lastImuAngle = getImuAngle();
 
         // Save time read
-        oldReadTime = lastReadTime;
         lastReadTime = System.currentTimeMillis();
 
         // Read Velocity and save old reading
-        oldImuVelocity = lastImuVelocity;
         lastImuVelocity = getImuAngularVelocity();
-
-        // Calculate acceleration
-        lastImuAcceleration = (lastImuVelocity - oldImuVelocity) / (lastReadTime - oldReadTime);
     }
 
     // Returns calculated orientation
@@ -83,7 +78,7 @@ public class Gyro {
 
         // Calculate estimated position
         long dt = currentTime - lastReadTime;
-        return -(lastImuAngle + lastImuVelocity * dt + lastImuAcceleration * Math.pow(dt, 2) / 2) - zeroPosition;
+        return -(lastImuAngle + lastImuVelocity * dt) - zeroPosition;
     }
 
     // Returns calculated velocity
@@ -94,7 +89,7 @@ public class Gyro {
 
         // Calculate estimated velocity
         long dt = currentTime - lastReadTime;
-        return -(lastImuVelocity + lastImuAcceleration * dt);
+        return -(lastImuVelocity);
     }
 
     // Alias
@@ -102,6 +97,10 @@ public class Gyro {
 
     public void setZeroPosition() {
         zeroPosition = getHeading(true);
+    }
+
+    public boolean  isUpdated(){
+        return System.currentTimeMillis() - lastReadTime > minReadDeltaTime;
     }
 /*
     public void recordHeading() {

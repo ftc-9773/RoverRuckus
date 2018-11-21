@@ -65,4 +65,8 @@ public class PIDController {
     public double getPIDCorrection(double target, double actual) {
         return getPIDCorrection(target - actual);
     }
+    public void resetPID(){
+        this.prevError = 0;
+        this.lastTime = System.currentTimeMillis() - 800;
+    }
 }

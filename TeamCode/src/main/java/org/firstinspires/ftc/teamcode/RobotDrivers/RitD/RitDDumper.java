@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers;
+package org.firstinspires.ftc.teamcode.RobotDrivers.RitD;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @author Cadence
  * @version 1.0
  * */
-public class Dumper extends AbstractScorer {
+public class RitDDumper extends AbstractScorer {
     Servo Belt, Left, Right;
     HardwareMap hwmp;
 
@@ -21,7 +21,7 @@ public class Dumper extends AbstractScorer {
      * @param RightDump the name of the servo that controls the right dumper
      * @param hwmp HardwareMap object created by the opmode for interfacing with the RevHub
      */
-    public Dumper(String BeltName, String LeftDump, String RightDump, HardwareMap hwmp){
+    public RitDDumper(String BeltName, String LeftDump, String RightDump, HardwareMap hwmp){
         this.hwmp = hwmp;
         this.Belt = hwmp.servo.get(BeltName);
         this.Left = hwmp.servo.get(LeftDump);

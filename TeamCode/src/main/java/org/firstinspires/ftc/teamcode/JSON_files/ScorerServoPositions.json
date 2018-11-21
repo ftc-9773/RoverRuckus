@@ -1,0 +1,8 @@
+{
+  "rightServoUpPosition" : 0,
+  "rightServoDownPosition" : 0,
+  "leftServoUpPosition" : 0,
+  "leftServoDownPosition" : 0,
+  "tiltServoRightPosition" : 0,
+  "tileServoLeftPosition" : 0
+}

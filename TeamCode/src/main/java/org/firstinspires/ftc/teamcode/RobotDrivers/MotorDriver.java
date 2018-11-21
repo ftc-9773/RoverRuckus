@@ -1,59 +1,60 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers;
 
+
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
-/**
- * Class for controlling DcMotors.
- * @author Cadence
- * */
 public class MotorDriver {
-    DcMotorEx motor;
-    DcMotor.RunMode runMode = RunMode.RUN_WITHOUT_ENCODER;
-    double power = 0;
-    double wheelRadius = 5.207;
 
-    /**
-     * @param hwmp Hardware map defined by the opmode
-     * @param Name String name of motor
-     * */
-    public MotorDriver(HardwareMap hwmp, String Name){
-        this.motor = hwmp.get(DcMotorEx.class, Name);
+    private static boolean DEBUG = true;
+    private static String TAG = "MotorSpeedControl";
+
+    private DcMotorEx motor;
+
+    private SafeJsonReader myJsonReader;
+
+
+    public MotorDriver (HardwareMap hwMap, String motorName) {
+
+
+        motor = hwMap.get(DcMotorEx.class, motorName);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        // PID Init
+        myJsonReader = new SafeJsonReader("DcMotorPIDCoefficients");
+        double kp = myJsonReader.getDouble("kp");
+        double ki = myJsonReader.getDouble("ki");
+        double kd = myJsonReader.getDouble("kd");
+
+        PIDCoefficients curCoeffs = motor.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (DEBUG) { Log.d(TAG, String.format("Default Coefficients: %f, %f, %f", curCoeffs.p, curCoeffs.i, curCoeffs.d)); }
+
+        PIDCoefficients motorPIDCoeffs = new PIDCoefficients(kp, ki, kd);
+        motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, motorPIDCoeffs);
     }
 
-    /**
-     * @param pow speed to set the motor to
-     * */
-    public void setPow(double pow){
-        setMode(RunMode.RUN_WITHOUT_ENCODER);
-        motor.setPower(pow);
-        this.power = pow;
-    }
 
-    /**
-     * Set the motor to turn some amount of rotations
-     * @param encoderDistance distance encoder steps to take
-     * */
+    public void setSpeed(double radPerSec) { motor.setVelocity(radPerSec, AngleUnit.RADIANS); }
 
-    public void setDistance(int encoderDistance){
-        setMode(RunMode.RUN_TO_POSITION);
-        int currEncoderPosition = motor.getCurrentPosition();
-        int targetPostion = currEncoderPosition + encoderDistance;
-        motor.setTargetPosition(targetPostion);
-    }
+    public void setPower(double pow){this.motor.setPower(pow);}
 
-    /**
-     * Set mode
-     * */
-    public void setMode(RunMode mode){
-        this.motor.setMode(mode);
-        this.runMode = mode;
-    }
-    public double getPow(){
-        return this.power;
+    public void motorReverse() { motor.setDirection(DcMotorSimple.Direction.REVERSE); }
+
+    public void motorForward() { motor.setDirection(DcMotorSimple.Direction.FORWARD); }
+
+    public double getSpeed() {return motor.getVelocity(AngleUnit.RADIANS);}
+
+    public void setPosition(int pos){
+        this.motor.setTargetPosition(motor.getCurrentPosition() + pos);
     }
 }
