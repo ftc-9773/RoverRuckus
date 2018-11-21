@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
-public class MecanumCont {
+public class MecanumDrivebase {
 
     static private final double     COUNTS_PER_MOTOR_REV    = 1120;    //
     static private final double     WHEEL_DIAMETER_INCHES   = 3.94 ;     // For figuring circumference
@@ -23,7 +23,7 @@ public class MecanumCont {
 
     Telemetry telemetry;
 
-    public MecanumCont(HardwareMap hwMap, Telemetry telem) {
+    public MecanumDrivebase(HardwareMap hwMap, Telemetry telem) {
         // init wheels
         this.telemetry = telem;
         driveMotors = new DcMotor[4];

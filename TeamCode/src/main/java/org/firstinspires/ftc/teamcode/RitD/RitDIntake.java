@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.RitD;
+package org.firstinspires.ftc.teamcode.RitD;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractIntake;
 
 /**
  * Implements AbstractIntake for the Robot in Three days robot
  *
  * @author Cadence
  * */
-public class RitDIntake extends AbstractIntake {
+public class RitDIntake{
+    enum intakeStates {TRANSFER, STORE, INTAKE};
+
     HardwareMap hwmp;
     Servo rightIntakeServo, leftIntakeServo;
     DcMotor intakeMotor, armMotor;

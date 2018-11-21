@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.Logic;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
-import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 import java.util.ArrayList;
 
 public class ArcFollower {
-    MecanumRobot robot;
+    FTCRobotV1 robot;
     ArrayList<Arc> arcQueue = new ArrayList<>();
     Arc currArc;
 
@@ -36,7 +34,7 @@ public class ArcFollower {
     double prevY = 0;
     double prevTheta = 0;
 
-    public ArcFollower(MecanumRobot robot){
+    public ArcFollower(FTCRobotV1 robot){
         this.robot = robot;
     }
 

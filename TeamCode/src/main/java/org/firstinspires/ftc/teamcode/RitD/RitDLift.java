@@ -1,12 +1,7 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.RitD;
+package org.firstinspires.ftc.teamcode.RitD;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractLift.liftStates;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractLift;
-import java.sql.Time;
 
 
 /**
@@ -14,7 +9,7 @@ import java.sql.Time;
  * A driver for the lift mechanism on the robot built in approximately 36 hours.
  * It should be used in conjunction with the Robot class in /Nonsense
  * */
-public class RitDLift extends AbstractLift{
+public class RitDLift{
     DcMotor LeftLiftMotor;
     DcMotor RightLiftMotor;
 
