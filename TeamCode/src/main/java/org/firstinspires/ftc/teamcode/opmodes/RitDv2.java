@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractIntake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractScorer;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Dumper;
-import org.firstinspires.ftc.teamcode.RobotDrivers.RitDIntake;
-import org.firstinspires.ftc.teamcode.RobotDrivers.RitDLift;
-import org.firstinspires.ftc.teamcode.RobotDrivers.TankDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.RitD.RitDDumper;
+import org.firstinspires.ftc.teamcode.RobotDrivers.RitD.RitDIntake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.RitD.RitDLift;
+import org.firstinspires.ftc.teamcode.RobotDrivers.RitD.TankDrivebase;
 
 /**
  *
@@ -26,7 +25,7 @@ public class RitDv2 extends LinearOpMode {
         RitDLift lift = new RitDLift("liftMotorA", "liftMotorB", hardwareMap);
         RitDIntake intake = new RitDIntake("ritkServo", "litkServo", "armMotor", "intakeMotor",  hardwareMap);
         TankDrivebase drivebase = new TankDrivebase("lMotorA", "lMotorB", "rMotorA", "rMotorB", hardwareMap);
-        Dumper scorer = new Dumper("sortServo", "lDump", "rDump", hardwareMap);
+        RitDDumper scorer = new RitDDumper("sortServo", "lDump", "rDump", hardwareMap);
 
         //Check that each class extends or implements an Abstract
         if(!validateClasses(drivebase, intake, lift, scorer)){
