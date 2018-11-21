@@ -6,10 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Logic.ArcFollower;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
-import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
-import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 @TeleOp(name = "PathFollowing")
 public class PathFollowingTest extends LinearOpMode {

@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
-import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 
 @TeleOp(name = "MecanumTest")

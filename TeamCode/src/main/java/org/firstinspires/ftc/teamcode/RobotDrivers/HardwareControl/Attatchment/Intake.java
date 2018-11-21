@@ -1,0 +1,97 @@
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attatchment;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
+import org.json.JSONObject;
+
+
+/**
+ * <h1> </h1>
+ * The HelloWorld program implements an application that
+ * simply displays "Hello World!" to the standard output.
+ * <p>
+ * Giving proper comments in your program makes it more
+ * user friendly and it is assumed as a high quality code.
+ *
+ *
+ * @author  Zara Ali
+ * @version 1.0
+ * @since   2014-03-31
+ */
+
+
+public class Intake implements Attatchment {
+    private enum IntakeState {
+
+    }
+
+    // hardware components
+    Servo leftServo;
+    Servo rightServo;
+    Servo bucketServo;
+    DcMotor armMotor;
+
+    // initialization stuff
+    SafeJsonReader jsonReader;
+
+
+    // Servo positions
+    double bucketServoTransferPosition ;
+    double bucketServoIntakePosition;
+    double downPosition;
+
+
+    public void IntakeController(HardwareMap hwmp ){
+        // initialize harware map stuff
+        leftServo = hwmp.get(Servo.class, "liServo");
+        rightServo = hwmp.get(Servo.class, "riServo");
+        bucketServo = hwmp.get(Servo.class, "trServo");
+        armMotor = hwmp.get(DcMotor.class, "iaMotor");
+
+        // json
+        jsonReader = new SafeJsonReader("IntakePositions.json") ;
+        bucketServoTransferPosition = jsonReader.getDouble( "bucketServoTransferPosition");
+        bucketServoIntakePosition = jsonReader.getDouble( "bucketServoIntakePosition");
+        downPosition = jsonReader.getDouble("downPosition");
+
+
+
+    }
+
+    public void intakeOff() {
+        leftServo.setPosition(0);
+        rightServo.setPosition(0);
+    }
+
+    public void intakeOn() {
+        leftServo.setPosition(.85);
+        rightServo.setPosition(.85);
+    }
+
+    public void intakeState() {
+        bucketServo.setPosition(bucketServoIntakePosition);
+    }
+
+    public void storeState() {
+        bucketServo.setPosition(0);
+
+    }
+
+
+    public void transferState() {
+        bucketServo.setPosition(this.bucketServoTransferPosition);
+    }
+    public void update(){
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+
+}

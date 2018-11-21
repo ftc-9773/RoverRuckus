@@ -9,6 +9,9 @@ public class Align {
     MecanumCont drivebase;
 
 
+    // TODO: this really should be just a method in a larger clas of drivebase controller, or extra functions, not its own class
+
+
     public Align(DistanceSensor r, DistanceSensor l, MecanumCont drivebase){
         this.rightSensor = r;
         this.leftSensor = l;
