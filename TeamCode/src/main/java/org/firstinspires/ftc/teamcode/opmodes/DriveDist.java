@@ -16,8 +16,8 @@ public class DriveDist extends LinearOpMode {
     public void runOpMode() {
         Gyro gyro = new Gyro(hardwareMap);
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
-        OdometryController oc = new OdometryController(hardwareMap);
-        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, oc, telemetry);
+        //OdometryController oc = new OdometryController(hardwareMap);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, telemetry);
 
         PushButton a = new PushButton(gamepad1, "a");
         waitForStart();

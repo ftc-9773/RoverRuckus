@@ -25,11 +25,11 @@ public class FTCRobotV1 {
     double x = 0;
     double y = 0;
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry) {
+    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
-        this.OC = odometryController;
+        //this.OC = odometryController;
         this.gyro0 = gyro;
         gyro0.setZeroPosition();
         this.telemetry = telemetry;
@@ -69,15 +69,15 @@ public class FTCRobotV1 {
     }
 
     public void update(){
-        double[] ocPos = this.OC.getPosition();
+        /*double[] ocPos = this.OC.getPosition();
         this.x = ocPos[0];
         this.y = ocPos[1];
         this.pos = new Point(x, y);
         this.heading = ocPos[2];
-        if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
-        telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
+        */if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
+        //telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
         if (gyro0.isUpdated()) telemetry.addData("Got heading from Gyro", this.heading);
-
+        telemetry.update();
     }
 
     public void setLiftPerc(double pow){this.lift.setPerc(pow);}

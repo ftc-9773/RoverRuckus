@@ -25,11 +25,11 @@ public class MecanumTest extends LinearOpMode {
 
         telemetry.addData("drivebase", 0);
         telemetry.update();
-        OdometryController oc = new OdometryController(hardwareMap);
+        //OdometryController oc = new OdometryController(hardwareMap);
 
         telemetry.addData("oc", 0);
         telemetry.update();
-        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, oc, telemetry);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, telemetry);
 
         telemetry.addData("robot", 0);
         telemetry.update();

@@ -15,7 +15,7 @@ public class AlignTest extends LinearOpMode {
 
     public void runOpMode() {
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
-        OdometryController oc = new OdometryController(hardwareMap);
+        //OdometryController oc = new OdometryController(hardwareMap);
         DistanceSensor leftDistSensor = hardwareMap.get(DistanceSensor.class, "leftDist");
         DistanceSensor rightDistSensor = hardwareMap.get(DistanceSensor.class, "rightDist");
 
