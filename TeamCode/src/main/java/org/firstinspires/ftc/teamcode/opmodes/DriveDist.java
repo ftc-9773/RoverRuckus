@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import android.media.midi.MidiManager;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
 import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
-import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 import org.firstinspires.ftc.teamcode.Utilities.misc.PushButton;
 
 @TeleOp(name="DriveDist")

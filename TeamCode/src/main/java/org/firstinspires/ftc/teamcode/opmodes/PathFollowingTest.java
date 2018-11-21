@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Logic.ArcFollower;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
