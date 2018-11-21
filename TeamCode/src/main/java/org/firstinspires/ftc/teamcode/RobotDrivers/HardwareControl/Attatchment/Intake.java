@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
-import org.json.JSONObject;
 
 
 /**
@@ -24,13 +23,13 @@ import org.json.JSONObject;
 
 
 public class Intake implements Attatchment {
-    private enum IntakeState {
+    private enum IntakeState { //todo:intake
 
     }
 
     // hardware components
-    Servo leftServo;
-    Servo rightServo;
+    Servo leftIntakeServo;
+    Servo rightIntakeServo;
     Servo bucketServo;
     DcMotor armMotor;
 
@@ -47,11 +46,12 @@ public class Intake implements Attatchment {
     /// pid coefficents
     double kp, ki, kd ;
 
+    double intakeMotorPower, intakebBucketPosition;
 
     public void IntakeController(HardwareMap hwmp ){
         // initialize harware map stuff
-        leftServo = hwmp.get(Servo.class, "liServo");
-        rightServo = hwmp.get(Servo.class, "riServo");
+        leftIntakeServo = hwmp.get(Servo.class, "liServo");
+        rightIntakeServo = hwmp.get(Servo.class, "riServo");
         bucketServo = hwmp.get(Servo.class, "trServo");
         armMotor = hwmp.get(DcMotor.class, "iaMotor");
 
@@ -62,30 +62,24 @@ public class Intake implements Attatchment {
         bucketServoIntakePosition = jsonReader.getDouble( "bucketServoIntakePosition");
         carryPosition = jsonReader.getDouble("bucketServoCarryPosition");
         // intake stuff
-        stopVal = jsonReader.getDouble("intakeStopVal");
-        fowardsVal = jsonReader.getDouble("intakeFowardsVal");
-        backwardsVal = jsonReader.getDouble("intakeBackwardsVal");
+        stopVal = jsonReader.getDouble("intakeStopVal", 0.5);
+        fowardsVal = jsonReader.getDouble("intakeFowardsVal",0.85);
+        backwardsVal = jsonReader.getDouble("intakeBackwardsVal",0.15);
         // liftCoefficents
-        kp = jsonReader.getDouble("liftKp");
-        ki = jsonReader.getDouble("liftKi");
-        kd = jsonReader.getDouble("liftKd");
-
-
-
-
-
-
+        kp = jsonReader.getDouble("liftKp",0.1);
+        ki = jsonReader.getDouble("liftKi", 0.0);
+        kd = jsonReader.getDouble("liftKd", 0.0);
     }
 
     public void intakeOff() {
-        leftServo.setPosition(0);
-        rightServo.setPosition(0);
+        intakeMotorPower = stopVal;
+        intakebBucketPosition = carryPosition;
     }
 
     public void intakeOn() {
-        leftServo.setPosition(.85);
-        rightServo.setPosition(.85);
+
     }
+
 
     public void intakeState() {
         bucketServo.setPosition(bucketServoIntakePosition);
