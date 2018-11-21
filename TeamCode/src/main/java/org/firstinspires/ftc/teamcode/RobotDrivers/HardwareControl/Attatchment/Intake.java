@@ -41,7 +41,11 @@ public class Intake implements Attatchment {
     // Servo positions
     double bucketServoTransferPosition ;
     double bucketServoIntakePosition;
-    double downPosition;
+    double carryPosition;
+    //double 393 servo vals
+    double stopVal, fowardsVal, backwardsVal;
+    /// pid coefficents
+    double kp, ki, kd ;
 
 
     public void IntakeController(HardwareMap hwmp ){
@@ -51,11 +55,23 @@ public class Intake implements Attatchment {
         bucketServo = hwmp.get(Servo.class, "trServo");
         armMotor = hwmp.get(DcMotor.class, "iaMotor");
 
-        // json
+        // Initialize all values from configuration files
         jsonReader = new SafeJsonReader("IntakePositions.json") ;
+        // bucket servo positions
         bucketServoTransferPosition = jsonReader.getDouble( "bucketServoTransferPosition");
         bucketServoIntakePosition = jsonReader.getDouble( "bucketServoIntakePosition");
-        downPosition = jsonReader.getDouble("downPosition");
+        carryPosition = jsonReader.getDouble("bucketServoCarryPosition");
+        // intake stuff
+        stopVal = jsonReader.getDouble("intakeStopVal");
+        fowardsVal = jsonReader.getDouble("intakeFowardsVal");
+        backwardsVal = jsonReader.getDouble("intakeBackwardsVal");
+        // liftCoefficents
+        kp = jsonReader.getDouble("liftKp");
+        ki = jsonReader.getDouble("liftKi");
+        kd = jsonReader.getDouble("liftKd");
+
+
+
 
 
 

@@ -48,7 +48,12 @@ public class SafeJsonReader {
         return baseDir + "/" + this.fileName + ".json";
     }
 
-    // fileName is local name, baseDir will be appended to create full path name
+    /**
+     * Constructor that creates the SafeJsonReader object.
+     * the filename should just be the local name. Automatically appends the root path to the
+     * given filename, as well as the .json extension.
+     * @param fileName the local name of the file. should not have whitespace
+     */
     public SafeJsonReader(String fileName) {
         this.fileName = fileName;
         this.modified = false;
@@ -96,9 +101,16 @@ public class SafeJsonReader {
         }
     }
 
-    public void updateFile()
+    /**
+     * Writes the updated version of the file to storage.
+     * <p> it is necessary to call this method in order to store a modified
+     * version of a value.
+     * </p>
+     * @return success value - returns true if a success, false if operation failed.
+     */
+    public boolean updateFile()
     {
-        if (! this.modified) return;
+        if (! this.modified) return true;
 
         // file path (same as reading)
         String filePath = FullName();
@@ -110,6 +122,7 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to open the json file" + this.fileName + " in write mode", e);
+            return false;
         }
         // write file
         try {
@@ -117,14 +130,17 @@ public class SafeJsonReader {
         }
         catch (IOException e) {
             Log.e(TAG, "Error while trying to write the json file" + this.fileName, e);
+            return false;
         }
         // cleanup file
         try {
             fileWriter.close();
         } catch (IOException e) {
             Log.e(TAG, "Error while trying to closing the file" + filePath, e);
+            return false;
         }
         this.modified = false;
+        return true;
 
     }
 
@@ -141,7 +157,14 @@ public class SafeJsonReader {
         return null;
     }
 
-    // read string while ignoring caps in name
+    /**
+     *  reads a String from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The string at the key, or null if no value is found there.
+     */
     public String getString(JSONObject obj, String name)
     {
         String value=null;
@@ -149,7 +172,31 @@ public class SafeJsonReader {
             String key = getRealKeyIgnoreCase(obj, name);
             value = obj.getString(key);
         } catch (JSONException e) {
-            Log.e(TAG, "Error while getting string value for key " + name + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while getting string value for key " + name + " in json file " + this.fileName, e);
+        }
+        if (DEBUG) {
+            if (value!=null) Log.d(TAG, "read string for key " + name + " and got " + value);
+            else Log.e(TAG, "read string for key " + name + " and got null");
+        }
+        return (value);
+    }
+    /**
+     *  reads a String from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultVal the defalut value. This will be returned if an error occurs in reading the value
+     *  @return The string at the key, or the default value if no value is found there.
+     */
+    public String getString(JSONObject obj, String name, String defaultVal)
+    {
+        String value=defaultVal;
+        try {
+            String key = getRealKeyIgnoreCase(obj, name);
+            value = obj.getString(key);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error while getting string value for key " + name + " in json file " + this.fileName, e);
         }
         if (DEBUG) {
             if (value!=null) Log.d(TAG, "read string for key " + name + " and got " + value);
@@ -158,7 +205,15 @@ public class SafeJsonReader {
         return (value);
     }
 
-    public void modifyString(String name, String newValue)
+
+    /**
+     * Tells the program to modify the value of a string. Needs to be used in conjunction with the
+     * update file method to update files.
+     * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
+     * @param newValue The updated string to be used.
+     * @return success value - returns true if a success, false if operation failed.
+     */
+    public boolean modifyString(String name, String newValue)
     {
         try {
             String key = getRealKeyIgnoreCase(jsonRoot, name);
@@ -169,24 +224,59 @@ public class SafeJsonReader {
                 if (DEBUG) Log.d(TAG, "write string for key " + name + " with new value " + newValue);
             }
         } catch (JSONException e) {
-            Log.d(TAG, "Error while setting string value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            Log.d(TAG, "Error while setting string value for key " + name + " to " + newValue + " in json file " + this.fileName, e);
+            return false;
         }
-
+        return true;
     }
-    // read int while ignoring caps in name
+    /**
+     *  reads an integer from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The value read at the key, or 0 if no value is found there.
+     */
     public int getInt(JSONObject obj, String name) {
         int value=0;
         try {
             String key = getRealKeyIgnoreCase(obj, name);
             value = obj.getInt(key);
         } catch (JSONException e) {
-            Log.e(TAG, "Error while getting int value for key " + name + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while getting int value for key " + name + " in json file " + this.fileName, e);
+        }
+        if (DEBUG) Log.d(TAG, "read int for key " + name + " and got " + value);
+        return (value);
+    }
+    /**
+     *  reads an integer from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultVal the defalut value. This will be returned if an error occurs in reading the value
+     *  @return The value read at the key, or the default value if no value is found there.
+     */
+    public int getInt(JSONObject obj, String name, int defaultVal) {
+        int value=defaultVal;
+        try {
+            String key = getRealKeyIgnoreCase(obj, name);
+            value = obj.getInt(key);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error while getting int value for key " + name + " in json file " + this.fileName, e);
         }
         if (DEBUG) Log.d(TAG, "read int for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyInt(String name, int newValue) {
+    /**
+     * Tells the program to modify the value of an int. Needs to be used in conjunction with the
+     * update file method to update files.
+     * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
+     * @param newValue The updated integer value to be stored.
+     * @return success value - returns true if a success, false if operation failed.
+     */
+    public boolean modifyInt(String name, int newValue) {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             int oldValue = this.jsonRoot.getInt(key);
@@ -197,12 +287,21 @@ public class SafeJsonReader {
 
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Error while modifying int value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while modifying int value for key " + name + " to " + newValue + " in json file " + this.fileName, e);
+            return false;
         }
+        return true;
     }
 
 
-    // read int while ignoring caps in name
+    /**
+     *  reads a Double from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The value read at the key, or 0.0 if no value is found there.
+     */
     public double getDouble(JSONObject obj, String name) {
         String key;
         double value=0.0;
@@ -210,13 +309,43 @@ public class SafeJsonReader {
             key = getRealKeyIgnoreCase(obj, name);
             value = obj.getDouble(key);
         } catch (JSONException e) {
-            Log.e(TAG, "Error while getting double value for key " + name + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while getting double value for key " + name + " in json file " + this.fileName, e);
         }
         if (DEBUG) Log.d(TAG, "read double for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyDouble(String name, double newValue) {
+    /**
+     *  reads a Double from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultVal the default value. This will be returned if an error occurs in the read process
+     *  @return The value read at the key, or the default value if no value is found there.
+     */
+    public double getDouble(JSONObject obj, String name,double defaultVal) {
+        String key;
+        double value= defaultVal;
+        try {
+            key = getRealKeyIgnoreCase(obj, name);
+            value = obj.getDouble(key);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error while getting double value for key " + name + " in json file " + this.fileName, e);
+        }
+        if (DEBUG) Log.d(TAG, "read double for key " + name + " and got " + value);
+        return (value);
+    }
+
+    /**
+     * Tells the program to modify the value of a double. Needs to be used in conjunction with the
+     * update file method to update files.
+     * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
+     * @param newValue The updated double being stored.
+     * @return success value- returns true if a success, false if otherwise
+     *
+     */
+    public boolean modifyDouble(String name, double newValue) {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             double oldValue = this.jsonRoot.getDouble(key);
@@ -226,11 +355,20 @@ public class SafeJsonReader {
                 if (DEBUG) Log.d(TAG, "write double for key " + name + " with new value " + newValue);
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Error while modifying double value for key " + name + " to " + newValue + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while modifying double value for key " + name + " to " + newValue + " in json file " + this.fileName, e);
+            return false;
         }
+        return true;
     }
 
-    // read boolean while ignoring caps in name
+    /**
+     *  reads a boolean from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The value read at the key, or False if no value is found there.
+     */
     public boolean getBoolean(JSONObject obj, String name) {
         String key;
         boolean value=false;
@@ -238,13 +376,43 @@ public class SafeJsonReader {
             key = getRealKeyIgnoreCase(obj, name);
             value = obj.getBoolean(key);
         } catch (JSONException e) {
-            Log.e(TAG, "Error while getting boolean value for key " + name + " in jason file " + this.fileName, e);
+            Log.e(TAG, "Error while getting boolean value for key " + name + " in json file " + this.fileName, e);
         }
         if (DEBUG) Log.d(TAG, "read boolean for key " + name + " and got " + value);
         return (value);
     }
 
-    public void modifyBoolean(String name, boolean newValue) {
+    /**
+     *  reads a boolean from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultValue the defalut value. This will be returned if an error occurs while reading the value
+     *  @return The value read at the key, or the default value if no value is found there.
+     */
+    public boolean getBoolean(JSONObject obj, String name, boolean defaultValue) {
+        String key;
+        boolean value=defaultValue;
+        try {
+            key = getRealKeyIgnoreCase(obj, name);
+            value = obj.getBoolean(key);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error while getting boolean value for key " + name + " in json file " + this.fileName, e);
+        }
+        if (DEBUG) Log.d(TAG, "read boolean for key " + name + " and got " + value);
+        return (value);
+    }
+
+
+    /**
+     * Tells the program to modify the value of a boolean. Needs to be used in conjunction with the
+     * update file method to update files.
+     * @param name the non-case sensitive key that the value being modified is stored in the JSON file
+     * @param newValue The updated boolean value to be stored.
+     * @return returns true if a success; false otherwise
+     */
+    public boolean modifyBoolean(String name, boolean newValue) {
         try {
             String key = getRealKeyIgnoreCase(this.jsonRoot, name);
             boolean oldValue = this.jsonRoot.getBoolean(key);
@@ -256,10 +424,19 @@ public class SafeJsonReader {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error while modifying boolean value for key " + name + " to " + newValue + " in json file " + this.fileName, e);
+            return false;
         }
+        return true;
     }
 
-    // read json object while ignoring caps in name
+    /**
+     *  reads a JSON object from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The value read at the key, or null if no value is found there.
+     */
     public JSONObject getJSONObject(JSONObject obj, String name) {
         String key;
         JSONObject value=null;
@@ -272,7 +449,14 @@ public class SafeJsonReader {
         return (value);
     }
 
-    // read json array while ignoring caps in name
+    /**
+     *  reads a JSON array from the Json file; ignores capitals in the name of the file, and automatically
+     *  matches them to the correct key regardless of case
+     *
+     *  @param obj The JSON object that is being read from.
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The value read at the key, or null if no value is found there.
+     */
     public JSONArray getJSONArray(JSONObject obj, String name) {
         String key;
         JSONArray value=null;
@@ -286,11 +470,97 @@ public class SafeJsonReader {
     }
 
     // aliases
+
+    /**
+     *  reads a String from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The string at the key, or null if no value is found there.
+     */
     public String getString(String name) { return getString(jsonRoot, name); }
+    /**
+     *  reads a String from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultValue the defalut value. This will be returned if an error occurs while reading the value
+     *  @return The string at the key, or the default value if no value is found there.
+     */
+    public String getString(String name, String defaultValue) { return getString(jsonRoot, name,defaultValue); }
+
+
+    /**
+     *  reads a Int from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The integer value at the key, or 0.0 if no value is found there.
+     */
     public int getInt(String name) { return getInt(jsonRoot, name); }
+    /**
+     *  reads an int from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultValue the defalut value. This will be returned if an error occurs while reading the value
+     *  @return The int at the key, or the default value if no value is found there.
+     */
+    public int getInt(String name, int defaultValue) { return getInt(jsonRoot, name,defaultValue); }
+
+    /**
+     *  reads a Double from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The double value at the key, or 0.0 if no value is found there.
+     */
     public double getDouble(String name) { return getDouble(jsonRoot, name); }
+    /**
+     *  reads a Double from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultValue the defalut value. This will be returned if an error occurs while reading the value
+     *  @return The double value at the key, or the default value if an error occurs
+     */
+    public double getDouble(String name,double defaultValue) { return getDouble(jsonRoot, name, defaultValue); }
+
+
+    /**
+     *  reads a Boolean value from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The boolean value at the key, or false if no value is found there.
+     */
     public boolean getBoolean(String name) { return getBoolean(jsonRoot, name); }
+
+    /**
+     *  reads a Boolean value from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @param defaultValue the defalut value. This will be returned if an error occurs while reading the value
+     *  @return The boolean value at the key, or the default value if no value is found there.
+     */
+    public boolean getBoolean(String name, boolean defaultValue) { return getBoolean(jsonRoot, name,defaultValue); }
+
+    /**
+     *  reads a JSON object from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The JSON object at the key, or null if no value is found there.
+     */
     public JSONObject getJSONObject(String name) { return getJSONObject(jsonRoot, name); }
+    /**
+     *  reads a JSON array from the Json file specified in the constructor; ignores capitals in the name
+     *  of the file, and automatically matches them to the correct key regardless of case
+     *
+     *  @param name the non-case sensitive key that the value is stored at.
+     *  @return The JSON array at the key, or null if no value is found there.
+     */
     public JSONArray getJSONArray(String name) { return getJSONArray(jsonRoot, name); }
 
 }
