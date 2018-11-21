@@ -1,17 +1,14 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.RitD;
+package org.firstinspires.ftc.teamcode.RitD;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractScorer;
-import java.sql.Time;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Implements abstractScorer for the Robot in 3 days scorer
  * @author Cadence
  * @version 1.0
  * */
-public class RitDDumper extends AbstractScorer {
+public class RitDDumper  {
     Servo Belt, Left, Right;
     HardwareMap hwmp;
 

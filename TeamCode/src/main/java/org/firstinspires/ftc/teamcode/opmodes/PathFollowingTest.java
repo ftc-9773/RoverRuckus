@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Logic.ArcFollower;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.Gyro;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
@@ -15,7 +16,7 @@ public class PathFollowingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
+        MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         Gyro gyro = new Gyro(hardwareMap);
         //SafeJsonReader reader = new SafeJsonReader("ArcPositions");
 
@@ -23,7 +24,7 @@ public class PathFollowingTest extends LinearOpMode {
         double startheading = Math.PI / 2;
         OdometryController OC = new OdometryController(hardwareMap);
 
-        MecanumRobot robot = new MecanumRobot(drivebase, gyro, OC, telemetry);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, OC, telemetry);
 
         Arc arc = new Arc(new Point(0,0),new Point(0,10),startheading);
         ArcFollower follower = new ArcFollower(robot);

@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor;
-
-import android.util.Log;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;

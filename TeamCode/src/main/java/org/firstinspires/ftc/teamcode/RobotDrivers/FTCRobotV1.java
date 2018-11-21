@@ -2,20 +2,22 @@ package org.firstinspires.ftc.teamcode.RobotDrivers;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractIntake;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.Gyro;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.OdometryController;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.VerticalLift;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
 import java.util.Arrays;
 
-public class MecanumRobot {
-    MecanumCont drivebase;
-    AbstractIntake intake;
+public class FTCRobotV1 {
+    MecanumDrivebase drivebase;
+    Intake intake;
     OdometryController OC;
     Gyro gyro0;
 
-    LiftController lift;
+    VerticalLift lift;
 
     public double heading = 0;
     Telemetry telemetry;
@@ -23,7 +25,7 @@ public class MecanumRobot {
     double x = 0;
     double y = 0;
 
-    public MecanumRobot(MecanumCont drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry) {
+    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
@@ -33,7 +35,7 @@ public class MecanumRobot {
         this.telemetry = telemetry;
     }
 
-    public MecanumRobot(MecanumCont drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, LiftController lift) {
+    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, VerticalLift lift) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;

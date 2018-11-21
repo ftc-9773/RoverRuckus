@@ -1,17 +1,14 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.RobotDrivers.Abstracts.AbstractLift;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
-public class LiftController extends AbstractLift {
+public class VerticalLift implements Attachment{
     public static double MAX_RAD_PER_SECOND = Math.PI * 4;
 
     DcMotorEx leftMotor;
@@ -22,7 +19,7 @@ public class LiftController extends AbstractLift {
     double hsOpen;
     double hsClosed;
 
-    public LiftController(HardwareMap hwmp, String lmn, String rmn, String hsn){
+    public VerticalLift(HardwareMap hwmp, String lmn, String rmn, String hsn){
         this.leftMotor = hwmp.get(leftMotor.getClass(), lmn);
         this.rightMotor = hwmp.get(rightMotor.getClass(), rmn);
         this.hookServo = hwmp.get(hookServo.getClass(), hsn);
@@ -53,4 +50,14 @@ public class LiftController extends AbstractLift {
     public void open(){this.hookServo.setPosition(hsOpen);}
 
     public void close(){this.hookServo.setPosition(hsClosed);}
+
+    @Override
+    public void stop(){
+
+    }
+
+    @Override
+    public void update(){
+
+    }
 }

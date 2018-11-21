@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 
 /**
  * @author David
@@ -13,13 +13,13 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 public class Align {
     public static String TAG = "Align";
     DistanceSensor rightSensor,leftSensor;
-    MecanumCont drivebase;
+    MecanumDrivebase drivebase;
 
 
     // TODO: this really should be just a method in a larger clas of drivebase controller, or extra functions, not its own class
 
 
-    public Align(DistanceSensor r, DistanceSensor l, MecanumCont drivebase){
+    public Align(DistanceSensor r, DistanceSensor l, MecanumDrivebase drivebase){
         this.rightSensor = r;
         this.leftSensor = l;
         this.drivebase = drivebase;

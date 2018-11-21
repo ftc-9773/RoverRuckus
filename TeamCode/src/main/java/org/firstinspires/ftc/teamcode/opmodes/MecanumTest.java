@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor.Gyro;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 @TeleOp(name = "MecanumTest")
 public class MecanumTest extends LinearOpMode {
@@ -20,7 +21,7 @@ public class MecanumTest extends LinearOpMode {
 
         telemetry.addData("gyro", 0);
         telemetry.update();
-        MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
+        MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
 
         telemetry.addData("drivebase", 0);
         telemetry.update();
@@ -28,7 +29,7 @@ public class MecanumTest extends LinearOpMode {
 
         telemetry.addData("oc", 0);
         telemetry.update();
-        MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc, telemetry);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, oc, telemetry);
 
         telemetry.addData("robot", 0);
         telemetry.update();

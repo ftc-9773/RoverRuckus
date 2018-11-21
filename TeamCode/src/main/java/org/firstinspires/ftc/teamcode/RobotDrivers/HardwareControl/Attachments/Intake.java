@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attatchment;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
-import org.json.JSONObject;
 
 
 /**
@@ -23,7 +22,7 @@ import org.json.JSONObject;
  */
 
 
-public class Intake implements Attatchment {
+public class Intake implements Attachment {
     private enum IntakeState {
 
     }
@@ -69,12 +68,6 @@ public class Intake implements Attatchment {
         kp = jsonReader.getDouble("liftKp");
         ki = jsonReader.getDouble("liftKi");
         kd = jsonReader.getDouble("liftKd");
-
-
-
-
-
-
     }
 
     public void intakeOff() {

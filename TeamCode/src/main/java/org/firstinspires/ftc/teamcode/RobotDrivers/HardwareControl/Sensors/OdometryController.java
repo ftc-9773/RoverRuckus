@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.sensor;
+package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.teamcode.Logic.Align;
-import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
-import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
 @TeleOp(name="AlignTest")
@@ -14,7 +14,7 @@ public class AlignTest extends LinearOpMode {
     @Override
 
     public void runOpMode() {
-        MecanumCont drivebase = new MecanumCont(hardwareMap, telemetry);
+        MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         OdometryController oc = new OdometryController(hardwareMap);
         DistanceSensor leftDistSensor = hardwareMap.get(DistanceSensor.class, "leftDist");
         DistanceSensor rightDistSensor = hardwareMap.get(DistanceSensor.class, "rightDist");
