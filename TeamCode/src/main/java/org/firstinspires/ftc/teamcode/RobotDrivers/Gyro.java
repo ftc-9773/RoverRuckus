@@ -10,8 +10,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 //import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
+/**
+ * @author ???
+ * Class for interacting with the imu built into the RevHub
+ * */
 public class Gyro {
-
 
     BNO055IMU imuLeft;
     //BNO055IMU imuRight;
