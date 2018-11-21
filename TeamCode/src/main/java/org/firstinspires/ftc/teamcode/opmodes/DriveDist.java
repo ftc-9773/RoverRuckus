@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumCont;
 import org.firstinspires.ftc.teamcode.RobotDrivers.MecanumRobot;
 import org.firstinspires.ftc.teamcode.RobotDrivers.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
+import org.firstinspires.ftc.teamcode.Utilities.misc.PushButton;
 
 @TeleOp(name="DriveDist")
 public class DriveDist extends LinearOpMode {
@@ -22,11 +23,11 @@ public class DriveDist extends LinearOpMode {
         OdometryController oc = new OdometryController(hardwareMap);
         MecanumRobot robot = new MecanumRobot(drivebase, gyro, oc, telemetry);
 
-        Button a = new Button();
+        PushButton a = new PushButton(gamepad1, "a");
         waitForStart();
 
         while(opModeIsActive()){
-            a.recordNewValue(gamepad1.a);
+            a.record();
             if(a.isJustOn()) {
                 robot.driveDist(1, 1, 0, 1);
             }

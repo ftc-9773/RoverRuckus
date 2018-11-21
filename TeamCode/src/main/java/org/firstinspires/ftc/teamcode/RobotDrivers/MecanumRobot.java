@@ -14,6 +14,8 @@ public class MecanumRobot {
     OdometryController OC;
     Gyro gyro0;
 
+    LiftController lift;
+
     public double heading = 0;
     Telemetry telemetry;
     Point pos;
@@ -28,6 +30,17 @@ public class MecanumRobot {
         this.gyro0 = gyro;
         gyro0.setZeroPosition();
         this.telemetry = telemetry;
+    }
+
+    public MecanumRobot(MecanumCont drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, LiftController lift) {
+        this.pos = new Point( 0, 0);
+        this.heading = 0;
+        this.drivebase = drivebase;
+        this.OC = odometryController;
+        this.gyro0 = gyro;
+        gyro0.setZeroPosition();
+        this.telemetry = telemetry;
+        this.lift = lift;
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
@@ -64,5 +77,9 @@ public class MecanumRobot {
 
     }
 
+    public void setLiftPerc(double pow){this.lift.setPerc(pow);}
 
+    public void setLiftVel(double vel){this.lift.setSpeed(vel);}
+
+    public void setLiftPos(int pos){this.lift.setPos(pos);} //Uses encoder position
 }
