@@ -22,9 +22,9 @@ public class PathFollowingTest extends LinearOpMode {
 
         double elapsedDistance = 0;
         double startheading = Math.PI / 2;
-        OdometryController OC = new OdometryController(hardwareMap);
+        //OdometryController OC = new OdometryController(hardwareMap);
 
-        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, OC, telemetry);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, telemetry);
 
         Arc arc = new Arc(new Point(0,0),new Point(0,10),startheading);
         ArcFollower follower = new ArcFollower(robot);
