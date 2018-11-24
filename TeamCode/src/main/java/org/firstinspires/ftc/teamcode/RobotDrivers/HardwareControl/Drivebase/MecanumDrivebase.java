@@ -9,8 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
-import java.util.Arrays;
-
 public class MecanumDrivebase {
 
     static private final double     COUNTS_PER_MOTOR_REV    = 1120;    //
@@ -35,7 +33,7 @@ public class MecanumDrivebase {
         driveMotors[3] = hwMap.get(DcMotor.class, "brdrive");
 
         for (DcMotor motor:driveMotors) {
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
 
@@ -49,7 +47,7 @@ public class MecanumDrivebase {
     }}
 
     public void drive(double theta, double velocity, double rotation) {
-        //noEncoders();
+        noEncoders();
         double _s = Math.sin(theta + Math.PI / 4.0);
         double _c = Math.cos(theta + Math.PI / 4.0);
         double m = Math.max(Math.abs(_s), Math.abs(_c));
@@ -67,11 +65,10 @@ public class MecanumDrivebase {
 
         // Set motor powers
         for (int i = 0; i < 4; i++) { driveMotors[i].setPower(vel[i]); }
-        //telemetry.addData("MotorValues", Arrays.toString(vel));
     }
 
     public void arcadeDrive(double x, double y, double rot) {
-        noEncoders();
+
         double theta = Math.atan2(x, y);
         double mag = Math.sqrt(x * x + y * y) ;
 

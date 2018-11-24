@@ -86,7 +86,7 @@ public class OdometryController {
         encoder2 = hwMap.dcMotor.get("centerEncoder");
         encoder3 = hwMap.dcMotor.get("rightEncoder");
 
-        //InvMatrixDict = new SafeJsonReader("odometryInvMatrix");
+        InvMatrixDict = new SafeJsonReader("odometryInvMatrix");
 
         readInvMatrix();
 
