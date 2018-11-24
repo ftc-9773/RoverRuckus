@@ -22,6 +22,10 @@ public class Vector {
         return MathOps.modPi(angle);
     }
 
+    public Vector(double x, double y){
+        this(true, x, y);
+    }
+
     /**
      * Creates a cartesian vector of the form [x, y]
      * @param xMag X value if isCartesian is true. If polar, magnitude of vector

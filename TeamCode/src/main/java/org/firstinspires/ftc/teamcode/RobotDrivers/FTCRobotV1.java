@@ -8,31 +8,57 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.Mec
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
+import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 
 import java.util.Arrays;
 
+/**
+ * @author cadence
+ * @version 1.0
+ * */
 public class FTCRobotV1 {
+    //Attachments
     MecanumDrivebase drivebase;
     Intake intake;
     OdometryController OC;
-    Gyro gyro0;
-
     VerticalLift lift;
 
-    public double heading = 0;
+    //sensors
+    Gyro gyro;
+
+    //state
+    double heading = 0;
     Telemetry telemetry;
     Point pos;
-    double x = 0;
-    double y = 0;
+
+    //helpers
+    boolean usingOdometry = false;
+    boolean usingGyros = false;
+
+    //Tracking position
+    double lastTime;
+    Vector lastVelocity;
+    double headingVelocity;
+
+
+    public FTCRobotV1(MecanumDrivebase drivebase,  Telemetry telemetry) {
+        this.pos = new Point( 0, 0);
+        this.heading = 0;
+        this.drivebase = drivebase;
+        this.telemetry = telemetry;
+        this.lastTime = System.currentTimeMillis();
+        this.lastVelocity = new Vector(0,0);
+        this.headingVelocity = 0;
+    }
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
-        //this.OC = odometryController;
-        this.gyro0 = gyro;
-        gyro0.setZeroPosition();
+        this.gyro = gyro;
+        this.gyro.setZeroPosition();
         this.telemetry = telemetry;
+        usingGyros = true;
     }
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, VerticalLift lift) {
@@ -40,14 +66,20 @@ public class FTCRobotV1 {
         this.heading = 0;
         this.drivebase = drivebase;
         this.OC = odometryController;
-        this.gyro0 = gyro;
-        gyro0.setZeroPosition();
+        this.gyro = gyro;
+        this.gyro.setZeroPosition();
         this.telemetry = telemetry;
         this.lift = lift;
+        usingGyros = true;
+        usingOdometry = true;
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
         drivebase.arcadeDrive(xV, yV, rotV);
+        if(!usingGyros && !usingOdometry) {
+            Point temp = new Point(this.pos.xCord, this.pos.yCord);
+            this.pos = temp;
+        }
     }
 
     public void driveDist(double x, double y, double rotation, double speed){
@@ -55,29 +87,31 @@ public class FTCRobotV1 {
         this.pos.xCord += x;
         this.pos.yCord += y;
         this.heading += rotation;
-        //update();
     }
 
     public Point getPos(){
-        //update();
         return this.pos;
     }
 
     public double getHeading() {
-        //update();
         return heading;
     }
 
     public void update(){
-        /*double[] ocPos = this.OC.getPosition();
-        this.x = ocPos[0];
-        this.y = ocPos[1];
-        this.pos = new Point(x, y);
-        this.heading = ocPos[2];
-        */if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
-        //telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
-        if (gyro0.isUpdated()) telemetry.addData("Got heading from Gyro", this.heading);
-        telemetry.update();
+        if (usingOdometry) {
+            double[] ocPos = this.OC.getPosition();
+            double x = ocPos[0];
+            double y = ocPos[1];
+            this.pos = new Point(x, y);
+            this.heading = ocPos[2];
+            telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
+        }
+        if (usingGyros) {
+            if (this.gyro.isUpdated()) {
+                this.heading = gyro.getHeading(true);
+                telemetry.addData("Got heading from Gyro", this.heading);
+            }
+        }
     }
 
     public void setLiftPerc(double pow){this.lift.setPerc(pow);}
