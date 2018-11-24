@@ -14,6 +14,7 @@ public class VerticalLift implements Attachment{
     DcMotorEx leftMotor;
     DcMotorEx rightMotor;
     Servo hookServo;
+    // TODO: For this stuff we really only need one json reader. it only clogs up memory to have more, especially as we dont have to write any of this stuff
     SafeJsonReader servoReader = new SafeJsonReader("hookServoPositions");
     SafeJsonReader motorReader = new SafeJsonReader("DcMotorPIDCoefficients");
     double hsOpen;
