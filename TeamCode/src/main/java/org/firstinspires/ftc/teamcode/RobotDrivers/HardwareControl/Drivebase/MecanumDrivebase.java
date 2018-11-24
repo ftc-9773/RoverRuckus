@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
+import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 public class MecanumDrivebase {
@@ -21,6 +22,8 @@ public class MecanumDrivebase {
     static final double MAX_ROTATIONAL_SPEED = 1.0;
 
     public DcMotorEx[] driveMotors;
+
+    private double[] motorPowers = new double[4];
 
     Telemetry telemetry;
     SafeJsonReader reader = new SafeJsonReader("DcMotorPIDCoefficients");
@@ -47,7 +50,7 @@ public class MecanumDrivebase {
         //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         d.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }}
-
+/*
     public void drive(double theta, double velocity, double rotation) {
         runWithEncoders();
         double _s = Math.sin(theta + Math.PI / 4.0);
@@ -79,45 +82,36 @@ public class MecanumDrivebase {
 
         drive(theta, mag, rot);
     }
+*/
+    // Clean Version
+    public void drive(double x, double y, double rotation) {
+        runWithEncoders();
 
-    /**
-     * Drive a certain distance, using the built in target position PID
-     * @param x Distance in inches to move left
-     * @param y Distance in inces to move foward
-     * @param headingChange radians to rotate
-     * @param speed Speed in inches for second.
-     * */
-    //TODO: Adapt to use PIDF rather than PID.
-    public void driveDist(double x, double y, double headingChange, double speed){
-        runToPosition();
-        double theta = Math.atan2(x, y);
-        double distance = Math.sqrt(x * x + y * y);
+        motorPowers[0] = y + x + rotation;
+        motorPowers[1] = y - x - rotation;
+        motorPowers[2] = y - x + rotation;
+        motorPowers[3] = y + x - rotation;
 
-        double _s = Math.sin(theta + Math.PI / 4.0);
-        double _c = Math.cos(theta + Math.PI / 4.0);
-        double m = Math.max(Math.abs(_s), Math.abs(_c));
-        double s = _s / m;
-        double c = _c / m;
-        int[] pos = new int[4];
+        motorPowers[1] *= -1;
+        motorPowers[3] *= -1;
 
-        pos[0] = (int) ((COUNTS_PER_INCH) * (distance * s + headingChange * Math.sqrt(2) * ROBOT_DIAMETER_INCHES / WHEEL_DIAMETER_INCHES));
-        pos[1] = (int) ((COUNTS_PER_INCH) * (distance * c - headingChange * Math.sqrt(2) * ROBOT_DIAMETER_INCHES / WHEEL_DIAMETER_INCHES));
-        pos[2] = (int) ((COUNTS_PER_INCH) * (distance * c + headingChange * Math.sqrt(2) * ROBOT_DIAMETER_INCHES / WHEEL_DIAMETER_INCHES));
-        pos[3] = (int) ((COUNTS_PER_INCH) * (distance * s - headingChange * Math.sqrt(2) * ROBOT_DIAMETER_INCHES / WHEEL_DIAMETER_INCHES));
+        double maxVal = Math.max(Math.max(Math.abs(motorPowers[0]), Math.abs(motorPowers[1])),
+                        Math.max(Math.abs(motorPowers[2]), Math.abs(motorPowers[3])));
 
-        pos[1] *= -1;
-        pos[3] *= -1;
-
-        telemetry.addData("Positions:", pos);
-
-        double radpsec = speed / WHEEL_DIAMETER_INCHES * 2; //Converts inches per second into radians per second
-        // Set motor powers
-        for (int i = 0; i < 4; i++) {
-            driveMotors[i].setTargetPosition(pos[i]);
-            driveMotors[i].setVelocity(radpsec, AngleUnit.RADIANS);
-        }
+        // Check that values are < 1. Normalize otherwise
+        if (maxVal > 1) { for (double val:motorPowers) { val /= maxVal;} }
     }
 
+    public void drivePolar(double mag, double theta, double rotation) {
+        double x = Math.sin(theta);
+        double y = Math.sin(theta);
+
+        drive(x, y, rotation);
+    }
+
+    public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]); } }
+    public void stop() { for (DcMotor motor:driveMotors) {motor.setPower(0);} }
+    /*
     public double[] arcStep(Arc arc, double speed, double currHeading) {
         double headingChange = 2 * currHeading;
         double steps = arc.getLength() / speed / 20; //20 steps minimum
@@ -130,6 +124,7 @@ public class MecanumDrivebase {
         out[2] = headingChange / steps;
         return out;
     }
+*/
 
     public double[] getPos(){
         double[] pos = new double[4];
