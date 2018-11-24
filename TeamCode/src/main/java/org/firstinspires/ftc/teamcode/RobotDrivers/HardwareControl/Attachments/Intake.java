@@ -138,10 +138,10 @@ public class Intake {
      * Note that the readSensors() function must be called after this for any action to happen
      */
     public void setExtensionPowerFromGamepad(double power){
-        if(Math.abs(power) >= 0.12 ) {
+        if(Math.abs(power) >= 0.09 ) {
             pidEnabled = false;
             gamepadArmPower = power;
-        }
+        } else gamepadArmPower = 0.0;
     }
 
     /**
@@ -150,7 +150,7 @@ public class Intake {
      * Note that the readSensors() function must be called after this for any action to happen
      */
     public void transferMinerals() {
-        bucketServo.setPosition(this.bucketServoTransferPosition);
+        intakeBucketServoPosition = bucketServoTransferPosition   ;
     }
 
     /**
@@ -171,26 +171,27 @@ public class Intake {
     public void update(){
 
         if(pidEnabled) {
-            armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, getArmPos()));
+            armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, armMotor.getCurrentPosition()));
         }
         else
             armMotor.setPower(gamepadArmPower);
         // set servoPositions
         leftIntakeServo.setPosition(intakeMotorPower);
+        rightIntakeServo.setPosition(intakeMotorPower);
         bucketServo.setPosition(intakeBucketServoPosition);
-
     }
 
-    public double getArmPos(){
-        return armMotor.getCurrentPosition() - armZeroTickPosition;
+    public int getArmPos(){
+        return armMotor.getCurrentPosition();
     }
+
 
     /**
      * Allows the user to tell if the arm is in the transfer state. used to coordinate handoff process
      * @return whether or not the arm is within the bounds of the "transfer zone"
      */
     public boolean isInTransferState(){
-        return getArmPos()< transferThreshold;
+        return armMotor.getCurrentPosition()< transferThreshold;
     }
 
     public void stop() {

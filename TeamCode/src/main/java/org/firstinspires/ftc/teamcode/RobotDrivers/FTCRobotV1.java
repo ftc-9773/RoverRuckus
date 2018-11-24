@@ -133,12 +133,12 @@ public class FTCRobotV1 {
         if(gp2.dpad_down) intake.goToTransfer();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
         else if(gp2.left_bumper) intake.reverseIntake();
-        else intake.stopIntake();
-
         // basic automation
-        if(intake.isInTransferState() && lift.isInTransferState()){
+        else if(intake.isInTransferState() && lift.isInTransferState()){
             intake.transferMinerals();
         }
+        else intake.stopIntake();
+
         // now hand controls for lifts
         telemetry.addData("Arm motor pos", -gp2.left_stick_y);
         telemetry.addData("Curr arm motor pos", intake.getArmPos());
