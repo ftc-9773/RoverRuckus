@@ -48,8 +48,8 @@ public class Intake {
     //double 393 servo vals
     private double stopVal, fowardsVal, backwardsVal;
     /// armPositions
-     int armInPosition = 10;
-     int transferThreshold = 15;
+     int armInPosition = 150;
+     int transferThreshold = 80;
 
     private double intakeMotorPower, intakeBucketServoPosition;
 
@@ -74,19 +74,19 @@ public class Intake {
 
 
         // Initialize all values from configuration files
-        jsonReader = new SafeJsonReader("IntakePositions.json") ;
+        jsonReader = new SafeJsonReader("IntakePositions") ;
         // bucket servo positions
-        bucketServoTransferPosition = jsonReader.getDouble( "bucketServoTransferPosition");
-        bucketServoIntakePosition = jsonReader.getDouble( "bucketServoIntakePosition");
-        carryPosition = jsonReader.getDouble("bucketServoCarryPosition");
+        bucketServoTransferPosition = jsonReader.getDouble( "bucketServoTransferPosition", 0.04);
+        bucketServoIntakePosition = jsonReader.getDouble( "bucketServoIntakePosition",0.55);
+        carryPosition = jsonReader.getDouble("bucketServoCarryPosition", 0.46);
         // intake stuff
         stopVal = jsonReader.getDouble("intakeStopVal", 0.5);
-        fowardsVal = jsonReader.getDouble("intakeFowardsVal",0.85);
-        backwardsVal = jsonReader.getDouble("intakeBackwardsVal",0.15);
+        fowardsVal = jsonReader.getDouble("intakeFowardsVal",0.09);
+        backwardsVal = jsonReader.getDouble("intakeBackwardsVal",0.85);
         // liftCoefficents
-        double kp = jsonReader.getDouble("liftKp",0.1);
-        double ki = jsonReader.getDouble("liftKi", 0.0);
-        double kd = jsonReader.getDouble("liftKd", 0.0);
+        double kp = jsonReader.getDouble("liftKp",0.0025);
+        double ki = jsonReader.getDouble("liftKi", 0.0009);
+        double kd = jsonReader.getDouble("liftKd", 0.0002);
         extensionPID = new PIDController(kp,ki,kd);
     }
 
