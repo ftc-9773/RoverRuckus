@@ -47,7 +47,7 @@ public class FTCRobotV1 {
     Button toggleLeftRightButton = new Button();
     boolean leftRightState = false;
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry) {
+    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
@@ -55,6 +55,9 @@ public class FTCRobotV1 {
         this.gyro = gyro;
         this.gyro.setZeroPosition();
         this.telemetry = telemetry;
+        this.lift = lift;
+        this.intake = intake;
+
     }
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, CubeLift lift) {

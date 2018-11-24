@@ -61,7 +61,7 @@ public class Intake {
      * Secondly, the function initializes all the necessary "tunables" from the JSON file.
      * @param hwmp the hardware map from the robot; used to map objects to real world counterparts
      */
-    public void IntakeController(HardwareMap hwmp ){
+    public Intake(HardwareMap hwmp ){
         // initialize harware map stuff
         leftIntakeServo = hwmp.get(Servo.class, "liServo");
         rightIntakeServo = hwmp.get(Servo.class, "riServo");
