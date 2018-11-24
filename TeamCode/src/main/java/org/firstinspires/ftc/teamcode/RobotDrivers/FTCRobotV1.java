@@ -12,23 +12,37 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.Mec
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
+import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
 import java.util.Arrays;
 
 public class FTCRobotV1 {
-    public MecanumDrivebase drivebase;
-    public Intake intake;
-    public OdometryController odometry;
-    public Gyro gyro0;
+    //Attachments
+    MecanumDrivebase drivebase;
+    Intake intake;
+    OdometryController odometry;
+    CubeLift lift;
 
-    public CubeLift lift;
+    //sensors
+    Gyro gyro;
 
-    public double heading = 0;
+    //state
+    double heading = 0;
     Telemetry telemetry;
     Point pos;
-    double x = 0;
-    double y = 0;
+
+    //helpers
+    boolean usingOdometry = false;
+    boolean usingGyros = false;
+
+    //Tracking position
+    double lastTime;
+    Vector lastVelocity;
+    double headingVelocity;
+
+
+
     // teleop values
     Button toggleLeftRightButton = new Button();
     boolean leftRightState = false;
@@ -38,8 +52,8 @@ public class FTCRobotV1 {
         this.heading = 0;
         this.drivebase = drivebase;
         //this.OC = odometryController;
-        this.gyro0 = gyro;
-        gyro0.setZeroPosition();
+        this.gyro = gyro;
+        this.gyro.setZeroPosition();
         this.telemetry = telemetry;
     }
 
@@ -48,15 +62,13 @@ public class FTCRobotV1 {
         this.heading = 0;
         this.drivebase = drivebase;
         this.odometry = odometryController;
-        this.gyro0 = gyro;
-        gyro0.setZeroPosition();
+        this.gyro = gyro;
+        this.gyro.setZeroPosition();
         this.telemetry = telemetry;
         this.lift = lift;
     }
     public FTCRobotV1(HardwareMap hwmap, Point startPos, Telemetry telem){
         // position tracking
-        gyro0 = hwmap.get(gyro0.getClass(), "imuLeft");
-        gyro0.setZeroPosition();
         this.telemetry = telemetry;
         this.pos = startPos;
         this.heading = 0.0;
@@ -125,16 +137,19 @@ public class FTCRobotV1 {
     }
 
     public void update(){
-        /*double[] ocPos = this.OC.getPosition();
-        this.x = ocPos[0];
-        this.y = ocPos[1];
-        this.pos = new Point(x, y);
-        this.heading = ocPos[2];
-        */if (this.gyro0.isUpdated()){this.heading = gyro0.getHeading(true);}
-        //telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
-        if (gyro0.isUpdated()) telemetry.addData("Got heading from Gyro", this.heading);
-        telemetry.update();
-
+            if (usingOdometry) {
+                double[] ocPos = this.odometry.getPosition();
+                double x = ocPos[0];
+                double y = ocPos[1];
+                this.pos = new Point(x, y);
+                this.heading = ocPos[2];
+                telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
+            }
+            if (usingGyros) {
+                if (this.gyro.isUpdated()) {
+                    this.heading = gyro.getHeading(true);
+                    telemetry.addData("Got heading from Gyro", this.heading);
+                }
+            }
     }
-
 }
