@@ -39,10 +39,8 @@ public class FTCRobotV1 {
     double iter = 0;
 
     //Tracking position
-    double lastTime;
-    Vector lastVelocity;
-    double headingVelocity;
-    ArrayList<double[]> driveHistory;
+    double[] lastEncoderPos;
+
 
 
     // teleop values
@@ -72,6 +70,7 @@ public class FTCRobotV1 {
         this.telemetry = telemetry;
         this.lift = lift;
     }
+
     public FTCRobotV1(HardwareMap hwmap, Point startPos, Telemetry telem){
         // position tracking
         this.telemetry = telemetry;
@@ -109,10 +108,14 @@ public class FTCRobotV1 {
         entry[0] = powx;
         entry[1] = powy;
         entry[2] = powt;
+        /*
         if (iter == 100) {
             driveHistory.set(driveHistory.size(), entry);
             iter = 0;
+        } else{
+            iter++;
         }
+        */
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
         else if(gp2.b) lift.goToScorePos();
@@ -130,19 +133,22 @@ public class FTCRobotV1 {
         else lift.stopDump();
 
         //button push intake functions;
+        telemetry.addData("Left bumper", gp2.left_bumper);
         if(gp2.dpad_down) intake.goToTransfer();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
         else if(gp2.left_bumper) intake.reverseIntake();
+
+
         // basic automation
-        else if(intake.isInTransferState() && lift.isInTransferState()){
-            intake.transferMinerals();
-        }
-        else intake.stopIntake();
+//        else if(intake.isInTransferState() && lift.isInTransferState()){
+//            intake.transferMinerals();
+//        }
+//        else intake.stopIntake();
 
         // now hand controls for lifts
         telemetry.addData("Arm motor pos", -gp2.left_stick_y);
         telemetry.addData("Curr arm motor pos", intake.getArmPos());
-        intake.setExtensionPowerFromGamepad(-gp2.left_stick_y);
+        intake.setExtensionPowerFromGamepad(gp2.left_stick_y);
         telemetry.addData("Lift motor power", -gp2.right_stick_y);
         telemetry.addData("Lift motor current pos", lift.getLiftPos());
         lift.adjustLift(-gp2.right_stick_y);
@@ -169,6 +175,8 @@ public class FTCRobotV1 {
                 this.pos = new Point(x, y);
                 this.heading = ocPos[2];
                 telemetry.addData("Got Positions from OC:", Arrays.toString(ocPos));
+            } else{
+
             }
             if (usingGyros) {
                 if (this.gyro.isUpdated()) {

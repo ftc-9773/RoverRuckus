@@ -21,7 +21,7 @@ public class PathFollowingTest extends LinearOpMode {
         //Create everything ...
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         sendTelemetry("Drivebase created");
-        Intake intake = new Intake(hardwareMap);
+        Intake intake = new Intake(hardwareMap, this);
         sendTelemetry("Intake created");
         CubeLift lift = new CubeLift(hardwareMap);
         sendTelemetry("CubeLift created");
@@ -33,12 +33,13 @@ public class PathFollowingTest extends LinearOpMode {
         sendTelemetry("Waiting for start...");
         waitForStart();
         boolean temp = true;
+
+
         while(opModeIsActive()) {
             if (temp){
                 sendTelemetry("Started");
                 temp = false;
             }
-
 
         }
     }

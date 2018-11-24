@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -30,23 +32,25 @@ public class Intake {
     private Servo leftIntakeServo;
     private Servo rightIntakeServo;
     private Servo bucketServo;
-    private DcMotor armMotor;
+    private DcMotorEx armMotor;
 
     // initialization stuff
     SafeJsonReader jsonReader;
+    LinearOpMode opmode;
 
     // pid controller
     private PIDController extensionPID;
     int armTargetPos;
-    int armZeroTickPosition;
-    boolean pidEnabled;
+    boolean pidEnabled = true;
     double gamepadArmPower;
+
     // Servo positions
     private double bucketServoTransferPosition ;
     private double bucketServoIntakePosition;
     private double carryPosition;
+
     //double 393 servo vals
-    private double stopVal, fowardsVal, backwardsVal;
+    private double stopVal, forwardsVal, backwardsVal;
     /// armPositions
      int armInPosition = 150;
      int transferThreshold = 80;
@@ -55,7 +59,7 @@ public class Intake {
     private double intakeMotorPower, intakeBucketServoPosition;
     /*
         Some stuff for me: pushing the file
-        cd TeamCode/src/main/java/org/firstinspires/ftc/teamcode/JSON_files/HardwareStuff
+        cd TeamCode/src/main/java/org/firstinspires/ftc/teamcode/json19/
         // to push
         ~/Library/Android/sdk/platform-tools/adb push IntakePositions.json /sdcard/FIRST/team9773/json19
         or
@@ -73,15 +77,15 @@ public class Intake {
      * Secondly, the function initializes all the necessary "tunables" from the JSON file.
      * @param hwmp the hardware map from the robot; used to map objects to real world counterparts
      */
-    public Intake(HardwareMap hwmp ){
+    public Intake(HardwareMap hwmp, LinearOpMode op){
         // initialize harware map stuff
         leftIntakeServo = hwmp.get(Servo.class, "liServo");
         rightIntakeServo = hwmp.get(Servo.class, "riServo");
         bucketServo = hwmp.get(Servo.class, "trServo");
-        armMotor = hwmp.get(DcMotor.class, "iaMotor");
+        armMotor = hwmp.get(DcMotorEx.class, "iaMotor");
         // initialize the motor
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -93,13 +97,17 @@ public class Intake {
         carryPosition = jsonReader.getDouble("bucketServoCarryPosition", 0.46);
         // intake stuff
         stopVal = jsonReader.getDouble("intakeStopVal", 0.5);
-        fowardsVal = jsonReader.getDouble("intakeFowardsVal",0.09);
+        forwardsVal = jsonReader.getDouble("intakeFowardsVal",0.09);
         backwardsVal = jsonReader.getDouble("intakeBackwardsVal",0.85);
         // liftCoefficents
         double kp = jsonReader.getDouble("liftKp",0.0025);
         double ki = jsonReader.getDouble("liftKi", 0.0009);
         double kd = jsonReader.getDouble("liftKd", 0.0002);
         extensionPID = new PIDController(kp,ki,kd);
+
+        opmode = op;
+        retractArm();
+        reset();
     }
 
     /**
@@ -112,12 +120,28 @@ public class Intake {
         intakeBucketServoPosition = carryPosition;
     }
 
+    public void retractArm(){
+        double lastTime = System.currentTimeMillis();
+        double lastEncoderValue = armMotor.getCurrentPosition();
+        double speed = 1000;
+        armMotor.setPower(-0.1); //Low power retraction
+        while(speed > 10 && !opmode.isStopRequested()){
+            double dx = armMotor.getCurrentPosition() - lastEncoderValue;
+            double dt = lastTime - System.currentTimeMillis();
+            speed = dx / dt;
+        }
+    }
+
+    public void reset(){
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     /**
      * Void method that starts the motion of the intake. Also lowers the bucket to allow collection
      * Note that the readSensors() function must be called after this for any action to happen
      */
     public void intakeOn() {
-        intakeMotorPower = fowardsVal;
+        intakeMotorPower = forwardsVal;
         if(!pidEnabled)
         intakeBucketServoPosition = bucketServoIntakePosition;
     }
@@ -169,7 +193,6 @@ public class Intake {
      * lift, and servos, reading from hardware, and writing to it when done.
      */
     public void update(){
-
         if(pidEnabled) {
             armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, armMotor.getCurrentPosition()));
         }
