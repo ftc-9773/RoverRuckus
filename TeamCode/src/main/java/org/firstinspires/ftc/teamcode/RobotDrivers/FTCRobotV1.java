@@ -86,9 +86,10 @@ public class FTCRobotV1 {
     }
 
     public void driveVelocity(double xV, double yV, double rotV){
-        drivebase.arcadeDrive(xV, yV, rotV);
+        drivebase.drive(xV, yV, rotV);
     }
 
+    /*
     public void driveDist(double x, double y, double rotation, double speed){
         drivebase.driveDist(x, y, rotation, speed);
         this.pos.xCord += x;
@@ -96,6 +97,7 @@ public class FTCRobotV1 {
         this.heading += rotation;
         //readSensors();
     }
+    */
 
     // teleop functions
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
