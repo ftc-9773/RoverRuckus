@@ -36,13 +36,13 @@ public class MecanumDrivebase {
 
         for (DcMotorEx motor:driveMotors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(reader.getDouble("kp"), reader.getDouble("ki"), reader.getDouble("kd")));
+            //motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(reader.getDouble("kp"), reader.getDouble("ki"), reader.getDouble("kd")));
 
         }
         runToPosition();
     }
 
-    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}}
+    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
     public void runToPosition(){for(DcMotor d:driveMotors){
         //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         d.setMode(DcMotor.RunMode.RUN_TO_POSITION);

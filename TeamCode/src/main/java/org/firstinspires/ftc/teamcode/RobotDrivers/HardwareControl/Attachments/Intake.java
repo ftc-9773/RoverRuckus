@@ -120,12 +120,16 @@ public class Intake {
         intakeBucketServoPosition = carryPosition;
     }
 
+    public void carryPos(){
+        intakeBucketServoPosition = carryPosition;
+    }
+
     public void retractArm(){
         double lastTime = System.currentTimeMillis();
         double lastEncoderValue = armMotor.getCurrentPosition();
         double speed = 1000;
-        armMotor.setPower(-0.1); //Low power retraction
-        while(speed > 10 && !opmode.isStopRequested()){
+        armMotor.setPower(0.15); //Low power retraction
+        while(speed > 10 && !opmode.isStopRequested() && !opmode.isStarted()){
             double dx = armMotor.getCurrentPosition() - lastEncoderValue;
             double dt = lastTime - System.currentTimeMillis();
             speed = dx / dt;
@@ -193,6 +197,7 @@ public class Intake {
      * lift, and servos, reading from hardware, and writing to it when done.
      */
     public void update(){
+        if(pidEnabled&&isInTransferState()) pidEnabled = false;
         if(pidEnabled) {
             armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, armMotor.getCurrentPosition()));
         }
@@ -202,6 +207,7 @@ public class Intake {
         leftIntakeServo.setPosition(intakeMotorPower);
         rightIntakeServo.setPosition(intakeMotorPower);
         bucketServo.setPosition(intakeBucketServoPosition);
+
     }
 
     public int getArmPos(){
@@ -216,6 +222,7 @@ public class Intake {
     public boolean isInTransferState(){
         return armMotor.getCurrentPosition()< transferThreshold;
     }
+
 
     public void stop() {
         armMotor.setPower(0.0);

@@ -1,5 +1,6 @@
 {
-  "leftSorterUpPos": 0.9,
+  "COMMENT: ": "blue is left",
+  "leftSorterUpPos": 0.89,
   "leftSorterDownPos": 0.55,
 
   "rightSorterUpPos": 0.5,
@@ -10,7 +11,7 @@
   "hookOpenPos": 0.05,
   "hookClosedPos": 0.38,
 
-  "liftLowPos":100,
+  "liftLowPos":195,
   "liftHookPos":2718,
   "liftScorePos":3700,
   "minLiftPosition": 30,
