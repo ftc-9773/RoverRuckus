@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
-
+@Deprecated
 public class VerticalLift implements Attachment{
     public static double MAX_RAD_PER_SECOND = Math.PI * 4;
 

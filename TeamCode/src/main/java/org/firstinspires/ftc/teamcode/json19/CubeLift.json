@@ -10,7 +10,6 @@
   "hookOpenPos": 0.05,
   "hookClosedPos": 0.38,
 
-  // lift
   "liftLowPos":195,
   "liftHookPos":2718,
   "liftScorePos":3700,
@@ -19,7 +18,6 @@
   "transferTol": 20,
   "joggingScalar": 10,
 
-  // pid
   "kp":0.0025,
   "ki": 0.009,
   "kd": 0.0002

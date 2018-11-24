@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.I
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 
-@TeleOp(name="TeleOp opmode")
+@TeleOp(name="TeleOpOpmode")
 public class TeleOpMain extends LinearOpMode{
 
     @Override
@@ -28,7 +28,12 @@ public class TeleOpMain extends LinearOpMode{
 
         sendTelemetry("Waiting for start...");
         waitForStart();
+        boolean temp = true;
         while(opModeIsActive()) {
+            if (temp){
+                sendTelemetry("Started");
+                temp = false;
+            }
             robot.runGamepadCommands(gamepad1, gamepad2);
             telemetry.update();
         }

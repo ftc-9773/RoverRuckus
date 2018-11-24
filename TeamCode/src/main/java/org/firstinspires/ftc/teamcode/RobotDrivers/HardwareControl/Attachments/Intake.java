@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
  * of the intake arm and slide
  * <p>
  * This program is made in the paradigm followed by the rest of the robot drivers:
- * Most of the methods simply update the "goal state" of the class. <b> The update(); method MUST be used
+ * Most of the methods simply readSensors the "goal state" of the class. <b> The readSensors(); method MUST be used
  * in order for changes to happen in robot function.</b>
  *
  *
@@ -103,7 +103,7 @@ public class Intake {
 
     /**
      * Void method that stops the motion of the intake. Also raises the intake bucket for transit
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void stopIntake() {
         intakeMotorPower = stopVal;
@@ -112,7 +112,7 @@ public class Intake {
 
     /**
      * Void method that starts the motion of the intake. Also lowers the bucket to allow collection
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void intakeOn() {
         intakeMotorPower = fowardsVal;
@@ -122,7 +122,7 @@ public class Intake {
 
     /**
      * Void method that reverses the motion of the intake.
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void reverseIntake(){
         intakeMotorPower = backwardsVal;
@@ -133,7 +133,7 @@ public class Intake {
      * sets the extension lift's power (supposed to be) from the gamepad value. if the value
      * is outside of a dead zone, it is assumed that the action is intentional,
      * and the value read is written to the motor, allowing manual control of the arm.
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void setExtensionPowerFromGamepad(double power){
         if(Math.abs(power) >= 0.12 ) {
@@ -145,7 +145,7 @@ public class Intake {
     /**
      * Void method that raises the bucket to the transfer position. should be called by
      * an exterior method to control handoff
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void transferMinerals() {
         bucketServo.setPosition(this.bucketServoTransferPosition);
@@ -154,7 +154,7 @@ public class Intake {
     /**
      * Switcehs into automatic control to return the intake lift to the transfer position.
      * Also lifts the bucket to the storage position, untill the lift is back in.
-     * Note that the update() function must be called after this for any action to happen
+     * Note that the readSensors() function must be called after this for any action to happen
      */
     public void goToTransfer(){
         pidEnabled = true;
@@ -163,7 +163,7 @@ public class Intake {
     }
 
     /**
-     * The main update method of the class. this executes any actions needed to update the position of the
+     * The main readSensors method of the class. this executes any actions needed to readSensors the position of the
      * lift, and servos, reading from hardware, and writing to it when done.
      */
     public void update(){
@@ -185,7 +185,7 @@ public class Intake {
 
     /**
      * Allows the user to tell if the arm is in the transfer state. used to coordinate handoff process
-     * @return wether or not the arm is within the bounds of the "transfer zone"
+     * @return whether or not the arm is within the bounds of the "transfer zone"
      */
     public boolean isInTransferState(){
         return getArmPos()< transferThreshold;
@@ -195,6 +195,4 @@ public class Intake {
         armMotor.setPower(0.0);
 
     }
-
-
 }

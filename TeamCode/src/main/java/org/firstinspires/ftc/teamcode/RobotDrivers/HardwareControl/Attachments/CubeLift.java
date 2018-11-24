@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
  * of the vertical lift, cube distributor, and hanging mech.
  * <p>
  * This program is made in the paradigm followed by the rest of the robot drivers:
- * Most of the methods simply update the "goal state" of the class. <b> The update(); method MUST be used
+ * Most of the methods simply readSensors the "goal state" of the class. <b> The readSensors(); method MUST be used
  * in order for changes to happen in robot function.</b>
  *
  *
@@ -22,6 +24,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
  */
 
 public class CubeLift implements Attachment {
+    private final static String TAG = "Cube Lift:";
 
     private DcMotorEx leftLiftMotor,rightLiftMotor;
     private Servo distributorServo, leftSorterServo, rightSorterServo, hookServo;
@@ -63,7 +66,7 @@ public class CubeLift implements Attachment {
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        Log.d(TAG, "Initialised motors and servos");
 
         // JSON
         json = new SafeJsonReader("CubeLift");
@@ -95,27 +98,32 @@ public class CubeLift implements Attachment {
         ki = json.getDouble("ki", 0.009);
         kd = json.getDouble("kd", 0.0002);
         pid = new PIDController(kp,ki,kd);
+
+        Log.d(TAG, "Read and set from JSON");
     }
     /**
      * Void method that tells the lift to go to the low position.
-     * Note that the update() function must be called after this to update motor state.
+     * Note that the readSensors() function must be called after this to readSensors motor state.
      */
     public void goToLowPos(){
+        Log.v(TAG, "Set target position to Low position");
         liftTargetPosition = liftLowPos;
     }
     /**
      * Void method that tells the lift to go to the scoring position. also opens the hanging hook to avoid accidental catching on the latch
-     * Note that the update() function must be called after this to update motor state.
+     * Note that the readSensors() function must be called after this to readSensors motor state.
      */
     public void goToScorePos(){
+        Log.v(TAG, "Set target position to scoring position");
         liftTargetPosition = liftScorePos;
     }
     /**
      * Void method that tells the lift to move so that the hook is at the same height as the hanging latch.
      * this should be used either to drop from hang position, or to re-align to that position to re-latch in endgame
-     * Note that the update() function must be called after this to update motor state.
+     * Note that the readSensors() function must be called after this to readSensors motor state.
      */
     public void goToHangPos(){
+        Log.v(TAG, "Set target to hang pos");
         liftTargetPosition = liftHookPos;
         hookServo.setPosition(hookOpenPos);
     }
@@ -128,8 +136,9 @@ public class CubeLift implements Attachment {
         if(dumpState) return;
         if(isDistributorRight) rightSorterServo.setPosition(rightSorterDownPos);
         else leftSorterServo.setPosition(leftSorterDownPos);
-        // update dumpState
+        // readSensors dumpState
         dumpState = true;
+        Log.v(TAG, "Set dump state");
     }
     /**
      * Void method that moves servos to the default, non-dumping position
@@ -139,8 +148,9 @@ public class CubeLift implements Attachment {
         if(!dumpState)
         leftSorterServo.setPosition(leftSorterUpPos);
         rightSorterServo.setPosition(rightSorterUpPos);
-        // update dumpState
+        // readSensors dumpState
         dumpState = false;
+        Log.v(TAG, "Moved away from dump state");
     }
 
 
@@ -167,8 +177,12 @@ public class CubeLift implements Attachment {
      */
     public void adjustLift( double input){
         if(Math.abs(input)>0.08) {
+            Log.d(TAG, String.format("Got input to adjustLift: %d", input));
             int correction = (int)(input*joggingScalar);
             liftTargetPosition = bound(minLiftPosition, maxLiftPosition, liftTargetPosition + correction);
+        }
+        else{
+            Log.v(TAG, String.format("Set lift position to 0, input was %d", input));
         }
     }
     //todo: code the home() method.
@@ -185,7 +199,7 @@ public class CubeLift implements Attachment {
     }
 
     /**
-     * The main update method of the class. this executes any actions needed to update the position of the
+     * The main readSensors method of the class. this executes any actions needed to readSensors the position of the
      * lift motors, reading from hardware, and takes care of all necessary sensor reads and writes.
      * This needs only be called once a cycle
      */
@@ -213,7 +227,7 @@ public class CubeLift implements Attachment {
     public int getLiftPos(){
         return rightLiftMotor.getCurrentPosition()- liftZeroPos;
     }
-    // used internally to bound the fnucthion
+    // used internally to bound the function
     private int bound(int min, int max, int input){
         if (input < min) return min;
         else if (input > max) return max;

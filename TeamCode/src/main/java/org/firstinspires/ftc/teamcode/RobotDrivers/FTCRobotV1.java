@@ -90,15 +90,15 @@ public class FTCRobotV1 {
         this.pos.xCord += x;
         this.pos.yCord += y;
         this.heading += rotation;
-        //update();
+        //readSensors();
     }
 
     // teleop functions
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
-        // update button objects
+        // readSensors button objects
         toggleLeftRightButton.recordNewValue(gp2.x);
         // drive functions
-        driveVelocity(gp1.left_stick_x, -gp1.left_stick_y,gp1.right_stick_x);
+        driveVelocity(gp1.left_stick_x, gp1.left_stick_y,gp1.right_stick_x);
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
         else if(gp2.b) lift.goToScorePos();
@@ -126,20 +126,22 @@ public class FTCRobotV1 {
         intake.setExtensionPowerFromGamepad(-gp2.left_stick_y);
         lift.adjustLift(-gp2.right_stick_y);
 
+        lift.update();
+        intake.update();
 
     }
 
     public Point getPos(){
-        //update();
+        //readSensors();
         return this.pos;
     }
 
     public double getHeading() {
-        //update();
+        //readSensors();
         return heading;
     }
 
-    public void update(){
+    public void readSensors(){
             if (usingOdometry) {
                 double[] ocPos = this.odometry.getPosition();
                 double x = ocPos[0];
