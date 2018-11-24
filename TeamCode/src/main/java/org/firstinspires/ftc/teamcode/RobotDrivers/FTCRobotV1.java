@@ -18,6 +18,9 @@ import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Class for manipulating the robot
+ * */
 public class FTCRobotV1 {
     //Attachments
     MecanumDrivebase drivebase;
@@ -100,14 +103,9 @@ public class FTCRobotV1 {
         toggleLeftRightButton.recordNewValue(gp2.x);
 
         // drive functions
-        double powx = gp1.left_stick_x;
-        double powy = gp1.left_stick_y;
-        double powt = gp1.right_stick_x;
-        driveVelocity(powx, powy, powt);
-        double entry[] = new double[3];
-        entry[0] = powx;
-        entry[1] = powy;
-        entry[2] = powt;
+
+        driveVelocity(gp1.left_stick_x, gp1.left_stick_y, -gp1.right_stick_x);
+
         /*
         if (iter == 100) {
             driveHistory.set(driveHistory.size(), entry);
@@ -128,6 +126,10 @@ public class FTCRobotV1 {
             else lift.setRightScoreSide();
         }
 
+        //lift close
+        if (gp2.right_trigger > 0.5)
+            lift.closeLatch();
+
         // dumping
         if(gp2.right_bumper)lift.dump();
         else lift.stopDump();
@@ -135,8 +137,14 @@ public class FTCRobotV1 {
         //button push intake functions;
         telemetry.addData("Left bumper", gp2.left_bumper);
         if(gp2.dpad_down) intake.goToTransfer();
+        if (gp2.dpad_right) intake.carryPos();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
         else if(gp2.left_bumper) intake.reverseIntake();
+        else{
+            intake.stopIntake();
+        }
+        if (gp2.dpad_left) intake.transferMinerals();
+
 
 
         // basic automation

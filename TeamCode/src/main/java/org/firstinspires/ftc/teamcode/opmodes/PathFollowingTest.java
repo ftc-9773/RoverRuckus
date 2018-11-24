@@ -3,15 +3,11 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Logic.ArcFollower;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
-import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
-import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 
 @TeleOp(name = "PathFollowing")
 public class PathFollowingTest extends LinearOpMode {

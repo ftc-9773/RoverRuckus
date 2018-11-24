@@ -229,6 +229,11 @@ public class CubeLift implements Attachment {
     public int getLiftPos(){
         return rightLiftMotor.getCurrentPosition()- liftZeroPos;
     }
+
+    public void closeLatch(){
+        hookServo.setPosition(hookClosedPos);
+    }
+
     // used internally to bound the function
     private int bound(int min, int max, int input){
         if (input < min) return min;
