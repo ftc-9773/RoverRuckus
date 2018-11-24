@@ -208,7 +208,7 @@ public class SafeJsonReader {
 
     /**
      * Tells the program to modify the value of a string. Needs to be used in conjunction with the
-     * update file method to update files.
+     * readSensors file method to readSensors files.
      * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
      * @param newValue The updated string to be used.
      * @return success value - returns true if a success, false if operation failed.
@@ -271,7 +271,7 @@ public class SafeJsonReader {
 
     /**
      * Tells the program to modify the value of an int. Needs to be used in conjunction with the
-     * update file method to update files.
+     * readSensors file method to readSensors files.
      * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
      * @param newValue The updated integer value to be stored.
      * @return success value - returns true if a success, false if operation failed.
@@ -339,7 +339,7 @@ public class SafeJsonReader {
 
     /**
      * Tells the program to modify the value of a double. Needs to be used in conjunction with the
-     * update file method to update files.
+     * readSensors file method to readSensors files.
      * @param name the non-case sensitive key that the value being modified is stored in the JSON file.
      * @param newValue The updated double being stored.
      * @return success value- returns true if a success, false if otherwise
@@ -407,7 +407,7 @@ public class SafeJsonReader {
 
     /**
      * Tells the program to modify the value of a boolean. Needs to be used in conjunction with the
-     * update file method to update files.
+     * readSensors file method to readSensors files.
      * @param name the non-case sensitive key that the value being modified is stored in the JSON file
      * @param newValue The updated boolean value to be stored.
      * @return returns true if a success; false otherwise

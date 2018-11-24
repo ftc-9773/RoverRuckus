@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FTCRobotV1 {
@@ -35,12 +36,13 @@ public class FTCRobotV1 {
     //helpers
     boolean usingOdometry = false;
     boolean usingGyros = false;
+    double iter = 0;
 
     //Tracking position
     double lastTime;
     Vector lastVelocity;
     double headingVelocity;
-
+    ArrayList<double[]> driveHistory;
 
 
     // teleop values
@@ -97,18 +99,32 @@ public class FTCRobotV1 {
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
         // readSensors button objects
         toggleLeftRightButton.recordNewValue(gp2.x);
+
         // drive functions
-        driveVelocity(gp1.left_stick_x, gp1.left_stick_y,gp1.right_stick_x);
+        double powx = gp1.left_stick_x;
+        double powy = gp1.left_stick_y;
+        double powt = gp1.right_stick_x;
+        driveVelocity(powx, powy, powt);
+        double entry[] = new double[3];
+        entry[0] = powx;
+        entry[1] = powy;
+        entry[2] = powt;
+        if (iter == 100) {
+            driveHistory.set(driveHistory.size(), entry);
+            iter = 0;
+        }
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
         else if(gp2.b) lift.goToScorePos();
         else if (gp2.y) lift.goToHangPos();
+
         // left/right side toggle
         if (toggleLeftRightButton.isJustOn()){
             leftRightState = !leftRightState;
             if(leftRightState)lift.setLefScoreSide();
             else lift.setRightScoreSide();
         }
+
         // dumping
         if(gp2.right_bumper)lift.dump();
         else lift.stopDump();
@@ -118,16 +134,20 @@ public class FTCRobotV1 {
         if(gp2.left_trigger > 0.5) intake.intakeOn();
         else if(gp2.left_bumper) intake.reverseIntake();
         else intake.stopIntake();
+
         // basic automation
         if(intake.isInTransferState() && lift.isInTransferState()){
             intake.transferMinerals();
         }
         // now hand controls for lifts
+        telemetry.addData("Arm motor pos", -gp2.left_stick_y);
+        telemetry.addData("Curr arm motor pos", intake.getArmPos());
         intake.setExtensionPowerFromGamepad(-gp2.left_stick_y);
+        telemetry.addData("Lift motor power", -gp2.right_stick_y);
+        telemetry.addData("Lift motor current pos", lift.getLiftPos());
         lift.adjustLift(-gp2.right_stick_y);
 
-        lift.update();
-        intake.update();
+        update();
 
     }
 
@@ -156,5 +176,9 @@ public class FTCRobotV1 {
                     telemetry.addData("Got heading from Gyro", this.heading);
                 }
             }
+    }
+    public void update(){
+        this.lift.update();
+        this.intake.update();
     }
 }

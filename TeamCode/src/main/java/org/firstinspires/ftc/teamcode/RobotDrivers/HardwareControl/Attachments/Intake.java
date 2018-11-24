@@ -51,6 +51,7 @@ public class Intake {
      int armInPosition = 150;
      int transferThreshold = 80;
 
+
     private double intakeMotorPower, intakeBucketServoPosition;
     /*
         Some stuff for me: pushing the file
@@ -80,7 +81,7 @@ public class Intake {
         armMotor = hwmp.get(DcMotor.class, "iaMotor");
         // initialize the motor
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -107,6 +108,7 @@ public class Intake {
      */
     public void stopIntake() {
         intakeMotorPower = stopVal;
+        if(!isInTransferState())
         intakeBucketServoPosition = carryPosition;
     }
 
@@ -179,7 +181,7 @@ public class Intake {
 
     }
 
-    double getArmPos(){
+    public double getArmPos(){
         return armMotor.getCurrentPosition() - armZeroTickPosition;
     }
 

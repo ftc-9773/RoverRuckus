@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Logic.ArcFollower;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
@@ -16,28 +18,34 @@ public class PathFollowingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //Create everything ...
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
+        sendTelemetry("Drivebase created");
+        Intake intake = new Intake(hardwareMap);
+        sendTelemetry("Intake created");
+        CubeLift lift = new CubeLift(hardwareMap);
+        sendTelemetry("CubeLift created");
         Gyro gyro = new Gyro(hardwareMap);
-        //SafeJsonReader reader = new SafeJsonReader("ArcPositions");
+        sendTelemetry("Gyro created");
+        FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
+        sendTelemetry("Robot created");
 
-        double elapsedDistance = 0;
-        double startheading = Math.PI / 2;
-        //OdometryController OC = new OdometryController(hardwareMap);
-
-        FTCRobotV1 robot = new FTCRobotV1(drivebase, gyro, telemetry);
-
-        Arc arc = new Arc(new Point(0,0),new Point(0,10),startheading);
-        ArcFollower follower = new ArcFollower(robot);
-
-        double speed = 5;
+        sendTelemetry("Waiting for start...");
         waitForStart();
-
+        boolean temp = true;
         while(opModeIsActive()) {
-            Arc arc1 = new Arc(new Point(0,0), new Point(0,10), 0);
-            follower.updateArc(arc1);
-            while(!robot.getPos().AreSame(arc.getEndPoint(), 0.5)){
-                follower.next();
+            if (temp){
+                sendTelemetry("Started");
+                temp = false;
             }
+
+
         }
     }
+
+    private void sendTelemetry(String msg){
+        telemetry.addLine(msg);
+        telemetry.update();
+    }
 }
+

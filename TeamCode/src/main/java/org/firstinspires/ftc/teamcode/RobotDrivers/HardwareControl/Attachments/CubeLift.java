@@ -62,6 +62,8 @@ public class CubeLift implements Attachment {
              //motors
         leftLiftMotor = (DcMotorEx)hwmap.dcMotor.get("llMotor");
         rightLiftMotor = (DcMotorEx)hwmap.dcMotor.get("rlMotor");
+        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -177,12 +179,12 @@ public class CubeLift implements Attachment {
      */
     public void adjustLift( double input){
         if(Math.abs(input)>0.08) {
-            Log.d(TAG, String.format("Got input to adjustLift: %d", input));
+            Log.d(TAG, "Got input to adjustLift: " + input);
             int correction = (int)(input*joggingScalar);
             liftTargetPosition = bound(minLiftPosition, maxLiftPosition, liftTargetPosition + correction);
         }
         else{
-            Log.v(TAG, String.format("Set lift position to 0, input was %d", input));
+            Log.v(TAG, "Set lift position to 0, input was " + input);
         }
     }
     //todo: code the home() method.
