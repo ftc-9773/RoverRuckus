@@ -1,1 +1,26 @@
-{}
+{
+  "leftSorterUpPos": 0.9,
+  "leftSorterDownPos": 0.55,
+
+  "rightSorterUpPos": 0.5,
+  "rightSorterDownPos": 0.8,
+
+  "distributorLeftPos":0.54,
+  "distributorRightPos": 0.37,
+  "hookOpenPos": 0.05,
+  "hookClosedPos": 0.38,
+
+  // lift
+  "liftLowPos":195,
+  "liftHookPos":2718,
+  "liftScorePos":3700,
+  "minLiftPosition": 30,
+  "maxLiftPosition":4200,
+  "transferTol": 20,
+  "joggingScalar": 10,
+
+  // pid
+  "kp":0.0025,
+  "ki": 0.009,
+  "kd": 0.0002
+}

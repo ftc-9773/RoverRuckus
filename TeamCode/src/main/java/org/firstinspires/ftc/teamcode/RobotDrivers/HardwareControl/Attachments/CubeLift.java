@@ -39,7 +39,7 @@ public class CubeLift implements Attachment {
     private PIDController pid ;
     boolean dumpState = false;
 
-    double liftZeroPos;
+    int liftZeroPos;
 
     // goal states
     int liftTargetPosition = 100;
@@ -69,14 +69,16 @@ public class CubeLift implements Attachment {
         json = new SafeJsonReader("CubeLift");
 
         //servos
-        leftSorterUpPos = json.getDouble("leftSorterUpPos");
-        leftSorterDownPos = json.getDouble("leftSorterDownPos");
-        rightSorterUpPos = json.getDouble("rightSorterUpPos");
-        rightSorterDownPos = json.getDouble("rightSorterDownPos");
-        distributorLeftPos = json.getDouble("distributorLeftPos");
-        distributorRightPos = json.getDouble("distributorRightPos");
-        hookOpenPos = json.getDouble("hookOpenPos");
-        hookClosedPos = json.getDouble("hookClosedPos");
+        leftSorterUpPos = json.getDouble("leftSorterUpPos", 0.9);
+        leftSorterDownPos = json.getDouble("leftSorterDownPos", 0.55);
+
+        rightSorterUpPos = json.getDouble("rightSorterUpPos", 0.5);
+        rightSorterDownPos = json.getDouble("rightSorterDownPos", 0.8);
+
+        distributorLeftPos = json.getDouble("distributorLeftPos",0.54);
+        distributorRightPos = json.getDouble("distributorRightPos", 0.37);
+        hookOpenPos = json.getDouble("hookOpenPos", 0.05);
+        hookClosedPos = json.getDouble("hookClosedPos", 0.38);
 
         // lift
         liftLowPos = json.getInt("liftLowPos",195);
@@ -170,7 +172,9 @@ public class CubeLift implements Attachment {
         }
     }
     //todo: code the home() method.
-    public void home(){}
+    public void zero(){
+        liftZeroPos = rightLiftMotor.getCurrentPosition();
+    }
 
     /**
      * A function for telling whether or not the lift is in the zone for transferring
@@ -207,7 +211,7 @@ public class CubeLift implements Attachment {
     }
     // used internally to find the position of the lift
     public int getLiftPos(){
-        return rightLiftMotor.getCurrentPosition()- minLiftPosition;
+        return rightLiftMotor.getCurrentPosition()- liftZeroPos;
     }
     // used internally to bound the fnucthion
     private int bound(int min, int max, int input){

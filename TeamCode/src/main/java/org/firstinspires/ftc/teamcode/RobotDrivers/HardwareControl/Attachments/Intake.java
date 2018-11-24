@@ -52,6 +52,17 @@ public class Intake {
      int transferThreshold = 80;
 
     private double intakeMotorPower, intakeBucketServoPosition;
+    /*
+        Some stuff for me: pushing the file
+        cd TeamCode/src/main/java/org/firstinspires/ftc/teamcode/JSON_files/HardwareStuff
+        // to push
+        ~/Library/Android/sdk/platform-tools/adb push IntakePositions.json /sdcard/FIRST/team9773/json19
+        or
+        ~/Library/Android/sdk/platform-tools/adb push CubeLift.json /sdcard/FIRST/team9773/json19
+
+        // to pull
+        ~/Library/Android/sdk/platform-tools/adb pull /sdcard/FIRST/team9773/json18/CubeTrayServoPositions.json
+     */
 
     /**
      * The only constructor of the IntakeController class. It serves two main functions:
