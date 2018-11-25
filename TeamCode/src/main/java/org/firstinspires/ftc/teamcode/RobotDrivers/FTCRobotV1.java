@@ -85,8 +85,12 @@ public class FTCRobotV1 {
         lift = new CubeLift(hwmap);
     }
 
-    public void driveVelocity(double xV, double yV, double rotV){
+    public void driveSpeed(double xV, double yV, double rotV){
         drivebase.drive(xV, yV, rotV);
+    }
+
+    public void driveSpeedScaled(double x, double y, double rot) {
+        drivebase.driveScaled(x, y, rot);
     }
 
     /*
@@ -106,7 +110,7 @@ public class FTCRobotV1 {
 
         // drive functions
 
-        driveVelocity(gp1.left_stick_x, gp1.left_stick_y, -gp1.right_stick_x);
+        driveSpeedScaled(gp1.left_stick_x, gp1.left_stick_y, -gp1.right_stick_x);
 
         /*
         if (iter == 100) {
