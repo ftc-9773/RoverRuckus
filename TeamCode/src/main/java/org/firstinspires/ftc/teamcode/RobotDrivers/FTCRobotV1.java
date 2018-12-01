@@ -86,11 +86,11 @@ public class FTCRobotV1 {
     }
 
     public void driveSpeed(double xV, double yV, double rotV){
-        drivebase.drive(xV, yV, rotV, false);
+        drivebase.drive(xV, yV, rotV);
     }
 
     public void driveSpeedScaled(double x, double y, double rot) {
-        drivebase.drive(x, y, rot, true);
+        drivebase.driveScaled(x, y, rot);
     }
 
     /*
@@ -202,10 +202,5 @@ public class FTCRobotV1 {
     public void update(){
         this.lift.update();
         this.intake.update();
-    }
-
-    public void stop() {
-        this.lift.stop();
-        this.drivebase.stop();
     }
 }

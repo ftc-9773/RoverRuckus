@@ -62,9 +62,7 @@ public class MecanumDrivebase {
         }
     }
 
-    private double[] scaleDriving(double x, double y, double rotation) {
-        Vector vec = new Vector(true, x, y);
-
+    private double[] scaleDriving(Vector vec, double rotation) {
         double[] finalSpeeds = new double[3];
 
         if (Math.abs(vec.getMagnitude()) > 0.05) {
@@ -72,7 +70,7 @@ public class MecanumDrivebase {
             finalSpeeds[0] = mag * Math.sin(vec.getAngle());
             finalSpeeds[1] = mag * Math.cos(vec.getAngle());
 
-            finalSpeeds[2] = scale(rotation) * (ROTATION_SCALING * mag + 1);
+            finalSpeeds[3] = scale(rotation) * (ROTATION_SCALING * mag + 1);
         } else {
             finalSpeeds[0] = 0;
             finalSpeeds[1] = 0;
@@ -82,19 +80,43 @@ public class MecanumDrivebase {
         return finalSpeeds;
     }
 
+    private double[] scaleDriving(double x, double y, double rotation) { return scaleDriving(new Vector(true, x, y), rotation); }
+
+    /*
+    public void drive(double theta, double velocity, double rotation) {
+        runWithEncoders();
+        double _s = Math.sin(theta + Math.PI / 4.0);
+        double _c = Math.cos(theta + Math.PI / 4.0);
+        double m = Math.max(Math.abs(_s), Math.abs(_c));
+        double s = _s / m;
+        double c = _c / m;
+        double[] vel = new double[4];
+
+        vel[0] = velocity * s + rotation;
+        vel[1] = velocity * c - rotation;
+        vel[2] = velocity * c + rotation;
+        vel[3] = velocity * s - rotation;
+
+        vel[1] *= -1;
+        vel[3] *= -1;
+
+        // Set motor powers
+        for (int i = 0; i < 4; i++) { driveMotors[i].setPower(vel[i]); }
+    }
+
+    public void arcadeDrive(double x, double y, double rot) {
+
+        double theta = Math.atan2(x, y);
+        double mag = Math.sqrt(x * x + y * y) ;
+
+        mag *= MAX_TRANSLATIONAL_SPEED;
+        rot *= MAX_ROTATIONAL_SPEED;
+
+        drive(theta, mag, rot);
+    }
+*/
     // Clean Version
-    public void drive(double xIn, double yIn, double rotationIn, boolean scale) {
-        double x = xIn;
-        double y = yIn;
-        double rotation = rotationIn;
-
-        if (scale)  {
-            double[] arr = scaleDriving(x, y, rotation);
-            x = arr[0];
-            y = arr[1];
-            rotation = arr[2];
-        }
-
+    public void drive(double x, double y, double rotation) {
         runWithEncoders();
 
         motorPowers[0] = y - x + rotation;
@@ -112,11 +134,16 @@ public class MecanumDrivebase {
         if (maxVal > 1) { for (double val:motorPowers) { val /= maxVal;} }
     }
 
-    public void drivePolar(double mag, double theta, double rotation, boolean scale) {
+    public void driveScaled(double x, double y, double rotation) {
+        double[] arr = scaleDriving(x, y, rotation);
+        drive(arr[0], arr[1], arr[2]);
+    }
+
+    public void drivePolar(double mag, double theta, double rotation) {
         double x = Math.sin(theta);
         double y = Math.sin(theta);
 
-        drive(x, y, rotation, scale);
+        drive(x, y, rotation);
     }
 
 
