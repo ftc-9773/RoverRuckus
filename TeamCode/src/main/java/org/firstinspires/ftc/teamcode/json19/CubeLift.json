@@ -11,7 +11,7 @@
   "hookOpenPos": 0.05,
   "hookClosedPos": 0.38,
 
-  "liftLowPos":195,
+  "liftLowPos":185,
   "liftHookPos":2718,
   "liftScorePos":3700,
   "minLiftPosition": 30,

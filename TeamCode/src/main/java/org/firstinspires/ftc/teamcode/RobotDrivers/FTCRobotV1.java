@@ -48,6 +48,8 @@ public class FTCRobotV1 {
 
     // teleop values
     Button toggleLeftRightButton = new Button();
+    Button highPrecisionToggle = new Button();
+    double highPrecision = 1;
     boolean leftRightState = false;
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
@@ -101,10 +103,20 @@ public class FTCRobotV1 {
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
         // readSensors button objects
         toggleLeftRightButton.recordNewValue(gp2.x);
+        highPrecisionToggle.recordNewValue(gp2.a);
 
+        if (highPrecisionToggle.isJustOn()){
+            if (highPrecision == 1){
+                highPrecision = 3;
+            }
+            else
+            {
+                highPrecision = 1;
+            }
+        }
         // drive functions
 
-        driveVelocity(gp1.left_stick_x, gp1.left_stick_y, -gp1.right_stick_x);
+        driveVelocity(-gp1.left_stick_x / highPrecision, gp1.left_stick_y / highPrecision, -gp1.right_stick_x / highPrecision);
 
         /*
         if (iter == 100) {
