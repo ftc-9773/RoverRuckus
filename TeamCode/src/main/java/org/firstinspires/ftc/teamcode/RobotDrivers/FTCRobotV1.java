@@ -157,7 +157,7 @@ public class FTCRobotV1 {
         // now hand controls for lifts
         //telemetry.addData("Arm motor pos", -gp2.left_stick_y);
         telemetry.addData("Curr arm motor pos", intake.getArmPos());
-        intake.setExtensionPowerFromGamepad(gp2.left_stick_y);
+        intake.setExtensionPowerFromGamepad(-gp2.left_stick_y);
         //telemetry.addData("Lift motor power", -gp2.right_stick_y);
         telemetry.addData("Lift motor current pos", lift.getLiftPos());
         lift.adjustLift(-gp2.right_stick_y);
