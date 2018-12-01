@@ -36,6 +36,7 @@ public class TeleOpMain extends LinearOpMode{
             }
             robot.runGamepadCommands(gamepad1, gamepad2);
             robot.readSensors();
+            robot.update();
             telemetry.update();
         }
 

@@ -17,7 +17,7 @@
   "minLiftPosition": 30,
   "maxLiftPosition":4200,
   "transferTol": 20,
-  "joggingScalar": 10,
+  "joggingScalar": 30,
 
   "kp":0.0025,
   "ki": 0.009,
