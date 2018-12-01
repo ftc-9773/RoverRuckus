@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
+import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
 import java.util.ArrayList;
@@ -51,6 +52,8 @@ public class FTCRobotV1 {
     Button highPrecisionToggle = new Button();
     double highPrecision = 1;
     boolean leftRightState = false;
+
+    SafeJsonReader reader = new SafeJsonReader("highPrecisionC");
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
         this.pos = new Point( 0, 0);
@@ -107,7 +110,7 @@ public class FTCRobotV1 {
 
         if (highPrecisionToggle.isJustOn()){
             if (highPrecision == 1){
-                highPrecision = 3;
+                highPrecision = reader.getDouble("high");
             }
             else
             {
