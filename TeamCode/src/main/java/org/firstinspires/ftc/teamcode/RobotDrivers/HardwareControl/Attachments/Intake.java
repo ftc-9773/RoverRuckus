@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -87,6 +88,7 @@ public class Intake {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // Initialize all values from configuration files
@@ -128,7 +130,7 @@ public class Intake {
         double lastTime = System.currentTimeMillis();
         double lastEncoderValue = armMotor.getCurrentPosition();
         double speed = 1000;
-        armMotor.setPower(-0.15); //Low power retraction
+        armMotor.setPower(0.15); //Low power retraction
         while(speed > 10 && !opmode.isStopRequested() && !opmode.isStarted()){
             double dx = armMotor.getCurrentPosition() - lastEncoderValue;
             double dt = lastTime - System.currentTimeMillis();
