@@ -37,9 +37,9 @@ public class Align {
         }
 
         if(rightDistance < leftDistance +1){ //the +1 is to give it some wiggle room so it doesn't ping.
-            drivebase.driveDist(0,0, -Math.atan((leftDistance-rightDistance)/distanceBetweenSensorsCM),1);
+            //drivebase.driveDist(0,0, -Math.atan((leftDistance-rightDistance)/distanceBetweenSensorsCM),1);
         }else if(leftDistance<rightDistance+1){  //the +1 is to give it some wiggle room so it doesn't ping.
-            drivebase.driveDist(0,0, Math.atan((-leftDistance+rightDistance)/distanceBetweenSensorsCM),1);
+            //drivebase.driveDist(0,0, Math.atan((-leftDistance+rightDistance)/distanceBetweenSensorsCM),1);
         }
 
     }

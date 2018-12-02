@@ -128,7 +128,7 @@ public class Intake {
         double lastTime = System.currentTimeMillis();
         double lastEncoderValue = armMotor.getCurrentPosition();
         double speed = 1000;
-        armMotor.setPower(0.15); //Low power retraction
+        armMotor.setPower(-0.15); //Low power retraction
         while(speed > 10 && !opmode.isStopRequested() && !opmode.isStarted()){
             double dx = armMotor.getCurrentPosition() - lastEncoderValue;
             double dt = lastTime - System.currentTimeMillis();
