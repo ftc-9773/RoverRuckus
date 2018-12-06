@@ -55,6 +55,7 @@ public class Intake {
     /// armPositions
      int armInPosition = 150;
      int transferThreshold = 80;
+     int armOutExtraThreshold = 400;
 
 
     private double intakeMotorPower, intakeBucketServoPosition;
@@ -78,7 +79,7 @@ public class Intake {
      * Secondly, the function initializes all the necessary "tunables" from the JSON file.
      * @param hwmp the hardware map from the robot; used to map objects to real world counterparts
      */
-    public Intake(HardwareMap hwmp, LinearOpMode op){
+    public Intake(HardwareMap hwmp, LinearOpMode op, boolean initArmPos){
         // initialize harware map stuff
         leftIntakeServo = hwmp.get(Servo.class, "liServo");
         rightIntakeServo = hwmp.get(Servo.class, "riServo");
@@ -109,7 +110,9 @@ public class Intake {
 
         opmode = op;
         retractArm();
-        reset();
+        if(initArmPos) {
+            reset();
+        }
     }
 
     /**
@@ -118,7 +121,7 @@ public class Intake {
      */
     public void stopIntake() {
         intakeMotorPower = stopVal;
-        if(!isInTransferState())
+        if(getArmPos() > (armInPosition + armOutExtraThreshold))
         intakeBucketServoPosition = carryPosition;
     }
 
@@ -222,7 +225,7 @@ public class Intake {
      * @return whether or not the arm is within the bounds of the "transfer zone"
      */
     public boolean isInTransferState(){
-        return armMotor.getCurrentPosition()< transferThreshold;
+        return Math.abs(armMotor.getCurrentPosition())< Math.abs(transferThreshold);
     }
 
 

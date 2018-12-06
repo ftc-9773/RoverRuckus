@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,13 +25,13 @@ import java.util.Arrays;
  * */
 public class FTCRobotV1 {
     //Attachments
-    MecanumDrivebase drivebase;
-    Intake intake;
-    OdometryController odometry;
-    CubeLift lift;
+    public MecanumDrivebase drivebase;
+    public Intake intake;
+    public OdometryController odometry;
+    public CubeLift lift;
 
     //sensors
-    Gyro gyro;
+    public Gyro gyro;
 
     //state
     double heading = 0;
@@ -43,8 +45,6 @@ public class FTCRobotV1 {
 
     //Tracking position
     double[] lastEncoderPos;
-
-
 
     // teleop values
     Button toggleLeftRightButton = new Button();
@@ -74,15 +74,16 @@ public class FTCRobotV1 {
         this.lift = lift;
     }
 
-    public FTCRobotV1(HardwareMap hwmap, Point startPos, Telemetry telem){
+    public FTCRobotV1(HardwareMap hwmap, Point startPos, LinearOpMode op, Telemetry telem, boolean reZero){
         // position tracking
-        this.telemetry = telemetry;
+        this.telemetry = telem;
         this.pos = startPos;
         this.heading = 0.0;
         // init hardware stuff
         drivebase = new MecanumDrivebase(hwmap, telem);
         odometry = new OdometryController(hwmap);
-        lift = new CubeLift(hwmap);
+        lift = new CubeLift(hwmap,reZero);
+        intake = new Intake(hwmap, op, reZero);
     }
 
     // DRIVING FUNCTIONS
@@ -108,7 +109,6 @@ public class FTCRobotV1 {
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
         // readSensors button objects
         toggleLeftRightButton.recordNewValue(gp2.x);
-
         // drive functions
         double x = gp1.left_stick_x;
         double y = -gp1.left_stick_y;
@@ -116,28 +116,23 @@ public class FTCRobotV1 {
 
         driveSpeedScaled(x, y, rot);
 
-        /*
-        if (iter == 100) {
-            driveHistory.set(driveHistory.size(), entry);
-            iter = 0;
-        } else{
-            iter++;
-        }
-        */
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
         else if(gp2.b) lift.goToScorePos();
         else if (gp2.y) lift.goToHangPos();
 
+        // lift "jog" functions
+        lift.adjustLift(-2*gp2.right_stick_y);
+
         // left/right side toggle
-        if (toggleLeftRightButton.isJustOn()){
+        if (toggleLeftRightButton.isJustOn() && gp2.a){
             leftRightState = !leftRightState;
             if(leftRightState)lift.setLefScoreSide();
             else lift.setRightScoreSide();
         }
 
         //lift close
-        if (gp2.right_trigger > 0.5)
+        if (gp2.left_bumper)
             lift.closeLatch();
 
         // dumping
@@ -146,15 +141,19 @@ public class FTCRobotV1 {
 
         //button push intake functions;
         telemetry.addData("Left bumper", gp2.left_bumper);
-        if(gp2.dpad_down) intake.goToTransfer();
+        if(gp2.dpad_down) {
+            intake.goToTransfer();
+            lift.goToLowPos();
+        }
         if (gp2.dpad_right) intake.carryPos();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
-        else if(gp2.left_bumper) intake.reverseIntake();
-        else{
+        else if(gp2.right_trigger >0.5) intake.reverseIntake();
+        else
             intake.stopIntake();
-        }
         if (gp2.dpad_left) intake.transferMinerals();
-
+        if(intake.isInTransferState()&&lift.isInTransferState()) {
+            intake.transferMinerals();
+        }
 
 
         // basic automation
@@ -164,12 +163,12 @@ public class FTCRobotV1 {
 //        else intake.stopIntake();
 
         // now hand controls for lifts
-//        telemetry.addData("Arm motor pos", -gp2.left_stick_y);
-//        telemetry.addData("Curr arm motor pos", intake.getArmPos());
+      telemetry.addData("Arm motor pos", -gp2.left_stick_y);
+      telemetry.addData("Curr arm motor pos", intake.getArmPos());
+      telemetry.addData("TransferState boolean val", intake.isInTransferState());
         intake.setExtensionPowerFromGamepad(gp2.left_stick_y);
-//        telemetry.addData("Lift motor power", -gp2.right_stick_y);
-//        telemetry.addData("Lift motor current pos", lift.getLiftPos());
-        lift.adjustLift(-gp2.right_stick_y);
+
+
 
         update();
 

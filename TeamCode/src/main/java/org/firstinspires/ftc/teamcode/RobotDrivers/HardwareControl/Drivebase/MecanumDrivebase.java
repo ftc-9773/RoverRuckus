@@ -12,10 +12,11 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 public class MecanumDrivebase {
 
-    static private final double     COUNTS_PER_MOTOR_REV    = 1120;    //
-    static private final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
+    static private final double     COUNTS_PER_MOTOR_REV    = 560;    //
+    static private final double     WHEEL_TURNS_PER_MOTOR_REV = 30.0 / 38.0;
+    static private final double     WHEEL_DIAMETER_INCHES   = 3.94 ;     // For figuring circumference
     static private final double     ROBOT_DIAMETER_INCHES   = 7.322 * 2;
-    static final double             COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    public static final double      COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV*WHEEL_TURNS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
     static private final double DRIVE_SCALING = 3; // Must be odd
     static private final double ROTATION_SCALING = 0.8; // 0 is none
@@ -23,12 +24,15 @@ public class MecanumDrivebase {
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
     static final double MAX_ROTATIONAL_SPEED = 1.0;
 
+
+
+
     public DcMotor[] driveMotors;
 
     private double[] motorPowers = new double[4];
 
     Telemetry telemetry;
-    SafeJsonReader reader = new SafeJsonReader("DcMotorPIDCoefficients");
+    SafeJsonReader reader = new SafeJsonReader("DrivePidVals.json");
 
     public MecanumDrivebase(HardwareMap hwMap, Telemetry telem) {
         // init wheels
@@ -38,6 +42,8 @@ public class MecanumDrivebase {
         driveMotors[1] = hwMap.get(DcMotor.class, "frdrive");
         driveMotors[2] = hwMap.get(DcMotor.class, "bldrive");
         driveMotors[3] = hwMap.get(DcMotor.class, "brdrive");
+        //pid coeffs for different motion stuff.
+
 
         for (DcMotor motor:driveMotors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -138,8 +144,14 @@ public class MecanumDrivebase {
         out[1] = deltaY;
         out[2] = headingChange / steps;
         return out;
+    }  */
+    public long[] getMotorPositions(){
+        long[] value = new long[4];
+        for (int i = 0; i< 4; i++)
+            value[i] = driveMotors[i].getCurrentPosition();
+        return value;
     }
-*/
+
 
     public double[] getPos(){
         double[] pos = new double[4];
