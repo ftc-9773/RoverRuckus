@@ -23,7 +23,7 @@ public class RasiInterpreter {
     private int numberOfParams;
     private String LOG_TAG = "RasiExecutor";
     private RasiLexer rasiParser;
-    //private LinearOpMode linearOpMode;
+    private LinearOpMode linearOpMode;
     private HashMap<String, String> hashMap;
     private RasiCommands teamRasiCommands;
     private String methodString;
@@ -40,7 +40,7 @@ public class RasiInterpreter {
     private Method method;
 
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode){
-        //this.linearOpMode = linearOpMode;
+        this.linearOpMode = opmode;
         teamRasiCommands = new RasiCommands(opmode);
         rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
@@ -52,13 +52,13 @@ public class RasiInterpreter {
         System.out.println("Ml: " + teamRasiCommands.getClass().getMethods().length);
 
         for(int x = 0; x < teamRasiCommands.getClass().getMethods().length; x++){ //runs for every method in the TeamRasiCommands Class
-            //Log.d("RasiExecutor", Integer.toString(x));
+            Log.d("RasiExecutor", Integer.toString(x));
             System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
             if(teamRasiCommands.getClass().getMethods()[x].toString().contains("RasiCommands.")){ //filters out the stuff that java puts there and hides.
                 System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
                 method = teamRasiCommands.getClass().getMethods()[x];
                 methodString = method.toString();
-                //Log.d("Rasi_MethodString1", methodString);
+                Log.d("Rasi_MethodString1", methodString);
                 stringBuilder = new StringBuilder(methodString); //StringBuilder to format the method text to be more usable.
                 int index = 0;
 
@@ -72,35 +72,35 @@ public class RasiInterpreter {
                     }
                 }
                 methodString = stringBuilder.toString();
-                //Log.d("RasiExecutor",methodString);
+                Log.d("RasiExecutor",methodString);
                 String[] tempArray = methodString.split("\\(");
                 tempArray = tempArray[0].split("\\."); //set mixedCaseString to the name of the method. removes the remaining parenthesis and dots.
                 mixedCaseString = tempArray[tempArray.length-1];
-                //Log.d("rasimixedCaseString", mixedCaseString);
-                //Log.d("Rasi_MethodString2", methodString);
+                Log.d("rasimixedCaseString", mixedCaseString);
+                Log.d("Rasi_MethodString2", methodString);
                 if(methodString.charAt(methodString.length()-1)!= '(') {
                     //make a string of the arguments to the method
                     parameters = methodString.split("\\(");
                     parameters = parameters[1].split(",");
                     hasArguments = true;
-                    //Log.d(LOG_TAG, "parameters initialized to actual parameters");
+                    Log.d(LOG_TAG, "parameters initialized to actual parameters");
                     numberOfParams = parameters.length;
-                    //Log.d("rasi_parameters", Arrays.asList(parameters).toString());
+                    Log.d("rasi_parameters", Arrays.asList(parameters).toString());
                 }
                 else{
                     hasArguments= false;
                     parameters = null;
-                    //Log.i(LOG_TAG, "Parameters set to empty array");
+                    Log.i(LOG_TAG, "Parameters set to empty array");
                     numberOfParams = 0;
                 }
                 lcString = mixedCaseString.toLowerCase();
-                //Log.d("rasilcString", lcString);
+                Log.d("rasilcString", lcString);
                 hashMap.put(lcString, mixedCaseString);
                 if(parameters != null)
-                    //Log.i("RasiExecutor", parameters.toString());
-                //Log.i("RasiExecutor", mixedCaseString);
+                    Log.i("RasiExecutor", parameters.toString());
+                Log.i("RasiExecutor", mixedCaseString);
                 infoHashmap.put(mixedCaseString, parameters);
-                //Log.i(LOG_TAG, "added parameters array, length: " + Integer.toString(numberOfParams));
+                Log.i(LOG_TAG, "added parameters array, length: " + Integer.toString(numberOfParams));
                 methodsHashMap.put(mixedCaseString, method);
             }
         }
@@ -111,7 +111,7 @@ public class RasiInterpreter {
 
     public void runRasi() {
         command = rasiParser.getCommand();
-        while (!rasiParser.fileEnded) {
+        while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
 
             Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
             Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
