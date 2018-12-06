@@ -81,7 +81,7 @@ public class RasiLexer {
 
     /**
      *
-     * 
+     *
      * */
     private void loadNextCommand(){
         try{

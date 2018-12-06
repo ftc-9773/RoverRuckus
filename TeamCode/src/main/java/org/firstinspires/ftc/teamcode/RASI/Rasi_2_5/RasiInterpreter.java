@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -30,10 +32,10 @@ public class RasiInterpreter {
     private boolean hasArguments;
     private Method method;
 
-    public RasiInterpreter(String filepath, String filename){
+    public RasiInterpreter(String filepath, String filename, LinearOpMode opmode){
         //this.linearOpMode = linearOpMode;
-        teamRasiCommands = new RasiCommands();
-        rasiParser = new RasiLexer(filepath, filename);
+        teamRasiCommands = new RasiCommands(opmode);
+        rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();
         methodsHashMap = new HashMap<String, Method>();
