@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
@@ -19,12 +18,12 @@ public class MecanumDrivebase {
     static final double             COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
     static private final double DRIVE_SCALING = 3; // Must be odd
-    static private final double ROTATION_SCALING = 1;
+    static private final double ROTATION_SCALING = 0.8; // 0 is none
 
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
     static final double MAX_ROTATIONAL_SPEED = 1.0;
 
-    public DcMotorEx[] driveMotors;
+    public DcMotor[] driveMotors;
 
     private double[] motorPowers = new double[4];
 
@@ -34,13 +33,13 @@ public class MecanumDrivebase {
     public MecanumDrivebase(HardwareMap hwMap, Telemetry telem) {
         // init wheels
         this.telemetry = telem;
-        driveMotors = new DcMotorEx[4];
-        driveMotors[0] = hwMap.get(DcMotorEx.class, "fldrive");
-        driveMotors[1] = hwMap.get(DcMotorEx.class, "frdrive");
-        driveMotors[2] = hwMap.get(DcMotorEx.class, "bldrive");
-        driveMotors[3] = hwMap.get(DcMotorEx.class, "brdrive");
+        driveMotors = new DcMotor[4];
+        driveMotors[0] = hwMap.get(DcMotor.class, "fldrive");
+        driveMotors[1] = hwMap.get(DcMotor.class, "frdrive");
+        driveMotors[2] = hwMap.get(DcMotor.class, "bldrive");
+        driveMotors[3] = hwMap.get(DcMotor.class, "brdrive");
 
-        for (DcMotorEx motor:driveMotors) {
+        for (DcMotor motor:driveMotors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             //motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(reader.getDouble("kp"), reader.getDouble("ki"), reader.getDouble("kd")));
 
@@ -84,6 +83,7 @@ public class MecanumDrivebase {
 
     // Clean Version
     public void drive(double xIn, double yIn, double rotationIn, boolean scale) {
+
         double x = xIn;
         double y = yIn;
         double rotation = rotationIn;
@@ -97,19 +97,23 @@ public class MecanumDrivebase {
 
         runWithEncoders();
 
-        motorPowers[0] = y - x + rotation;
-        motorPowers[1] = y + x - rotation;
-        motorPowers[2] = y + x + rotation;
-        motorPowers[3] = y - x - rotation;
+        motorPowers[0] = y + x + rotation;
+        motorPowers[1] = y - x - rotation;
+        motorPowers[2] = y - x + rotation;
+        motorPowers[3] = y +  x - rotation;
 
-        motorPowers[1] *= -1;
-        motorPowers[3] *= -1;
+        motorPowers[0] *= -1;
+        motorPowers[2] *= -1;
+
 
         double maxVal = Math.max(Math.max(Math.abs(motorPowers[0]), Math.abs(motorPowers[1])),
                         Math.max(Math.abs(motorPowers[2]), Math.abs(motorPowers[3])));
 
         // Check that values are < 1. Normalize otherwise
-        if (maxVal > 1) { for (double val:motorPowers) { val /= maxVal;} }
+        if (maxVal > 1) { for (int i = 0; i < 4; i++) { motorPowers[i] /= maxVal;} }
+
+        telemetry.addData("MotorPowers", String.format("%.1f, %.1f, %.1f, %.1f", motorPowers[0], motorPowers[1], motorPowers[2], motorPowers[3]));
+
     }
 
     public void drivePolar(double mag, double theta, double rotation, boolean scale) {

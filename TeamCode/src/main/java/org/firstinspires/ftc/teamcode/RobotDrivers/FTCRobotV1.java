@@ -85,6 +85,7 @@ public class FTCRobotV1 {
         lift = new CubeLift(hwmap);
     }
 
+    // DRIVING FUNCTIONS
     public void driveSpeed(double xV, double yV, double rotV){
         drivebase.drive(xV, yV, rotV, false);
     }
@@ -109,8 +110,11 @@ public class FTCRobotV1 {
         toggleLeftRightButton.recordNewValue(gp2.x);
 
         // drive functions
+        double x = gp1.left_stick_x;
+        double y = -gp1.left_stick_y;
+        double rot = gp1.right_stick_x;
 
-        driveSpeedScaled(gp1.left_stick_x, gp1.left_stick_y, -gp1.right_stick_x);
+        driveSpeedScaled(x, y, rot);
 
         /*
         if (iter == 100) {
@@ -202,6 +206,7 @@ public class FTCRobotV1 {
     public void update(){
         this.lift.update();
         this.intake.update();
+        this.drivebase.update();
     }
 
     public void stop() {
