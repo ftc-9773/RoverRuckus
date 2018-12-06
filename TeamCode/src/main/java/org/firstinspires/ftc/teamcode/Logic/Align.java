@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Logic;
-
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -16,7 +15,7 @@ public class Align {
     MecanumDrivebase drivebase;
 
 
-    // TODO: this really should be just a method in a larger clas of drivebase controller, or extra functions, not its own class
+    // TODO: this really should be just a meithubthod in a larger clas of drivebase controller, or extra functions, not its own class
 
 
     public Align(DistanceSensor r, DistanceSensor l, MecanumDrivebase drivebase){

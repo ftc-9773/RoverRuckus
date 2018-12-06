@@ -131,14 +131,15 @@ public class Intake {
 
     public void retractArm(){
         double lastTime = System.currentTimeMillis();
-        double lastEncoderValue = armMotor.getCurrentPosition();
+        double lastEncoderValue = getArmPos();
         double speed = 1000;
         armMotor.setPower(0.15); //Low power retraction
         while(speed > 10 && !opmode.isStopRequested() && !opmode.isStarted()){
-            double dx = armMotor.getCurrentPosition() - lastEncoderValue;
+            double dx = getArmPos() - lastEncoderValue;
             double dt = lastTime - System.currentTimeMillis();
             speed = dx / dt;
         }
+        armMotor.setPower(0);
     }
 
     public void reset(){
@@ -204,7 +205,7 @@ public class Intake {
     public void update(){
         if(pidEnabled&&isInTransferState()) pidEnabled = false;
         if(pidEnabled) {
-            armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, armMotor.getCurrentPosition()));
+            armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, getArmPos()));
         }
         else
             armMotor.setPower(gamepadArmPower);
@@ -225,7 +226,7 @@ public class Intake {
      * @return whether or not the arm is within the bounds of the "transfer zone"
      */
     public boolean isInTransferState(){
-        return Math.abs(armMotor.getCurrentPosition())< Math.abs(transferThreshold);
+        return Math.abs(getArmPos())< Math.abs(transferThreshold);
     }
 
 
