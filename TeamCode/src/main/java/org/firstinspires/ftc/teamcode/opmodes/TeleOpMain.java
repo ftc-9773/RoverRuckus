@@ -17,9 +17,9 @@ public class TeleOpMain extends LinearOpMode{
     public void runOpMode(){
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         sendTelemetry("Drivebase created");
-        Intake intake = new Intake(hardwareMap, this);
+        Intake intake = new Intake(hardwareMap, this, true);
         sendTelemetry("Intake created");
-        CubeLift lift = new CubeLift(hardwareMap);
+        CubeLift lift = new CubeLift(hardwareMap, true);
         sendTelemetry("CubeLift created");
         Gyro gyro = new Gyro(hardwareMap);
         sendTelemetry("Gyro created");

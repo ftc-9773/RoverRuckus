@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 
 import java.math.*;
 
@@ -56,6 +60,25 @@ public class RasiCommands {
      * Initialise the Robot
      * */
     public void createRobot(){
+        MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
+        telemetry.addLine("Drivebase created");
+        telemetry.update();
+
+        Intake intake = new Intake(opMode.hardwareMap, opMode, true);
+        telemetry.addLine("Intake created");
+        telemetry.update();
+
+        CubeLift lift = new CubeLift(opMode.hardwareMap, true);
+        telemetry.addLine("CubeLift created");
+        telemetry.update();
+
+        Gyro gyro = new Gyro(opMode.hardwareMap);
+        telemetry.addLine("Gyro created");
+        telemetry.update();
+
+        robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
+        telemetry.addLine("Robot created");
+        telemetry.update();
 
     }
     /**
