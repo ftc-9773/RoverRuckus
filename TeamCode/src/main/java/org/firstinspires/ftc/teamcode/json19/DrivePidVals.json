@@ -1,7 +1,7 @@
 {
-  "distKp":0.01,
+  "distKp":0.028,
   "distKi": 0,
-  "distKd": 0,
+  "distKd": 0.09,
   "distTol": 0.5,
 
   "rotKp":0.0,

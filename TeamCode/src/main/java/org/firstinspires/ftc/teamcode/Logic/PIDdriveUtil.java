@@ -13,8 +13,15 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by zacharye on 12/5/18.
- */
+ * The PID drive util class creates and holds various methods for driving
+ * This program is made to be able to be used in various circumstances,
+ * <p>
+ * This program is made in the paradigm followed by the rest of the robot drivers. Between each loop,
+ * it calls the robot.update(); method, allowing other processes to happen simultaneously.
+ *
+ * @author  Zachary Eichenberger , -ftc robocracy 9773
+ * @version 1.0
+ * */
 
 public class PIDdriveUtil {
 
@@ -41,7 +48,14 @@ public class PIDdriveUtil {
     static double[] headingPidCoeffs = new double[3];
     PIDController headingPid;
 
-
+    /**
+     * Constructor for the PID drive Util class.
+     * initializes all of the parts, and reads values from JSON
+     *
+     * takes the robot and linear opMode classes, used to initialize and eventuallly update stuff
+     * @param robot
+     * @param opMode
+     */
     public PIDdriveUtil(FTCRobotV1 robot, LinearOpMode opMode){
         this.robot = robot;
         this.opMode = opMode;
@@ -51,20 +65,20 @@ public class PIDdriveUtil {
 
         //todo: update with actual values
         //  distPid
-        distPidCoeffs[0] = json.getDouble("distKp",0.01);
-        distPidCoeffs[1] = json.getDouble("distKi", 0);
-        distPidCoeffs[2] = json.getDouble("distKd", 0);
+        distPidCoeffs[0] = json.getDouble("distKp",0.028);
+        distPidCoeffs[1] = json.getDouble("distKi", 0.0);
+        distPidCoeffs[2] = json.getDouble("distKd", 0.17);
         distPid = new PIDController(distPidCoeffs[0],distPidCoeffs[1], distPidCoeffs[2]);
         distTol = json.getDouble("distTol", 0.5);
         //  rotPid
-        rotPidCoeffs[0] = json.getDouble("rotKp",0.01);
+        rotPidCoeffs[0] = json.getDouble("rotKp",0.11);
         rotPidCoeffs[1] = json.getDouble("rotKi", 0);
-        rotPidCoeffs[2] = json.getDouble("rotKd", 0);
+        rotPidCoeffs[2] = json.getDouble("rotKd", 0.15);
         rotPid = new PIDController(rotPidCoeffs[0],rotPidCoeffs[1], rotPidCoeffs[2]);
         rotTol = json.getDouble("rotTol", 0.0174533);// currently 1 degree
         rotExitSpeed = json.getDouble("rotExitSpeed", 0.0872665); // currently 5º/sec
         //  rotPid
-        headingPidCoeffs[0] = json.getDouble("headingKp",0.01);
+        headingPidCoeffs[0] = json.getDouble("headingKp",0.1);
         headingPidCoeffs[1] = json.getDouble("headingKi", 0);
         headingPidCoeffs[2] = json.getDouble("headingKd", 0);
         headingPid = new PIDController(headingPidCoeffs[0],headingPidCoeffs[1], headingPidCoeffs[2]);
