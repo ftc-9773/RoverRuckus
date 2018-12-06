@@ -1,0 +1,13 @@
+wait, 0.1
+
+telewrite, "Hello"
+
+wait, 10
+telewrite, "Test"
+
+
+add, 1, 2
+
+run_thing, 0
+
+end
