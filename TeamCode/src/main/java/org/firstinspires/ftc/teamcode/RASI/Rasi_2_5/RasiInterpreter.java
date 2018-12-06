@@ -1,15 +1,22 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Created by Vikesh on 2/20/2018.
- */
-
+ * Main way to run RASI files from inside java
+ *
+ * construct with
+ * RasiInterpreter rasi = new RasiInterpreter("Path/to/file", "filename.rasi", this);
+ * (this is a LinearOpMode instance)
+ * call rasi.runRasi() to run the file.
+ * */
 public class RasiInterpreter {
 
     private boolean isnull;
@@ -104,19 +111,16 @@ public class RasiInterpreter {
 
     public void runRasi() {
         command = rasiParser.getCommand();
-        System.out.println("Command is \"" + command + "\"");
-        System.out.println("Entering while loop");
-        int i = 0;
-        while (command != "end;" && i < 15) {
-          i++;
-            //Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
-            //Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
+        while (!rasiParser.fileEnded) {
+
+            Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
+            Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
                 isnull = false;
             } else {
                 isnull = true;
             }
-            //Log.d("rasiisnull", Boolean.toString(isnull));
+            Log.d("rasiisnull", Boolean.toString(isnull));
             if (!isnull) {
                 finalParameters = new Object[infoHashmap.get(hashMap.get(command.toLowerCase())).length];
                 for (int index = 0; index < finalParameters.length; index++) {
@@ -124,58 +128,51 @@ public class RasiInterpreter {
                     switch (type) {
                         case "int":
                             finalParameters[index] = Integer.valueOf(rasiParser.parameters[index+1]);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Int" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Int" + rasiParser.parameters[index]);
                             break;
                         case "char":
                             finalParameters[index] = rasiParser.parameters[index+1].charAt(0);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Char" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Char" + rasiParser.parameters[index]);
                             break;
                         case "long":
                             finalParameters[index] = Long.valueOf(rasiParser.parameters[index+1]);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Long" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Long" + rasiParser.parameters[index]);
                             break;
                         case "float":
                             finalParameters[index] = Float.valueOf(rasiParser.parameters[index+1]);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Float" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Float" + rasiParser.parameters[index]);
                             break;
                         case "double":
                             finalParameters[index] = Double.valueOf(rasiParser.parameters[index+1]);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Double" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Double" + rasiParser.parameters[index]);
                             break;
                         case "java.lang.String":
                             finalParameters[index] = rasiParser.parameters[index+1];
-                            //Log.i(LOG_TAG + "Parameter is String", rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "Parameter is String", rasiParser.parameters[index]);
                             break;
                         case "boolean":
                             finalParameters[index] = Boolean.valueOf(rasiParser.parameters[index+1]);
-                            //Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Boolean" + rasiParser.parameters[index]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Boolean" + rasiParser.parameters[index]);
                             break;
                     }
                 }
             } else {
                 finalParameters = null;
-                //Log.d("finalparamsisnull", "true");
+                Log.d("finalparamsisnull", "true");
             }
             if(finalParameters != null)
-                //  Log.d("rasifinalparams", Arrays.asList(finalParameters).toString());
+                Log.d("rasifinalparams", Arrays.asList(finalParameters).toString());
 
-            /*try {
-                method = teamRasiCommands.getClass().getMethod(hashMap.get(command.toLowerCase()));
-            } catch (NoSuchMethodException e) {
-                Log.e("RasiExecutor", "NoSuchMethodException");
-            }*/
-                //Log.d("RasiExecutor", method.toString());
+                Log.d("RasiExecutor", method.toString());
                 try {
                     methodsHashMap.get(hashMap.get(command.toLowerCase())).invoke(teamRasiCommands, finalParameters);
                 } catch (IllegalAccessException e) {
-                    //Log.e("rasiExecutor", "illegalAccessException");
+                    Log.e("rasiExecutor", "illegalAccessException");
                 } catch (InvocationTargetException e) {
-                    //Log.e("rasiExecutor", "InvocationTargetException");
+                    Log.e("rasiExecutor", "InvocationTargetException");
                 }
             command = rasiParser.getCommand();
-            System.out.println("Command is " + "\"" + command+"\"");
         }
-
     }
     public void setTags(String[] Tags){ //sets the rasi tags
         rasiParser.setTags(Tags);

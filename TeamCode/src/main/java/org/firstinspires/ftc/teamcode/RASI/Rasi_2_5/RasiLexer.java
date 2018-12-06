@@ -35,6 +35,7 @@ public class RasiLexer {
     //File io utilities
     private File rasiFile;                  //File object for the rasi file
     private Scanner fileScanner;            //Scanner object to read the file line by line
+    public boolean fileEnded = false;
 
     //Objects to be returned to RasiInterpreter and Utilities for building them
     private StringBuilder commandBuilder;   //StringBuilder object for miscellaneous manipulation
@@ -80,21 +81,19 @@ public class RasiLexer {
     }
 
     /**
-     *
-     *
+     * Gets the next command from the file and stores it in currentCommand
+     * If it is reserved, it runs it.
      * */
     private void loadNextCommand(){
-        try{
+        try {
         currentCommand = fileScanner.nextLine();
-      } catch (NoSuchElementException e) {
-        //System.out.println("Reached End of file");
-        currentCommand = " ";
-
-      }
-        commandBuilder = new StringBuilder(currentCommand);
-        if (currentCommand != " ") {
-          System.out.println("Got command: " + commandBuilder);
         }
+        catch (NoSuchElementException e) {
+            fileEnded = true;
+            return;
+        }
+
+        commandBuilder = new StringBuilder(currentCommand);
 
         int index = 0;
         while(index < commandBuilder.length()){
@@ -130,12 +129,20 @@ public class RasiLexer {
             runReservedCommand(parameters[0]);
         }
     }
+    /**
+     * Return the next command in file
+     * */
     public String getCommand(){
         //System.out.println("In get command");
+        if (fileEnded)
+            return null;
         loadNextCommand();
-        while(!shouldExecute) {
+        while(!shouldExecute && !fileEnded) {
             System.out.println("Skipped command: " + currentCommand);
             loadNextCommand();
+        }
+        if (fileEnded){
+            return null;
         }
         if(parameters[0] != " " && parameters[0] != ""){ System.out.println("Returned command: " + parameters[0]);}
         return parameters[0];
@@ -144,6 +151,9 @@ public class RasiLexer {
         return parameters[paramNumber];
     }
 
+    /**
+     * Run a reserved command
+     * */
     public void runReservedCommand(String command){
         switch (command){
             case "changetags":
@@ -159,10 +169,11 @@ public class RasiLexer {
                 removeTag(parameters[1]);
                 break;
             case "endOpMode":
-                //linearOpMode.requestOpModeStop();
-                //while(linearOpMode.opModeIsActive()){}
+                opMode.requestOpModeStop();
+                while(opMode.opModeIsActive()){}
                 break;
             case "end":
+                fileEnded = true;
                 break;
         }
     }
