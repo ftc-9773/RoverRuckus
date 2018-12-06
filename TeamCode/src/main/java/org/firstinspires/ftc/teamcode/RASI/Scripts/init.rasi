@@ -1,0 +1,10 @@
+addTag RED_CUBE
+addTag BLUE_CUBE
+addTag RED_BALL
+addTag BLUE_BALL
+
+createRobot,
+
+write, "File Ending"
+
+end
