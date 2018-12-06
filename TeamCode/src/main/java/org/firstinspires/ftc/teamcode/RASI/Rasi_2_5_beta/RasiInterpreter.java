@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
+package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5_beta;
 
 import android.util.Log;
 
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -19,11 +20,24 @@ import java.util.HashMap;
  * */
 public class RasiInterpreter {
 
+    //Helpers
     private boolean isnull;
     private int numberOfParams;
-    private String LOG_TAG = "RasiExecutor";
-    private RasiLexer rasiParser;
+
+    //Telemetry stuff
+    private static String LOG_TAG = "RasiExecutor";
+
+    //Current parser
+    private RasiLexer currentRasiParser;
+    private String currFilename;
+    private String currPath;
+
+    //File tracker
+    private ArrayList<String> queue;
+
+    //Opmode
     private LinearOpMode linearOpMode;
+
     private HashMap<String, String> hashMap;
     private RasiCommands teamRasiCommands;
     private String methodString;
@@ -42,20 +56,20 @@ public class RasiInterpreter {
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode){
         this.linearOpMode = opmode;
         teamRasiCommands = new RasiCommands(opmode);
-        rasiParser = new RasiLexer(filepath, filename, opmode);
+        currentRasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();
         methodsHashMap = new HashMap<String, Method>();
 
-        //System.out.println("Class: " + teamRasiCommands.getClass());
-        //System.out.println("Methods: " + teamRasiCommands.getClass().getMethods().toString());
-        //System.out.println("Ml: " + teamRasiCommands.getClass().getMethods().length);
+        System.out.println("Class: " + teamRasiCommands.getClass());
+        System.out.println("Methods: " + teamRasiCommands.getClass().getMethods().toString());
+        System.out.println("Ml: " + teamRasiCommands.getClass().getMethods().length);
 
         for(int x = 0; x < teamRasiCommands.getClass().getMethods().length; x++){ //runs for every method in the TeamRasiCommands Class
             Log.d("RasiExecutor", Integer.toString(x));
-            //System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
+            System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
             if(teamRasiCommands.getClass().getMethods()[x].toString().contains("RasiCommands.")){ //filters out the stuff that java puts there and hides.
-                //System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
+                System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
                 method = teamRasiCommands.getClass().getMethods()[x];
                 methodString = method.toString();
                 Log.d("Rasi_MethodString1", methodString);
@@ -104,14 +118,14 @@ public class RasiInterpreter {
                 methodsHashMap.put(mixedCaseString, method);
             }
         }
-//        System.out.println("HashMap is " + hashMap);
-//        System.out.println("Methods are " + methodsHashMap);
-//        System.out.println("Info is " + infoHashmap);
+        System.out.println("HashMap is " + hashMap);
+        System.out.println("Methods are " + methodsHashMap);
+        System.out.println("Info is " + infoHashmap);
     }
 
     public void runRasi() {
-        command = rasiParser.getCommand();
-        while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
+        command = currentRasiParser.getCommand();
+        while (!currentRasiParser.fileEnded && !linearOpMode.isStopRequested()) {
 
             Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
             Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
@@ -127,32 +141,32 @@ public class RasiInterpreter {
                     type = infoHashmap.get(hashMap.get(command.toLowerCase()))[index];
                     switch (type) {
                         case "int":
-                            finalParameters[index] = Integer.valueOf(rasiParser.parameters[index+1]);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Int" + rasiParser.parameters[index]);
+                            finalParameters[index] = Integer.valueOf(currentRasiParser.parameters[index+1]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Int" + currentRasiParser.parameters[index]);
                             break;
                         case "char":
-                            finalParameters[index] = rasiParser.parameters[index+1].charAt(0);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Char" + rasiParser.parameters[index]);
+                            finalParameters[index] = currentRasiParser.parameters[index+1].charAt(0);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Char" + currentRasiParser.parameters[index]);
                             break;
                         case "long":
-                            finalParameters[index] = Long.valueOf(rasiParser.parameters[index+1]);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Long" + rasiParser.parameters[index]);
+                            finalParameters[index] = Long.valueOf(currentRasiParser.parameters[index+1]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Long" + currentRasiParser.parameters[index]);
                             break;
                         case "float":
-                            finalParameters[index] = Float.valueOf(rasiParser.parameters[index+1]);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Float" + rasiParser.parameters[index]);
+                            finalParameters[index] = Float.valueOf(currentRasiParser.parameters[index+1]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Float" + currentRasiParser.parameters[index]);
                             break;
                         case "double":
-                            finalParameters[index] = Double.valueOf(rasiParser.parameters[index+1]);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Double" + rasiParser.parameters[index]);
+                            finalParameters[index] = Double.valueOf(currentRasiParser.parameters[index+1]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Double" + currentRasiParser.parameters[index]);
                             break;
                         case "java.lang.String":
-                            finalParameters[index] = rasiParser.parameters[index+1];
-                            Log.i(LOG_TAG + "Parameter is String", rasiParser.parameters[index]);
+                            finalParameters[index] = currentRasiParser.parameters[index+1];
+                            Log.i(LOG_TAG + "Parameter is String", currentRasiParser.parameters[index]);
                             break;
                         case "boolean":
-                            finalParameters[index] = Boolean.valueOf(rasiParser.parameters[index+1]);
-                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Boolean" + rasiParser.parameters[index]);
+                            finalParameters[index] = Boolean.valueOf(currentRasiParser.parameters[index+1]);
+                            Log.i(LOG_TAG + "parameter number" + Integer.toString(index) + ":", "Boolean" + currentRasiParser.parameters[index]);
                             break;
                     }
                 }
@@ -171,17 +185,17 @@ public class RasiInterpreter {
                 } catch (InvocationTargetException e) {
                     Log.e("rasiExecutor", "InvocationTargetException");
                 }
-            command = rasiParser.getCommand();
+            command = currentRasiParser.getCommand();
         }
     }
     public void setTags(String[] Tags){ //sets the rasi tags
-        rasiParser.setTags(Tags);
+        currentRasiParser.setTags(Tags);
     }
     public void addTag(String tag){ //adds a rasi tag
-        rasiParser.addTag(tag);
+        currentRasiParser.addTag(tag);
     }
     public void removeTag(String tag){ // removes a rasi tag
-        rasiParser.removeTag(tag);
+        currentRasiParser.removeTag(tag);
     }
 
 }

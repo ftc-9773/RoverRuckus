@@ -86,24 +86,23 @@ public class FTCRobotV1 {
         intake = new Intake(hwmap, op, reZero);
     }
 
-    // DRIVING FUNCTIONS
+    /**
+     * Drive at velocity [xV, yV] and rotate at velocity rotV
+     * Does not scale inputs for gamepad input, use driveSpeedScaled instead.
+     * @param xV velocity left
+     * @param yV velcoty fowards
+     * @param rotV angular velocity
+     * */
     public void driveSpeed(double xV, double yV, double rotV){
         drivebase.drive(xV, yV, rotV, false);
     }
 
+    /***
+     * As driveSpeed but scaled for more precision at lower input values.
+     */
     public void driveSpeedScaled(double x, double y, double rot) {
         drivebase.drive(x, y, rot, true);
     }
-
-    /*
-    public void driveDist(double x, double y, double rotation, double speed){
-        drivebase.driveDist(x, y, rotation, speed);
-        this.pos.xCord += x;
-        this.pos.yCord += y;
-        this.heading += rotation;
-        //readSensors();
-    }
-    */
 
     // teleop functions
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
