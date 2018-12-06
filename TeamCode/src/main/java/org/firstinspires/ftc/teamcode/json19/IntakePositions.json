@@ -1,7 +1,7 @@
 {
   "bucketServoTransferPosition": 0.04,
   "bucketServoIntakePosition":0.54,
-  "bucketServoCarryPosition": 0.46,
+  "bucketServoCarryPosition": 0.4,
 
   "intakeStopVal": 0.5,
   "intakeFowardsVal":0.09,

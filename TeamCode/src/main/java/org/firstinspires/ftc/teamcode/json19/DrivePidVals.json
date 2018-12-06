@@ -11,7 +11,7 @@
   "rotExitSpeed": 0.0872665,
 
 
-  "headingKp":0.01,
+  "headingKp":0.05,
   "headingKi": 0,
   "headingKd": 0
 }
