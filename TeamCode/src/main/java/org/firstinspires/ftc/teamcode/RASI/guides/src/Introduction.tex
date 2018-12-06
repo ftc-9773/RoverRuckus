@@ -1,0 +1,24 @@
+\documentclass{article}
+
+\begin{document}
+
+\section{What is RASI?}
+RASI, which stands for \textit{Robocracy Automated Scripting Interface}, is a scripted language developed by Robocracy engineers to allow for faster programming and debugging times. Its principle usage was to allow for the developer to write code which could be run without needing to rebuild the entire application, and wait sometimes minutes for it to be loaded onto the android device. RASI has a simple syntax which is easy to understand and use, but it can be extended to do anything that could be done in Java.
+
+\section{RASI Language Design}
+Rasi consists of three main parts, the interpreter, the lexer, and \texttt{RasiCommands}.
+\begin{itemize}
+  \item \textbf{\texttt{RasiCommands}} is the heart of what makes Rasi so useful, as it is where the programmer can write java functions that can be called from a rasi file, and in doing so, allow RASI to do anything that Java could.
+  \item \textbf{The Rasi Interpreter} takes in commands from the lexer and then actually calls the functions that are in \texttt{RasiCommands}. This is what actually runs the code from your java program.
+  \item \textbf{The Rasi Lexer} is what takes in a RASI file and translates it into commands and arguments for the interpreter to execute.[More stuff about how it is great]
+\end{itemize}
+
+\section{RASI Syntax}
+To be done.
+\begin{verbatim}
+TAG: command, argument1, argument2
+TAG2: command2, arg1, arg2
+...
+\end{verbatim}
+
+\end{document}
