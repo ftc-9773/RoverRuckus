@@ -52,7 +52,7 @@ public class CubeLift implements Attachment {
      * Initializes the hardware map, and gets configurables from json
      * @param hwmap the hardwae map taken from runOpMode();
      */
-    public CubeLift(HardwareMap hwmap){
+    public CubeLift(HardwareMap hwmap, boolean initLift){
         // initialize hardware map stuff
              // servos
         this.distributorServo = hwmap.servo.get("distributorServo");
@@ -62,8 +62,10 @@ public class CubeLift implements Attachment {
              //motors
         leftLiftMotor = (DcMotorEx)hwmap.dcMotor.get("llMotor");
         rightLiftMotor = (DcMotorEx)hwmap.dcMotor.get("rlMotor");
-        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if(initLift) {
+            leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -197,7 +199,7 @@ public class CubeLift implements Attachment {
      * @return a boolean value indicating the state of the lift; true if it is in the transfer state, false otherwise
      */
     public boolean isInTransferState(){
-        return (getLiftPos() < (liftLowPos + transferTol) &&( Math.abs(liftTargetPosition - liftLowPos) < transferTol));
+        return (Math.abs(getLiftPos()) < Math.abs(liftLowPos) + Math.abs(transferTol) );
     }
 
     /**
