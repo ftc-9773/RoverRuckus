@@ -17,6 +17,9 @@ import java.util.HashMap;
  * RasiInterpreter rasi = new RasiInterpreter("Path/to/file", "filename.rasi", this);
  * (this is a LinearOpMode instance)
  * call rasi.runRasi() to run the file.
+ *
+ * @author caden vikesh
+ * @version 2.5.2
  * */
 public class RasiInterpreter {
 

@@ -52,7 +52,7 @@ public class PIDdriveUtil {
      * Constructor for the PID drive Util class.
      * initializes all of the parts, and reads values from JSON
      *
-     * takes the robot and linear opMode classes, used to initialize and eventuallly update stuff
+     * takes the robot and linear opMode classes, used to initialize and eventually update stuff
      * @param robot
      * @param opMode
      */
@@ -83,12 +83,11 @@ public class PIDdriveUtil {
         headingPidCoeffs[2] = json.getDouble("headingKd", 0);
         headingPid = new PIDController(headingPidCoeffs[0],headingPidCoeffs[1], headingPidCoeffs[2]);
 
-
-
     }
      public void driveDistStraight(double dist, double power){
         drivePolar(dist, gyro.getHeading(), power);
      }
+
      public void drivePolar(double distance, double theta, double power ) { // may be less accurate
          double initialHeading = gyro.getHeading();
          distPid.resetPID();
@@ -123,7 +122,7 @@ public class PIDdriveUtil {
         return sum / dists.length;
      }
     /**
-     * a semi-internal funciton used to keep the robot pointed in a certian direction while driving.
+     * a semi-internal function used to keep the robot pointed in a certain direction while driving.
      * @param magnitude driving function magnitude in motor power (i.e. on range -1.0 to 0.0 to 1.0)
      * @param angle the angle at which the robot is desired to drive in radians.
      * @param heading the heading that the robot is desired to face.
@@ -135,9 +134,9 @@ public class PIDdriveUtil {
      }
 
     /**
-     * A function that turns the robot to a certian feild centric position
+     * A function that turns the robot to a certain field centric position
      *  runs a loop while it can, and exits once at the correct position
-     * @param goalHeading the indended feild centric heading in degrees.
+     * @param goalHeading the indented field centric heading in degrees.
      */
      public void turnToAngle(double goalHeading) {
 
@@ -199,6 +198,10 @@ public class PIDdriveUtil {
         rotPid.resetPID();
      }
 
+    /**
+     * Return the equivelent angle to num, set on the interval [-pi, pi]
+     * @param num Angle to evaluate
+     * */
     private double setOnNegToPosPi (double num) {
         while (num > Math.PI) {
             num -= 2*Math.PI;
