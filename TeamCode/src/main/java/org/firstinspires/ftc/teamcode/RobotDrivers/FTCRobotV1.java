@@ -163,7 +163,7 @@ public class FTCRobotV1 {
       telemetry.addData("Arm motor pos", -gp2.left_stick_y);
       telemetry.addData("Curr arm motor pos", intake.getArmPos());
       telemetry.addData("TransferState boolean val", intake.isInTransferState());
-        intake.setExtensionPowerFromGamepad(gp2.left_stick_y);
+      intake.setExtensionPowerFromGamepad(gp2.left_stick_y);
 
 
 
@@ -203,6 +203,9 @@ public class FTCRobotV1 {
         this.lift.update();
         this.intake.update();
         this.drivebase.update();
+
+        // temproary
+
     }
 
     public void stop() {

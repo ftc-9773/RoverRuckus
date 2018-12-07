@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.Arrays;
+
 /**
  * The PID drive util class creates and holds various methods for driving
  * This program is made to be able to be used in various circumstances,
@@ -25,7 +27,7 @@ import com.qualcomm.robotcore.util.Range;
 
 public class PIDdriveUtil {
 
-    static final String TAG = "ftc_9773_drivePID";
+    static final String TAG = "ftc9773_drivePID";
     static final boolean scalingClip = false;
     //operator things;
     FTCRobotV1 robot;
@@ -37,13 +39,16 @@ public class PIDdriveUtil {
     double ticksPerInch;
 
     // Json
-    SafeJsonReader json = new SafeJsonReader("DrivePidVals");
+    SafeJsonReader json;
+
+
     // pid coeffs
     static double[] distPidCoeffs = new double[3];
     double distTol;
     PIDController distPid;
     static double[] rotPidCoeffs = new double[3];
     double rotTol, rotExitSpeed;
+    double rotMinPow;
     PIDController rotPid;
     static double[] headingPidCoeffs = new double[3];
     PIDController headingPid;
@@ -60,41 +65,47 @@ public class PIDdriveUtil {
         this.robot = robot;
         this.opMode = opMode;
         drivebase = robot.drivebase;
+        drivebase.setToPIDMode();
         gyro = robot.gyro;
         ticksPerInch = drivebase.COUNTS_PER_INCH;
 
-        //todo: update with actual values
+        json = new SafeJsonReader("DrivePidVals");
         //  distPid
         distPidCoeffs[0] = json.getDouble("distKp",0.028);
         distPidCoeffs[1] = json.getDouble("distKi", 0.0);
         distPidCoeffs[2] = json.getDouble("distKd", 0.17);
         distPid = new PIDController(distPidCoeffs[0],distPidCoeffs[1], distPidCoeffs[2]);
+        Log.d(TAG, "created dist PID controller pid coeff array: " + Arrays.toString(distPidCoeffs));
         distTol = json.getDouble("distTol", 0.5);
         //  rotPid
         rotPidCoeffs[0] = json.getDouble("rotKp",0.11);
         rotPidCoeffs[1] = json.getDouble("rotKi", 0);
         rotPidCoeffs[2] = json.getDouble("rotKd", 0.15);
         rotPid = new PIDController(rotPidCoeffs[0],rotPidCoeffs[1], rotPidCoeffs[2]);
+        Log.d(TAG, "created rotation PID controller pid coeff array: " + Arrays.toString(rotPidCoeffs));
         rotTol = json.getDouble("rotTol", 0.0174533);// currently 1 degree
-        rotExitSpeed = json.getDouble("rotExitSpeed", 0.0872665); // currently 5º/sec
+        rotExitSpeed = json.getDouble("rotExitSpeed", 0.2); // currently 5º/sec
+        rotMinPow = json.getDouble("rotMinSpeed", 0.14);
         //  rotPid
         headingPidCoeffs[0] = json.getDouble("headingKp",0.1);
         headingPidCoeffs[1] = json.getDouble("headingKi", 0);
         headingPidCoeffs[2] = json.getDouble("headingKd", 0);
         headingPid = new PIDController(headingPidCoeffs[0],headingPidCoeffs[1], headingPidCoeffs[2]);
+        Log.d(TAG, "created heading PID controller pid coeff array: " + Arrays.toString(headingPidCoeffs));
 
 
 
     }
      public void driveDistStraight(double dist, double power){
-        drivePolar(dist, gyro.getHeading(), power);
-     }
-     public void drivePolar(double distance, double theta, double power ) { // may be less accurate
          double initialHeading = gyro.getHeading();
          distPid.resetPID();
-         while (opMode.isStopRequested()) {
-             double error = distance - getAverageDistInches();
+         long[] initialEncoderDists = drivebase.getMotorPositions();
+
+         while (!opMode.isStopRequested()) {
+             double error = dist - avgDistElapsedInches(initialEncoderDists);
              double correction = distPid.getPIDCorrection(error);
+             Log.d(TAG,"error:" + error);
+             Log.d(TAG, "correction" +correction);
              // might change this
              if(scalingClip) {
                  // scales continuously
@@ -108,20 +119,56 @@ public class PIDdriveUtil {
              Log.d(TAG+" error", Double.toString(error));
              Log.d(TAG+" pow", Double.toString(correction));
 
-             driveHoldHeading(correction, theta, initialHeading);
-             if(Math.abs(error) <= Math.abs(distTol))
+
+             driveHoldHeading(correction, 0, initialHeading);
+             if(avgDistElapsedInches(initialEncoderDists) < dist - distTol)
                  break;
 
          }
-     }
-     private double getAverageDistInches(){
-        long[] dists = drivebase.getMotorPositions();
-        double sum = 0;
-        for(Long l: dists){
-            sum += (l / ticksPerInch);
-        }
-        return sum / dists.length;
-     }
+    }
+    public double avgDistElapsedInches(long[] initpositions){
+         long[] positions = drivebase.getMotorPositions();
+         double sum=0;
+         for(int i = 0; i<4; i++){
+             double diff = (double) positions[i] - initpositions[i];
+             if(i==0 ||i==2) diff *=-1;
+             sum +=diff;
+         }
+          sum /=4;
+        sum /= drivebase.COUNTS_PER_INCH;
+        return sum ;
+    }
+
+    // todo: implement this using the kinematics described in this paper: https://www.researchgate.net/publication/308570348_Inverse_kinematic_implementation_of_four-wheels_mecanum_drive_mobile_robot_using_stepper_motors
+//    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
+//         double initialHeading = gyro.getHeading();
+//         distPid.resetPID();
+//         initialEncoderDists = drivebase.getMotorPositions();
+//         while (!opMode.isStopRequested()) {
+//             double error = distance - getAverageDistInches();
+//             double correction = distPid.getPIDCorrection(error);
+//             Log.d(TAG,"error:" + error);
+//             Log.d(TAG, "correction" +correction);
+//             // might change this
+//             if(scalingClip) {
+//                 // scales continuously
+//                 correction = Range.clip(correction, -1, 1);
+//                 correction*= power;
+//             } else {
+//                 // otherwise just clip
+//                 correction = Range.clip(correction, -power, power);
+//             }
+//             //logs
+//             Log.d(TAG+" error", Double.toString(error));
+//             Log.d(TAG+" pow", Double.toString(correction));
+//
+//
+//             driveHoldHeading(correction, theta, initialHeading);
+//             if(Math.abs(distance) <= Math.abs(distance+distTol))
+//                 break;
+//
+//         }
+//    }
     /**
      * a semi-internal funciton used to keep the robot pointed in a certian direction while driving.
      * @param magnitude driving function magnitude in motor power (i.e. on range -1.0 to 0.0 to 1.0)
@@ -130,8 +177,20 @@ public class PIDdriveUtil {
      */
      public void driveHoldHeading (double magnitude, double angle, double heading){
          double currHeading = gyro.getHeading();
-         double correction = headingPid.getPIDCorrection(heading - currHeading);
-         drivebase.drivePolar(magnitude, angle, correction, false);
+         double error = heading - currHeading;
+         Log.d(TAG, "Error: " + error);
+         double correction = headingPid.getPIDCorrection(error);
+
+         angle = Math.toRadians(angle -90);
+         angle = currHeading - angle;
+
+         double x = Math.cos(angle)*magnitude;
+         double y = Math.sin(angle)*magnitude;
+
+         Log.d(TAG, "wrote to drive. correction was" + correction +" x was " + x + " y was " + y);
+
+         drivebase.drive(x, y, -correction, false);
+         drivebase.update();
      }
 
     /**
@@ -140,16 +199,19 @@ public class PIDdriveUtil {
      * @param goalHeading the indended feild centric heading in degrees.
      */
      public void turnToAngle(double goalHeading) {
-
+         Log.d(TAG,"startingTurnToAnlge: " +goalHeading);
 
          final double targetAngleRad = goalHeading;
 
          // For calculating rotational speed:
          double lastHeading;
          double currentHeading = gyro.getHeading();
+         Log.d(TAG,"startingHeading: " + currentHeading );
+
 
          double lastTime;
          double currentTime = System.currentTimeMillis();
+         double lastError =0.0;
 
          // For turning PID
          double error;
@@ -167,18 +229,20 @@ public class PIDdriveUtil {
              error = setOnNegToPosPi(targetAngleRad - currentHeading);
 
              double rotation = rotPid.getPIDCorrection(error);
-             Log.e("Error: ", "" + error);
+             Log.d("Error: ", "" + error);
 
-             Log.e(" Rotation Pow: ", "" + rotation);
+             Log.d(" Rotation Pow: ", "" + rotation);
 
              // may add this in if dt is too weak
-//             if (rotation > 0) {
-//                 rotation += baseSpeed;
-//             } else if (rotation < 0) {
-//                 rotation -= baseSpeed;
-//             }
-
-             drivebase.drivePolar(0.0, 0, rotation, false);
+           if (rotation > 0 && Math.abs(rotation) <rotMinPow) {
+               rotation += rotMinPow;
+             } else if (rotation < 0 && Math.abs(rotation) <rotMinPow) {
+               rotation -= rotMinPow;
+            }
+             Log.d(TAG,"writingToDrive: Error: "+ error + " Correction: " + rotation );
+             Log.d(TAG, "error in degrees: "+ Math.toDegrees(error));
+             drivebase.drivePolar(0.0, 0, -rotation, false);
+             drivebase.update();
 
              // Check to see if it's time to exit
              // Calculate speed
@@ -186,15 +250,18 @@ public class PIDdriveUtil {
              if (currentTime == lastTime || firstTime) {
                  speed = 0.003;
              } else {
-                 speed = Math.abs(error) / (currentTime - lastTime);
+                 speed = Math.abs(error - lastError) / (currentTime - lastTime);
              }
+             lastError = error;
 
-             if (speed < rotExitSpeed && error < rotTol) {
+             if ((speed < rotExitSpeed ) && Math.abs(error) < Math.abs(rotTol)) {
+                 Log.i(TAG, "ending rotation, should be at heading");
                  break;
              }
              firstTime = false;
              // update robot
              robot.update();
+             // temporary
          }
         rotPid.resetPID();
      }

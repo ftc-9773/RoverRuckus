@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Created by vikesh on 12/26/17.
  */
 
-public class RasiParser {
+ class RasiParser {
     private String TAG = "TeamRasiCommands";
 
     private LinearOpMode linearOpMode;
@@ -111,7 +111,7 @@ public class RasiParser {
                 addTag(parameters[0+1]);
                 break;
             case "removetag":
-                // TODO: used to be an n here. idk what it was supposed to be, but his was my guess
+                // TODO: used to be an n here. idk what it was supposed to be, but this was my guess
 
                 removeTag(parameters[0+1]);
                 break;

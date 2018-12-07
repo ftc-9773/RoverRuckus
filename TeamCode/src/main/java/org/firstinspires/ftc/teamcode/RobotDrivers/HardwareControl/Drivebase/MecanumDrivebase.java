@@ -32,7 +32,7 @@ public class MecanumDrivebase {
     private double[] motorPowers = new double[4];
 
     Telemetry telemetry;
-    SafeJsonReader reader = new SafeJsonReader("DrivePidVals.json");
+//    SafeJsonReader reader = new SafeJsonReader("DrivePidVals.json");
 
     public MecanumDrivebase(HardwareMap hwMap, Telemetry telem) {
         // init wheels
@@ -47,6 +47,7 @@ public class MecanumDrivebase {
 
         for (DcMotor motor:driveMotors) {
             motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(reader.getDouble("kp"), reader.getDouble("ki"), reader.getDouble("kd")));
 
         }
@@ -124,8 +125,8 @@ public class MecanumDrivebase {
     }
 
     public void drivePolar(double mag, double theta, double rotation, boolean scale) {
-        double x = Math.sin(theta);
-        double y = Math.sin(theta);
+        double x = Math.sin(theta)*mag;
+        double y = Math.cos(theta)*mag;
 
         drive(x, y, rotation, scale);
     }
@@ -152,6 +153,17 @@ public class MecanumDrivebase {
             value[i] = driveMotors[i].getCurrentPosition();
         return value;
     }
+    public void setToPIDMode(){
+        for (DcMotor m: driveMotors){
+            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+    public void turnOffPidMode(){
+        for (DcMotor m: driveMotors){
+            m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+    }
+
 
 
     public double[] getPos(){

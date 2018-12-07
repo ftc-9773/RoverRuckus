@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
 /**
@@ -22,7 +24,7 @@ public class Gyro {
 
     //private double zeroPositionRight = 0;
 
-    private static String TAG = "9773_Gyro";
+    private static String TAG = "ftc9773_Gyro";
     private static boolean DEBUG = false;
 
 
@@ -69,14 +71,15 @@ public class Gyro {
 
     // Returns calculated orientation
     public double getHeading(boolean forceNewReading) {
-
-        // Check if new reading is required
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastReadTime > minReadDeltaTime || forceNewReading)  readImu();
-
-        // Calculate estimated position
-        long dt = currentTime - lastReadTime;
-        return -(lastImuAngle + lastImuVelocity * dt) - zeroPosition;
+//
+//        // Check if new reading is required
+//        long currentTime = System.currentTimeMillis();
+//        if (currentTime - lastReadTime > minReadDeltaTime || forceNewReading)  readImu();
+//
+//        // Calculate estimated position
+//        long dt = currentTime - lastReadTime;
+//        return -(lastImuAngle + lastImuVelocity * dt) - zeroPosition;
+        return getImuAngle() -zeroPosition;
     }
 
     // Returns calculated velocity

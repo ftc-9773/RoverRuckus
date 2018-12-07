@@ -2,16 +2,17 @@
   "distKp":0.028,
   "distKi": 0,
   "distKd": 0.09,
-  "distTol": 0.5,
+  "distTol": 0.25,
 
-  "rotKp":0.0,
-  "rotKi": 0,
-  "rotKd": 0,
-  "rotTol": 0.0174533,
-  "rotExitSpeed": 0.0872665,
+  "rotKp":0.5,
+  "rotKi": 0.0003,
+  "rotKd": 0.4,
+  "rotTol": 0.0074533,
+  "rotExitSpeed": 0.00032665,
+  "rotMinSpeed": 0.17,
 
 
-  "headingKp":0.05,
+  "headingKp":0.01,
   "headingKi": 0,
-  "headingKd": 0
+  "headingKd": 0.0
 }

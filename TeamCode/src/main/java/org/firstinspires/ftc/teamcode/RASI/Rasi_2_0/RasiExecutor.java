@@ -8,7 +8,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
- * Created by Vikesh on 2/20/2018.
+ * <h>  Rasi executor class</h>
+ * this class works with the RASI parser to read the methods written in the rasi file,
+ * This ist he class that actually acts upon the actions spelt out in the TeamRasiCommands class
+ *
+ *
+ * the  Created by Vikesh on 2/20/2018.
  */
 
 public class RasiExecutor {
@@ -32,6 +37,17 @@ public class RasiExecutor {
     private HashMap<String, Method> methodsHashMap;
     private boolean hasArguments;
     private Method method;
+
+    /**
+     * @Constructor RasiExecutor
+     * this constructor takes the file path of the file, as well as the linear opmode,
+     * and initializes the rasi executor object, usign them. Also interfaces wtih the TeamRasiCommands
+     * and RasiExecutor classes.
+     *
+     * @param linearOpMode the opMode class, used to smoothly end the opmode when requested
+     * @param filepath the path of the folder containing the .rasi file.
+     * @param filename the name of the specific .rasi file
+     */
 
     public RasiExecutor(LinearOpMode linearOpMode, String filepath, String filename){
         this.linearOpMode = linearOpMode;

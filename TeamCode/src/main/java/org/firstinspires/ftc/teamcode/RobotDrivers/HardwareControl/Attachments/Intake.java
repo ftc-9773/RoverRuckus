@@ -66,6 +66,8 @@ public class Intake {
         ~/Library/Android/sdk/platform-tools/adb push IntakePositions.json /sdcard/FIRST/team9773/json19
         or
         ~/Library/Android/sdk/platform-tools/adb push CubeLift.json /sdcard/FIRST/team9773/json19
+        ~/Library/Android/sdk/platform-tools/adb push DrivePidVals.json /sdcard/FIRST/team9773/json19
+
 
         // to pull
         ~/Library/Android/sdk/platform-tools/adb pull /sdcard/FIRST/team9773/json18/CubeTrayServoPositions.json
