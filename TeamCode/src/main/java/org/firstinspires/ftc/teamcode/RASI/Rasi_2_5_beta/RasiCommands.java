@@ -42,7 +42,7 @@ import java.math.*;
  *
  * ----Please add documentation to the functions you create-----
  * @author caden
- * @version 2.5
+ * @version 2.5.2
  * */
 
 public class RasiCommands {

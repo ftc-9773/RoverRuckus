@@ -20,7 +20,7 @@ import java.util.Scanner;
  * TODO: create guides and documentation
  *
  * @author vikesh cadence
- * @version 2.5
+ * @version 2.5.2
  */
 public class RasiLexer {
     //Tag to use for telemetry
