@@ -112,7 +112,7 @@ public class RasiInterpreter {
                 hashMap.put(lcString, mixedCaseString);
                 if(parameters != null)
                     Log.i("RasiExecutor", parameters.toString());
-                Log.i("RasiExecutor", mixedCaseString);
+                Log.i("RasiExecutor", mixedCaseString + " ");
                 infoHashmap.put(mixedCaseString, parameters);
                 Log.i(LOG_TAG, "added parameters array, length: " + Integer.toString(numberOfParams));
                 methodsHashMap.put(mixedCaseString, method);
