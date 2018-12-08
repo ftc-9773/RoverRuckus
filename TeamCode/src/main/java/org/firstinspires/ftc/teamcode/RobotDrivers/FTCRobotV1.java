@@ -117,14 +117,14 @@ public class FTCRobotV1 {
 
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
-        else if(gp2.b) lift.goToScorePos();
+        else if(gp2.b) {lift.goToScorePos(); intake.carryPos();}
         else if (gp2.y) lift.goToHangPos();
 
         // lift "jog" functions
         lift.adjustLift(-2*gp2.right_stick_y);
 
         // left/right side toggle
-        if (toggleLeftRightButton.isJustOn() && gp2.a){
+        if (toggleLeftRightButton.isJustOn() && gp2.left_bumper){
             leftRightState = !leftRightState;
             if(leftRightState)lift.setLefScoreSide();
             else lift.setRightScoreSide();
@@ -205,7 +205,6 @@ public class FTCRobotV1 {
         this.drivebase.update();
 
         // temproary
-
     }
 
     public void stop() {

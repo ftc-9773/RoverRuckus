@@ -1,7 +1,7 @@
 {
-  "bucketServoTransferPosition": 0.04,
-  "bucketServoIntakePosition":0.54,
-  "bucketServoCarryPosition": 0.4,
+  "bucketServoTransferPosition": 0.6,
+  "bucketServoIntakePosition":1.0,
+  "bucketServoCarryPosition": 0.9,
 
   "intakeStopVal": 0.5,
   "intakeFowardsVal":0.09,
@@ -9,6 +9,10 @@
 
   "liftKp" : 0.0025,
   "liftKi": 0.0009,
-  "liftKd": 0.0002
+  "liftKd": 0.0002,
+
+   "armInPosition": 10,
+  "transferThreshold": 80,
+  "armOutExtraThreshold": 300
 
 }

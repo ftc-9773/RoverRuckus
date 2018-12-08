@@ -1,5 +1,5 @@
 createRobot,
 
-write, "File Ending"
+write, "Hello",
 
-end
+telemupdate,

@@ -65,7 +65,7 @@ public class PIDdriveUtil {
         this.robot = robot;
         this.opMode = opMode;
         drivebase = robot.drivebase;
-        drivebase.setToPIDMode();
+        drivebase.runWithEncoders();
         gyro = robot.gyro;
         ticksPerInch = drivebase.COUNTS_PER_INCH;
 
@@ -101,8 +101,11 @@ public class PIDdriveUtil {
          distPid.resetPID();
          long[] initialEncoderDists = drivebase.getMotorPositions();
 
+         drivebase.runWithEncoders();
+
          while (!opMode.isStopRequested()) {
              double error = dist - avgDistElapsedInches(initialEncoderDists);
+             Log.d("encoder", "" + initialEncoderDists[0]);
              double correction = distPid.getPIDCorrection(error);
              Log.d(TAG,"error:" + error);
              Log.d(TAG, "correction" +correction);
@@ -121,7 +124,9 @@ public class PIDdriveUtil {
 
 
              driveHoldHeading(correction, 0, initialHeading);
-             if(avgDistElapsedInches(initialEncoderDists) < dist - distTol)
+             double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
+             Log.d(TAG, "at position: " + distTraveled);
+             if( Math.abs(distTraveled - dist) < distTol)
                  break;
 
          }
@@ -131,6 +136,7 @@ public class PIDdriveUtil {
          double sum=0;
          for(int i = 0; i<4; i++){
              double diff = (double) positions[i] - initpositions[i];
+             Log.d(TAG, "adding motor position: " +i+" ticks: " + positions[i]  + " diff:" + diff);
              if(i==0 ||i==2) diff *=-1;
              sum +=diff;
          }
@@ -139,7 +145,8 @@ public class PIDdriveUtil {
         return sum ;
     }
 
-    // todo: implement this using the kinematics described in this paper:   //    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
+    // todo: implement this using the kinematics described in this paper:
+    //    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
 //         double initialHeading = gyro.getHeading();
 //         distPid.resetPID();
 //         initialEncoderDists = drivebase.getMotorPositions();

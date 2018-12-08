@@ -51,15 +51,8 @@ public class MecanumDrivebase {
             //motor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDCoefficients(reader.getDouble("kp"), reader.getDouble("ki"), reader.getDouble("kd")));
 
         }
-        runToPosition();
+        runWithEncoders();
     }
-
-
-    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
-    public void runToPosition(){for(DcMotor d:driveMotors){
-        //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        d.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }}
 
     private double scale(double val) {
         if (Math.abs(val) > 0.05) {
@@ -153,17 +146,13 @@ public class MecanumDrivebase {
             value[i] = driveMotors[i].getCurrentPosition();
         return value;
     }
-    public void setToPIDMode(){
-        for (DcMotor m: driveMotors){
-            m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-    public void turnOffPidMode(){
-        for (DcMotor m: driveMotors){
-            m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-    }
 
+    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}}
+    public void runWithoutEncoders() { for (DcMotor d:driveMotors) {d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
+    public void runToPosition(){for(DcMotor d:driveMotors){
+        //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        d.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }}
 
 
     public double[] getPos(){

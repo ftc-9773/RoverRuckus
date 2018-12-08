@@ -53,7 +53,7 @@ public class Intake {
     //double 393 servo vals
     private double stopVal, forwardsVal, backwardsVal;
     /// armPositions
-     int armInPosition = 150;
+     int armInPosition = 10;
      int transferThreshold = 80;
      int armOutExtraThreshold = 400;
 
@@ -109,6 +109,10 @@ public class Intake {
         double ki = jsonReader.getDouble("liftKi", 0.0009);
         double kd = jsonReader.getDouble("liftKd", 0.0002);
         extensionPID = new PIDController(kp,ki,kd);
+
+        armInPosition= jsonReader.getInt("armInPosition", 10);
+        transferThreshold =jsonReader.getInt("transferThreshold", 80);
+        armOutExtraThreshold = jsonReader.getInt("armOutExtraThreshold",300);
 
         opmode = op;
         retractArm();
@@ -176,7 +180,7 @@ public class Intake {
     public void setExtensionPowerFromGamepad(double power){
         if(Math.abs(power) >= 0.09 ) {
             pidEnabled = false;
-            gamepadArmPower = power;
+            gamepadArmPower = -power;
         } else gamepadArmPower = 0.0;
     }
 

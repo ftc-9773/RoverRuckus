@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
  */
 
 public class CubeLift implements Attachment {
-    private final static String TAG = "Cube Lift:";
+    private final static String TAG = "ftc9773_Cube Lift:";
 
     private DcMotorEx leftLiftMotor,rightLiftMotor;
     private Servo distributorServo, leftSorterServo, rightSorterServo, hookServo;
@@ -66,6 +66,7 @@ public class CubeLift implements Attachment {
             leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
+        Log.d(TAG, "Initialized liftMotors. LeftMotorPosition =" + getLiftPos());
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -104,6 +105,7 @@ public class CubeLift implements Attachment {
         pid = new PIDController(kp,ki,kd);
 
         Log.d(TAG, "Read and set from JSON");
+        setLefScoreSide();
     }
     /**
      * Void method that tells the lift to go to the low position.
@@ -191,7 +193,7 @@ public class CubeLift implements Attachment {
     }
     //todo: code the home() method.
     public void zero(){
-        liftZeroPos = rightLiftMotor.getCurrentPosition();
+        liftZeroPos = -leftLiftMotor.getCurrentPosition();
     }
 
     /**
@@ -211,7 +213,10 @@ public class CubeLift implements Attachment {
     public void update() {
         if(isEnded) return;
         // correct motor, might eventually do other stuff;
-        setLiftPower(pid.getPIDCorrection((double)liftTargetPosition, (double)getLiftPos()));
+        double correction = pid.getPIDCorrection((double)liftTargetPosition, (double)getLiftPos());
+
+        setLiftPower(correction);
+        Log.d(TAG, " pid correction set:" + correction + " position: "  + getLiftPos());
     }
     /**
      * ends all motion of the components allows for ending of all functions.
@@ -229,7 +234,7 @@ public class CubeLift implements Attachment {
     }
     // used internally to find the position of the lift
     public int getLiftPos(){
-        return rightLiftMotor.getCurrentPosition()- liftZeroPos;
+        return (-leftLiftMotor.getCurrentPosition())- liftZeroPos;
     }
 
     public void closeLatch(){

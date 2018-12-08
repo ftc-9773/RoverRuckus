@@ -37,7 +37,7 @@ public class TestAutonOpMode extends LinearOpMode{
         Timer driveTimer;
         waitForStart();
 
-        pidDrive.driveDistStraight(60,0.50);
+        pidDrive.driveDistStraight(10,0.5);
 
 
 

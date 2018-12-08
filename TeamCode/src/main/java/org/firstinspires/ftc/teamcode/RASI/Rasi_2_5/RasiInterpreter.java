@@ -21,11 +21,11 @@ public class RasiInterpreter {
 
     private boolean isnull;
     private int numberOfParams;
-    private String LOG_TAG = "RasiExecutor";
+    private String LOG_TAG = "RasiInterpreter";
     private RasiLexer rasiParser;
     private LinearOpMode linearOpMode;
     private HashMap<String, String> hashMap;
-    private RasiCommands teamRasiCommands;
+    private RasiCommands rasiCommands;
     private String methodString;
     private String lcString;
     private String type;
@@ -41,22 +41,22 @@ public class RasiInterpreter {
 
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode){
         this.linearOpMode = opmode;
-        teamRasiCommands = new RasiCommands(opmode);
+        rasiCommands = new RasiCommands(opmode);
         rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();
         methodsHashMap = new HashMap<String, Method>();
 
-        //System.out.println("Class: " + teamRasiCommands.getClass());
-        //System.out.println("Methods: " + teamRasiCommands.getClass().getMethods().toString());
-        //System.out.println("Ml: " + teamRasiCommands.getClass().getMethods().length);
+        //System.out.println("Class: " + rasiCommands.getClass());
+        //System.out.println("Methods: " + rasiCommands.getClass().getMethods().toString());
+        //System.out.println("Ml: " + rasiCommands.getClass().getMethods().length);
 
-        for(int x = 0; x < teamRasiCommands.getClass().getMethods().length; x++){ //runs for every method in the TeamRasiCommands Class
+        for(int x = 0; x < rasiCommands.getClass().getMethods().length; x++){ //runs for every method in the TeamRasiCommands Class
             Log.d("RasiExecutor", Integer.toString(x));
-            //System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
-            if(teamRasiCommands.getClass().getMethods()[x].toString().contains("RasiCommands.")){ //filters out the stuff that java puts there and hides.
-                //System.out.println("Method " + x + " is " + teamRasiCommands.getClass().getMethods()[x].toString());
-                method = teamRasiCommands.getClass().getMethods()[x];
+            //System.out.println("Method " + x + " is " + rasiCommands.getClass().getMethods()[x].toString());
+            if(rasiCommands.getClass().getMethods()[x].toString().contains("RasiCommands.")){ //filters out the stuff that java puts there and hides.
+                //System.out.println("Method " + x + " is " + rasiCommands.getClass().getMethods()[x].toString());
+                method = rasiCommands.getClass().getMethods()[x];
                 methodString = method.toString();
                 Log.d("Rasi_MethodString1", methodString);
                 stringBuilder = new StringBuilder(methodString); //StringBuilder to format the method text to be more usable.
@@ -110,6 +110,7 @@ public class RasiInterpreter {
     }
 
     public void runRasi() {
+        Log.d(LOG_TAG, "IN RUN RASI");
         command = rasiParser.getCommand();
         while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
 
@@ -160,17 +161,32 @@ public class RasiInterpreter {
                 finalParameters = null;
                 Log.d("finalparamsisnull", "true");
             }
-            if(finalParameters != null && !isnull)
+            rasiCommands.Wait(1);
+            if(finalParameters != null)
                 Log.d("rasifinalparams", Arrays.asList(finalParameters).toString());
 
-                Log.d("RasiExecutor", method.toString());
-                Log.d("RasiInterpreter", command.toLowerCase());
+                Log.d(LOG_TAG, method.toString());
+                Log.d(LOG_TAG, command.toLowerCase());
                 try {
-                    methodsHashMap.get(hashMap.get(command.toLowerCase())).invoke(teamRasiCommands, finalParameters);
+                    String command_lower = command.toLowerCase();
+                    Log.d("Command: ",command_lower);
+                    String hash = hashMap.get(command_lower);
+                    Log.d("Hash", hash + " ");
+                    Method method = methodsHashMap.get(hash);
+                    //Log.d("Method:", method.toString());
+                    //methodsHashMap.get(hashMap.get(command.toLowerCase())).invoke(rasiCommands, finalParameters);
+                    if (rasiCommands == null){Log.i("Rasi:", "TeamRasiCommands is null");}
+                    else{Log.d("RasiCommands", rasiCommands.toString());}
+                    if (finalParameters != null){
+                    Log.d("finalParameters", finalParameters.toString());}
+                    else{Log.i("RASI", "Final params is null");}
+                    method.invoke(rasiCommands, finalParameters);
                 } catch (IllegalAccessException e) {
-                    Log.e("rasiExecutor", "illegalAccessException");
+                    Log.e(LOG_TAG, "illegalAccessException");
                 } catch (InvocationTargetException e) {
-                    Log.e("rasiExecutor", "InvocationTargetException");
+                    Log.e(LOG_TAG, "InvocationTargetException");
+                } catch (NullPointerException e){
+                    Log.e(LOG_TAG, "NullPointerException");
                 }
             command = rasiParser.getCommand();
         }

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -63,22 +65,32 @@ public class RasiCommands {
         MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
         telemetry.addLine("Drivebase created");
         telemetry.update();
+        Log.i("RASI", "Created Drivebase");
+        Wait(1);
 
         Intake intake = new Intake(opMode.hardwareMap, opMode, true);
         telemetry.addLine("Intake created");
         telemetry.update();
+        Log.i("RASI", "Created Intake");
+        Wait(1);
 
         CubeLift lift = new CubeLift(opMode.hardwareMap, true);
         telemetry.addLine("CubeLift created");
         telemetry.update();
+        Log.i("RASI", "Created Lift");
+        Wait(1);
 
         Gyro gyro = new Gyro(opMode.hardwareMap);
         telemetry.addLine("Gyro created");
         telemetry.update();
+        Log.i("RASI", "Created Gyro");
+        Wait(1);
 
         robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         telemetry.addLine("Robot created");
         telemetry.update();
+        Log.i("RASI", "Created Robert");
+        Wait(1);
     }
 
     /**
@@ -93,6 +105,7 @@ public class RasiCommands {
      * Calls telemetry.update() on opMode telemetry
      * */
     public void telemUpdate(){
+        telemetry.addLine("telemUpdate");
         telemetry.update();
     }
 
@@ -110,9 +123,9 @@ public class RasiCommands {
      * As Wait but with a duration specified in milliseconds
      * @param milli Amount of milliseconds to pause duration for.
      * */
-    public void waitMilli(double milli){
-      System.out.println("Waiting for " + milli + " milliseconds");
-      long startTime = System.currentTimeMillis();
-      while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
-    }
+//    public void waitMilli(double milli){
+//      System.out.println("Waiting for " + milli + " milliseconds");
+//      long startTime = System.currentTimeMillis();
+//      while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
+//    }
 }

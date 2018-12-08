@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Utilities.Controllers;
 
+import android.util.Log;
+
 /**
  * Created by Vikesh on 11/20/2017.
  */
@@ -26,6 +28,10 @@ public class PIDController {
         this.KP = KP;
         this.KI = KI;
         this.KD = KD;
+        Log.i("PID", "KP: " + KP);
+        Log.i("PID", "KI: " + KI);
+        Log.i("PID", "KD: " + KD);
+
 
     }
 
@@ -34,6 +40,10 @@ public class PIDController {
         this.KI = KI;
         this.KD = KD;
         useExponential = false;
+        Log.i("PID", "KP: " + KP);
+        Log.i("PID", "KI: " + KI);
+        Log.i("PID", "KD: " + KD);
+
     }
 
     public double getPIDCorrection(double error) {
@@ -52,6 +62,8 @@ public class PIDController {
             // Calculate I and D errors
             integral = integral + (error * deltaTime);
             derivative = (error - prevError) / deltaTime;
+            Log.i("PID:", "I : "+ integral);
+            Log.i("PID:", "D : "+ derivative );
             output = KP * error * expError + KI * integral + KD * derivative;
         }
         // Set previous values for next time
