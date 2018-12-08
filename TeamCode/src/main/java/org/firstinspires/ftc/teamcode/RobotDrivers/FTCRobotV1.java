@@ -23,6 +23,7 @@ import java.util.Arrays;
 /**
  * Class for manipulating the robot
  * */
+
 public class FTCRobotV1 {
     //Attachments
     public MecanumDrivebase drivebase;
@@ -106,14 +107,17 @@ public class FTCRobotV1 {
 
     // teleop functions
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
+
         // readSensors button objects
-        toggleLeftRightButton.recordNewValue(gp2.x);
+
+
         // drive functions
         double x = gp1.left_stick_x;
         double y = -gp1.left_stick_y;
         double rot = gp1.right_stick_x;
 
         driveSpeedScaled(x, y, rot);
+
 
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
@@ -124,6 +128,8 @@ public class FTCRobotV1 {
         lift.adjustLift(-2*gp2.right_stick_y);
 
         // left/right side toggle
+        toggleLeftRightButton.recordNewValue(gp2.x);
+
         if (toggleLeftRightButton.isJustOn() && gp2.a){
             leftRightState = !leftRightState;
             if(leftRightState)lift.setLefScoreSide();
@@ -133,6 +139,7 @@ public class FTCRobotV1 {
         //lift close
         if (gp2.left_bumper)
             lift.closeLatch();
+
 
         // dumping
         if(gp2.right_bumper)lift.dump();
