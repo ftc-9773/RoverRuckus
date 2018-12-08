@@ -139,8 +139,7 @@ public class PIDdriveUtil {
         return sum ;
     }
 
-    // todo: implement this using the kinematics described in this paper: https://www.researchgate.net/publication/308570348_Inverse_kinematic_implementation_of_four-wheels_mecanum_drive_mobile_robot_using_stepper_motors
-//    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
+    // todo: implement this using the kinematics described in this paper:   //    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
 //         double initialHeading = gyro.getHeading();
 //         distPid.resetPID();
 //         initialEncoderDists = drivebase.getMotorPositions();

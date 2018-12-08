@@ -113,8 +113,8 @@ public class RasiInterpreter {
         command = rasiParser.getCommand();
         while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
 
-            Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
-            Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
+            //Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
+            //Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
                 isnull = false;
             } else {
@@ -160,10 +160,11 @@ public class RasiInterpreter {
                 finalParameters = null;
                 Log.d("finalparamsisnull", "true");
             }
-            if(finalParameters != null)
+            if(finalParameters != null && !isnull)
                 Log.d("rasifinalparams", Arrays.asList(finalParameters).toString());
 
                 Log.d("RasiExecutor", method.toString());
+                Log.d("RasiInterpreter", command.toLowerCase());
                 try {
                     methodsHashMap.get(hashMap.get(command.toLowerCase())).invoke(teamRasiCommands, finalParameters);
                 } catch (IllegalAccessException e) {

@@ -79,6 +79,7 @@ public class RasiCommands {
         robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         telemetry.addLine("Robot created");
         telemetry.update();
+        Wait(1);
     }
 
     /**
