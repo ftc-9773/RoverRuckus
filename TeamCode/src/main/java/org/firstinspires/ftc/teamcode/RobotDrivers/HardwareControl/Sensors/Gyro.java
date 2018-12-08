@@ -71,15 +71,15 @@ public class Gyro {
 
     // Returns calculated orientation
     public double getHeading(boolean forceNewReading) {
-//
-//        // Check if new reading is required
-//        long currentTime = System.currentTimeMillis();
-//        if (currentTime - lastReadTime > minReadDeltaTime || forceNewReading)  readImu();
-//
-//        // Calculate estimated position
+
+        //Check if new reading is required
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastReadTime > minReadDeltaTime || forceNewReading)  readImu();
+
+        // Calculate estimated position
 //        long dt = currentTime - lastReadTime;
 //        return -(lastImuAngle + lastImuVelocity * dt) - zeroPosition;
-        return getImuAngle() -zeroPosition;
+        return lastImuAngle - zeroPosition;
     }
 
     // Returns calculated velocity
@@ -95,7 +95,6 @@ public class Gyro {
 
     // Alias
     public double getHeading() { return getHeading(false); }
-
     public void setZeroPosition() {
         zeroPosition = getHeading(true);
     }
