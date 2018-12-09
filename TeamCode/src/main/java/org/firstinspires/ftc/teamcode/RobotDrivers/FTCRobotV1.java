@@ -118,7 +118,10 @@ public class FTCRobotV1 {
         // button push lift positions
         if(gp2.a) lift.goToLowPos();
         else if(gp2.b) {lift.goToScorePos(); intake.carryPos();}
-        else if (gp2.y) lift.goToHangPos();
+        else if (gp2.y) {
+            lift.goToHangPos();
+            intake.carryPos();
+        }
 
         // lift "jog" functions
         lift.adjustLift(-2*gp2.right_stick_y);

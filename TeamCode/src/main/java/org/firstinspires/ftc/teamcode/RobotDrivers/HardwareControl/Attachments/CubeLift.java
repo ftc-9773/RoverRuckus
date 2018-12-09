@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
+import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
+
 /**
  * <h1>Cube Lift (hardware driver) class </h1>
  * The Cube Lift class acts as a driver to allow other robot functions to access and modify the state
@@ -42,7 +44,7 @@ public class CubeLift implements Attachment {
     private PIDController pid ;
     boolean dumpState = false;
 
-    int liftZeroPos;
+    int liftZeroPos = 0;
 
     // goal states
     int liftTargetPosition = 100;
@@ -182,7 +184,7 @@ public class CubeLift implements Attachment {
      * @param input the gamepad adjustment to be "jogged"
      */
     public void adjustLift( double input){
-        if(Math.abs(input)>0.08) {
+        if( Math.abs(input)>0.08) {
             Log.d(TAG, "Got input to adjustLift: " + input);
             int correction = (int)(input*joggingScalar);
             liftTargetPosition = bound(minLiftPosition, maxLiftPosition, liftTargetPosition + correction);
@@ -217,6 +219,11 @@ public class CubeLift implements Attachment {
 
         setLiftPower(correction);
         Log.d(TAG, " pid correction set:" + correction + " position: "  + getLiftPos());
+
+        if(getLiftPos() < 0){
+            liftZeroPos = -leftLiftMotor.getCurrentPosition();
+            Log.i(TAG, "adjusting zero position to " + liftZeroPos);
+        }
     }
     /**
      * ends all motion of the components allows for ending of all functions.

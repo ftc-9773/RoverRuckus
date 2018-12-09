@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -57,6 +59,9 @@ public class Intake {
      int transferThreshold = 80;
      int armOutExtraThreshold = 400;
 
+     int zeroPosition = 0;
+
+     static final String TAG = "ftc9773_Intake";
 
     private double intakeMotorPower, intakeBucketServoPosition;
     /*
@@ -219,11 +224,15 @@ public class Intake {
         leftIntakeServo.setPosition(intakeMotorPower);
         rightIntakeServo.setPosition(intakeMotorPower);
         bucketServo.setPosition(intakeBucketServoPosition);
-
+        //TODO: this might be dumb and not work
+        if(getArmPos() <0){
+            zeroPosition = armMotor.getCurrentPosition();
+            Log.i(TAG, "adjusting zero position to " + zeroPosition);
+        }
     }
 
     public int getArmPos(){
-        return armMotor.getCurrentPosition();
+        return armMotor.getCurrentPosition() - zeroPosition;
     }
 
 
