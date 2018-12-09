@@ -15,7 +15,7 @@
   "liftLowPos":30,
   "liftHookPos":2718,
   "liftScorePos":3700,
-  "minLiftPosition": 30,
+  "minLiftPosition": -10,
   "maxLiftPosition":4200,
   "transferTol": 20,
   "joggingScalar": 30,

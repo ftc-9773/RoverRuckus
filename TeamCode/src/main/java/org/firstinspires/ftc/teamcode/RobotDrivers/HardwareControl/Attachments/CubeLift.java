@@ -94,7 +94,7 @@ public class CubeLift implements Attachment {
         liftLowPos = json.getInt("liftLowPos",195);
         liftHookPos = json.getInt ("liftHookPos",2718);
         liftScorePos = json.getInt ("liftScorePos",3700);
-        minLiftPosition = json.getInt("minLiftPosition", 30);
+        minLiftPosition = json.getInt("minLiftPosition", -20);
         maxLiftPosition = json.getInt("maxLiftPosition",4200);
         transferTol = json.getInt("transferTol", 20);
 
