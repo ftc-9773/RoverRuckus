@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
+import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class FTCRobotV1 {
     // teleop values
     Button toggleLeftRightButton = new Button();
     boolean leftRightState = false;
+    SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
+    double slowFactor = reader.getDouble("SlowFactor", 0.3);
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
         this.pos = new Point( 0, 0);
@@ -112,6 +115,12 @@ public class FTCRobotV1 {
         double x = gp1.left_stick_x;
         double y = -gp1.left_stick_y;
         double rot = gp1.right_stick_x;
+
+        if (gp1.left_trigger > 0.2){
+            x   *= slowFactor;
+            y   *= slowFactor;
+            rot *= slowFactor;
+        }
 
         driveSpeedScaled(x, y, rot);
 
