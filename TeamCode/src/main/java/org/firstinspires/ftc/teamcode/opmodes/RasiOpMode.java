@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.RASI.Rasi_2_5.RasiCommands;
 import org.firstinspires.ftc.teamcode.RASI.Rasi_2_5.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
@@ -29,10 +30,12 @@ public class RasiOpMode extends LinearOpMode {
         sendTelemetry("Robot created");
 
         RasiInterpreter i = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/","init.rasi", this, robot);
-
+        RasiCommands r = new RasiCommands(this, robot);
         sendTelemetry("Waiting for start");
         waitForStart();
         sendTelemetry("Started");
+        //r.drive(0, 10, 0);
+
         i.runRasi();
 
     }

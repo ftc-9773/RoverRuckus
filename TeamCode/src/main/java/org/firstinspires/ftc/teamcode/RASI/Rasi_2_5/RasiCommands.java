@@ -50,7 +50,7 @@ import java.math.*;
 
 public class RasiCommands {
     Telemetry telemetry;
-    //FTCRobotV1 robert;
+    FTCRobotV1 robert;
     LinearOpMode opMode;
     PIDdriveUtil driver;
 
@@ -61,7 +61,7 @@ public class RasiCommands {
     }
 
     public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
-        //this.robert = robot;
+        this.robert = robot;
         this.telemetry = opMode.telemetry;
         this.opMode = opMode;
         driver = new PIDdriveUtil(robot, opMode);
@@ -71,14 +71,10 @@ public class RasiCommands {
      * Move the robot in space
      * @param x distance to drive horizontally in inches
      * @param y distance to drive vertically in inches
-     * @param h rotation in radians
      * */
-    public void drive(double x, double y, double h){
-        driver.driveDistStraight(x, y);
+    public void drive(double x, double y){
+        driver.driveDistStraight(Math.sqrt(x * x + y * y), 1);
         //driver.turnToAngle(robert.getHeading() + h);
-    }
-
-    public void foo(String y){ ;
     }
 
     /**

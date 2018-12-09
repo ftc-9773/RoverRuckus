@@ -70,11 +70,10 @@ public class FTCRobotV1 {
 
     }
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, CubeLift lift) {
+    public FTCRobotV1(MecanumDrivebase drivebase,Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
-        this.odometry = odometryController;
         this.gyro = gyro;
         this.gyro.setZeroPosition();
         this.telemetry = telemetry;
