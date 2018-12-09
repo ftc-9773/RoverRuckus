@@ -1,6 +1,3 @@
-write, "In Rasi File"
-telemupdate
+wait, 2,
 
-drive, 0, 10, 0
-
-write, "Called driving"
+wait, 1,

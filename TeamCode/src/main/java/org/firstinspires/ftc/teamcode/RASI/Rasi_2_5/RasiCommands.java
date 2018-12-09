@@ -50,7 +50,7 @@ import java.math.*;
 
 public class RasiCommands {
     Telemetry telemetry;
-    FTCRobotV1 robert;
+    //FTCRobotV1 robert;
     LinearOpMode opMode;
     PIDdriveUtil driver;
 
@@ -61,46 +61,10 @@ public class RasiCommands {
     }
 
     public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
-        this.robert = robot;
+        //this.robert = robot;
         this.telemetry = opMode.telemetry;
         this.opMode = opMode;
         driver = new PIDdriveUtil(robot, opMode);
-    }
-
-    /**
-     * Initialise the Robot
-     * @deprecated Initialise with the Robot instead
-     * */
-    public void createRobot(){
-        MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
-        telemetry.addLine("Drivebase created");
-        telemetry.update();
-        Log.i("RASI", "Created Drivebase");
-        Wait(1);
-
-        Intake intake = new Intake(opMode.hardwareMap, opMode, true);
-        telemetry.addLine("Intake created");
-        telemetry.update();
-        Log.i("RASI", "Created Intake");
-        Wait(1);
-
-        CubeLift lift = new CubeLift(opMode.hardwareMap, true);
-        telemetry.addLine("CubeLift created");
-        telemetry.update();
-        Log.i("RASI", "Created Lift");
-        Wait(1);
-
-        Gyro gyro = new Gyro(opMode.hardwareMap);
-        telemetry.addLine("Gyro created");
-        telemetry.update();
-        Log.i("RASI", "Created Gyro");
-        Wait(1);
-
-        robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
-        telemetry.addLine("Robot created");
-        telemetry.update();
-        Log.i("RASI", "Created Robert");
-        Wait(1);
     }
 
     /**
@@ -111,16 +75,18 @@ public class RasiCommands {
      * */
     public void drive(double x, double y, double h){
         driver.driveDistStraight(x, y);
-        driver.turnToAngle(robert.getHeading() + h);
+        //driver.turnToAngle(robert.getHeading() + h);
     }
 
+    public void foo(String y){ ;
+    }
 
     /**
      * Write data to telemetry. Does not call telemetry.update()
      * @param caption String to write to telemetry
      * */
-    public void Write(String caption){
-        telemetry.addLine(caption);
+    public void Write(double caption){
+        telemetry.addLine(caption + "");
     }
 
     /**

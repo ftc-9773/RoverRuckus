@@ -49,21 +49,18 @@ public class RasiInterpreter {
         infoHashmap = new HashMap<String, String[]>();
         methodsHashMap = new HashMap<String, Method>();
 
-        //System.out.println("Class: " + rasiCommands.getClass());
-        //System.out.println("Methods: " + rasiCommands.getClass().getMethods().toString());
-        //System.out.println("Ml: " + rasiCommands.getClass().getMethods().length);
 
         for(int x = 0; x < rasiCommands.getClass().getMethods().length; x++){ //runs for every method in the TeamRasiCommands Class
-            Log.d("RasiExecutor", Integer.toString(x));
-            //System.out.println("Method " + x + " is " + rasiCommands.getClass().getMethods()[x].toString());
+            Log.d(LOG_TAG, x + "");
+
             if(rasiCommands.getClass().getMethods()[x].toString().contains("RasiCommands.")){ //filters out the stuff that java puts there and hides.
-                //System.out.println("Method " + x + " is " + rasiCommands.getClass().getMethods()[x].toString());
+
                 method = rasiCommands.getClass().getMethods()[x];
                 methodString = method.toString();
-                Log.d("Rasi_MethodString1", methodString);
+                Log.d(LOG_TAG, "Initial String was " + methodString);
                 stringBuilder = new StringBuilder(methodString); //StringBuilder to format the method text to be more usable.
-                int index = 0;
 
+                int index = 0;
                 //remove spaces and close parenthesis:
                 while(index < stringBuilder.length()){
                     if(stringBuilder.charAt(index) == ' ' || stringBuilder.charAt(index) == ')'){
@@ -73,13 +70,15 @@ public class RasiInterpreter {
                         index++;
                     }
                 }
+
                 methodString = stringBuilder.toString();
-                Log.d("RasiExecutor",methodString);
+                Log.d(LOG_TAG, "Method String:" + methodString);
                 String[] tempArray = methodString.split("\\(");
                 tempArray = tempArray[0].split("\\."); //set mixedCaseString to the name of the method. removes the remaining parenthesis and dots.
                 mixedCaseString = tempArray[tempArray.length-1];
                 Log.d("rasimixedCaseString", mixedCaseString);
                 Log.d("Rasi_MethodString2", methodString);
+
                 if(methodString.charAt(methodString.length()-1)!= '(') {
                     //make a string of the arguments to the method
                     parameters = methodString.split("\\(");
@@ -109,6 +108,7 @@ public class RasiInterpreter {
 //        System.out.println("HashMap is " + hashMap);
 //        System.out.println("Methods are " + methodsHashMap);
 //        System.out.println("Info is " + infoHashmap);
+        Log.i("RasiCommands is null", (rasiCommands == null) + "  ");
     }
 
     public void runRasi() {
@@ -116,8 +116,8 @@ public class RasiInterpreter {
         command = rasiParser.getCommand();
         while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
 
-            //Log.d("RasiCommand", hashMap.get(command.toLowerCase()));
-            //Log.d("infohashmapout", infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
+            Log.d(LOG_TAG, "RasiCommand:" + hashMap.get(command.toLowerCase()));
+//            Log.d(LOG_TAG, "infohashmapout: " + infoHashmap.get(hashMap.get(command.toLowerCase())).toString());
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
                 isnull = false;
             } else {
@@ -175,20 +175,21 @@ public class RasiInterpreter {
                     String hash = hashMap.get(command_lower);
                     Log.d("Hash", hash + " ");
                     Method method = methodsHashMap.get(hash);
-                    //Log.d("Method:", method.toString());
+                    Log.d("Method:", method.toString());
                     //methodsHashMap.get(hashMap.get(command.toLowerCase())).invoke(rasiCommands, finalParameters);
+                    if (rasiCommands == null){Log.i("Rasi:", "TeamRasiCommands is null");}
                     if (rasiCommands == null){Log.i("Rasi:", "TeamRasiCommands is null");}
                     else{Log.d("RasiCommands", rasiCommands.toString());}
                     if (finalParameters != null){
                     Log.d("finalParameters", finalParameters.toString());}
-                    else{Log.i("RASI", "Final params is null");}
+                    Log.d("Final Parameters", finalParameters.toString());
                     method.invoke(rasiCommands, finalParameters);
                 } catch (IllegalAccessException e) {
-                    Log.e(LOG_TAG, "illegalAccessException");
+                    Log.e(LOG_TAG, "illegalAccessException", e);
                 } catch (InvocationTargetException e) {
-                    Log.e(LOG_TAG, "InvocationTargetException");
+                    Log.e(LOG_TAG, "InvocationTargetException", e);
                 } catch (NullPointerException e){
-                    Log.e(LOG_TAG, "NullPointerException");
+                    Log.e(LOG_TAG, "NullPointerException", e);
                 }
             command = rasiParser.getCommand();
         }
