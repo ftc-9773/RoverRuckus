@@ -22,9 +22,9 @@ public class TeleOpMain extends LinearOpMode{
         CubeLift lift = new CubeLift(hardwareMap, true);
         sendTelemetry("CubeLift created");
         Gyro gyro;
-        //gyro = new Gyro(hardwareMap);
+        gyro = new Gyro(hardwareMap);
         sendTelemetry("Gyro created");
-        FTCRobotV1 robot = new FTCRobotV1(drivebase,null,telemetry,lift,intake);
+        FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         sendTelemetry("Robot created");
 
         sendTelemetry("Waiting for start...");
