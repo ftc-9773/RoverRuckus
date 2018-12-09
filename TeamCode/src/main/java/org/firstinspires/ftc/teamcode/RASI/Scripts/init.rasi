@@ -1,3 +1,5 @@
+drop,
+
 wait, 2,
-drive, 10, 10,
+drive, 10, 1,
 wait, 1,

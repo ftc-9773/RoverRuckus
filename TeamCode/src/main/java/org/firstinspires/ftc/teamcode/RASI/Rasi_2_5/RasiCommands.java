@@ -69,12 +69,17 @@ public class RasiCommands {
 
     /**
      * Move the robot in space
-     * @param x distance to drive horizontally in inches
-     * @param y distance to drive vertically in inches
+     * @param dist distance to drive
+     * @param pow power to drive at
      * */
-    public void drive(double x, double y){
-        driver.driveDistStraight(Math.sqrt(x * x + y * y), 1);
-        //driver.turnToAngle(robert.getHeading() + h);
+    public void drive(double dist, double pow){
+        driver.driveDistStraight(dist, pow);
+    }
+
+
+    public void drop(){
+        robert.lift.stop();
+        robert.lift.goToHangPos();
     }
 
     /**

@@ -1,6 +1,6 @@
 {
-  "distKp": 0.07,
-  "distKi": 0.03,
+  "distKp": 0.0,
+  "distKi": 0.0,
   "distKd": 0,
   "distTol": 0.125,
 

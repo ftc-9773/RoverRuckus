@@ -32,6 +32,9 @@ public class RasiOpMode extends LinearOpMode {
         RasiInterpreter i = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/","init.rasi", this, robot);
         RasiCommands r = new RasiCommands(this, robot);
         sendTelemetry("Waiting for start");
+
+        robot.lift.adjustLift(-0.1);
+
         waitForStart();
         sendTelemetry("Started");
         //r.drive(0, 10, 0);
