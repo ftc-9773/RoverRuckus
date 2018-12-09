@@ -6,6 +6,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
@@ -51,15 +52,24 @@ public class RasiCommands {
     Telemetry telemetry;
     FTCRobotV1 robert;
     LinearOpMode opMode;
+    PIDdriveUtil driver;
 
-
+    @Deprecated
     public RasiCommands(LinearOpMode opMode){
-        telemetry = opMode.telemetry;
+        this.telemetry = opMode.telemetry;
         this.opMode = opMode;
+    }
+
+    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
+        this.robert = robot;
+        this.telemetry = opMode.telemetry;
+        this.opMode = opMode;
+        driver = new PIDdriveUtil(robot, opMode);
     }
 
     /**
      * Initialise the Robot
+     * @deprecated Initialise with the Robot instead
      * */
     public void createRobot(){
         MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
@@ -92,6 +102,18 @@ public class RasiCommands {
         Log.i("RASI", "Created Robert");
         Wait(1);
     }
+
+    /**
+     * Move the robot in space
+     * @param x distance to drive horizontally in inches
+     * @param y distance to drive vertically in inches
+     * @param h rotation in radians
+     * */
+    public void drive(double x, double y, double h){
+        driver.driveDistStraight(x, y);
+        driver.turnToAngle(robert.getHeading() + h);
+    }
+
 
     /**
      * Write data to telemetry. Does not call telemetry.update()

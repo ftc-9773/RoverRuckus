@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -147,7 +149,7 @@ public class MecanumDrivebase {
         return value;
     }
 
-    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}}
+    public void runWithEncoders(){for(DcMotor d:driveMotors){ /*/d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/}}
     public void runWithoutEncoders() { for (DcMotor d:driveMotors) {d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
     public void runToPosition(){for(DcMotor d:driveMotors){
         //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -162,5 +164,12 @@ public class MecanumDrivebase {
         pos[2] = driveMotors[2].getCurrentPosition();
         pos[3] = driveMotors[3].getCurrentPosition();
         return pos;
+    }
+    public void getPowersLogged(Telemetry telemetry){
+        for(int i = 0; i< 4; i++){
+            telemetry.addData("Motor power of motor: "+ i, driveMotors[i].getPower());
+            Log.d("ftc9773_motorPowers", "motor " + i + driveMotors[i].getPowerFloat());
+
+        }
     }
 }

@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -39,9 +41,9 @@ public class RasiInterpreter {
     private boolean hasArguments;
     private Method method;
 
-    public RasiInterpreter(String filepath, String filename, LinearOpMode opmode){
+    public RasiInterpreter(String filepath, String filename, LinearOpMode opmode, FTCRobotV1 robot){
         this.linearOpMode = opmode;
-        rasiCommands = new RasiCommands(opmode);
+        rasiCommands = new RasiCommands(opmode, robot);
         rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();

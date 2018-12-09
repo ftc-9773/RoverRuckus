@@ -1,5 +1,6 @@
-createRobot,
+write, "In Rasi File"
+telemupdate
 
-write, "Hello",
+drive, 0, 10, 0
 
-telemupdate,
+write, "Called driving"
