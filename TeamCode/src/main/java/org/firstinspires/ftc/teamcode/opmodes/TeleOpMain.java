@@ -28,6 +28,7 @@ public class TeleOpMain extends LinearOpMode{
         sendTelemetry("Robot created");
 
         sendTelemetry("Waiting for start...");
+        robot.drivebase.runWithoutEncoders();
         // opmode start
         waitForStart();
         boolean temp = true;
@@ -40,6 +41,7 @@ public class TeleOpMain extends LinearOpMode{
             robot.runGamepadCommands(gamepad1, gamepad2);
             robot.readSensors();
             robot.update();
+            robot.drivebase.getPowersLogged(telemetry);
             telemetry.update();
         }
 

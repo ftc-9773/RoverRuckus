@@ -6,6 +6,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
@@ -51,54 +52,42 @@ public class RasiCommands {
     Telemetry telemetry;
     FTCRobotV1 robert;
     LinearOpMode opMode;
+    PIDdriveUtil driver;
 
-
+    @Deprecated
     public RasiCommands(LinearOpMode opMode){
-        telemetry = opMode.telemetry;
+        this.telemetry = opMode.telemetry;
         this.opMode = opMode;
     }
 
+    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
+        this.robert = robot;
+        this.telemetry = opMode.telemetry;
+        this.opMode = opMode;
+        driver = new PIDdriveUtil(robot, opMode);
+    }
+
     /**
-     * Initialise the Robot
+     * Move the robot in space
+     * @param dist distance to drive
+     * @param pow power to drive at
      * */
-    public void createRobot(){
-        MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
-        telemetry.addLine("Drivebase created");
-        telemetry.update();
-        Log.i("RASI", "Created Drivebase");
-        Wait(1);
+    public void drive(double dist, double pow){
+        driver.driveDistStraight(dist, pow);
+    }
 
-        Intake intake = new Intake(opMode.hardwareMap, opMode, true);
-        telemetry.addLine("Intake created");
-        telemetry.update();
-        Log.i("RASI", "Created Intake");
-        Wait(1);
 
-        CubeLift lift = new CubeLift(opMode.hardwareMap, true);
-        telemetry.addLine("CubeLift created");
-        telemetry.update();
-        Log.i("RASI", "Created Lift");
-        Wait(1);
-
-        Gyro gyro = new Gyro(opMode.hardwareMap);
-        telemetry.addLine("Gyro created");
-        telemetry.update();
-        Log.i("RASI", "Created Gyro");
-        Wait(1);
-
-        robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
-        telemetry.addLine("Robot created");
-        telemetry.update();
-        Log.i("RASI", "Created Robert");
-        Wait(1);
+    public void drop(){
+        robert.lift.stop();
+        robert.lift.goToHangPos();
     }
 
     /**
      * Write data to telemetry. Does not call telemetry.update()
      * @param caption String to write to telemetry
      * */
-    public void Write(String caption){
-        telemetry.addLine(caption);
+    public void Write(double caption){
+        telemetry.addLine(caption + "");
     }
 
     /**

@@ -134,8 +134,9 @@ public class Intake {
      */
     public void stopIntake() {
         intakeMotorPower = stopVal;
-        if(getArmPos() > (armInPosition + armOutExtraThreshold))
-        intakeBucketServoPosition = carryPosition;
+        if(getArmPos() > (armInPosition + armOutExtraThreshold)) {
+            //intakeBucketServoPosition = carryPosition;
+        }
     }
 
     public void carryPos(){

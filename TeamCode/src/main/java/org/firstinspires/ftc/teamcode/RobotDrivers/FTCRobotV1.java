@@ -57,6 +57,10 @@ public class FTCRobotV1 {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
+        if (reader.getBoolean("RunWithEncoders"))
+            this.drivebase.runWithEncoders();
+        else
+            this.drivebase.runWithoutEncoders();
         //this.OC = odometryController;
         this.gyro = gyro;
         this.gyro.setZeroPosition();
@@ -66,11 +70,10 @@ public class FTCRobotV1 {
 
     }
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, OdometryController odometryController, Telemetry telemetry, CubeLift lift) {
+    public FTCRobotV1(MecanumDrivebase drivebase,Telemetry telemetry) {
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
-        this.odometry = odometryController;
         this.gyro = gyro;
         this.gyro.setZeroPosition();
         this.telemetry = telemetry;
@@ -119,8 +122,12 @@ public class FTCRobotV1 {
         if (gp1.left_trigger > 0.2){
             x   *= slowFactor;
             y   *= slowFactor;
-            rot *= slowFactor;
+            //rot *= slowFactor;
         }
+
+        telemetry.addData("X Power", x);
+        telemetry.addData("Y Power", y);
+        telemetry.addData("Rot Power", rot);
 
         driveSpeedScaled(x, y, rot);
 
