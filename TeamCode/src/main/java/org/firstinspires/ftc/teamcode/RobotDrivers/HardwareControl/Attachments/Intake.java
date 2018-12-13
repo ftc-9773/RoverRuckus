@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 
@@ -232,6 +233,12 @@ public class Intake {
             zeroPosition = armMotor.getCurrentPosition();
             Log.i(TAG, "adjusting zero position to " + zeroPosition);
         }
+    }
+
+    public void debugIntakeArmServos(Telemetry telem){
+        telem.addData("leftIntakeServo", leftIntakeServo.getPosition());
+        telem.addData("rightIntakeServo", rightIntakeServo.getPosition());
+        telem.addData("BucketServo", bucketServo.getPosition());
     }
 
     public int getArmPos(){

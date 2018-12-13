@@ -132,8 +132,10 @@ public class FTCRobotV1 {
         driveSpeedScaled(x, y, rot);
 
         // button push lift positions
-        if(gp2.a) lift.goToLowPos();
-        else if(gp2.b) {lift.goToScorePos(); intake.carryPos();}
+        if(gp2.a) {
+            lift.goToLowPos();
+            intake.carryPos();
+        } else if(gp2.b) {lift.goToScorePos(); intake.carryPos();}
         else if (gp2.y) {
             lift.goToHangPos();
             intake.carryPos();
@@ -174,9 +176,6 @@ public class FTCRobotV1 {
         }
 
 
-        if(intake.isInTransferState() && lift.isInTransferState()){
-          intake.transferMinerals();
-        }
 
         // now hand controls for lifts
       telemetry.addData("Arm motor pos", -gp2.left_stick_y);
@@ -219,6 +218,9 @@ public class FTCRobotV1 {
             }
     }
     public void update(){
+        if(intake.isInTransferState() && lift.isInTransferState()){
+            intake.transferMinerals();
+        }
         this.lift.update();
         this.intake.update();
         this.drivebase.update();

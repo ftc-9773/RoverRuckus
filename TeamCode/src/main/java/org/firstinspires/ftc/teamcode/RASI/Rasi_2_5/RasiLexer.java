@@ -86,6 +86,7 @@ public class RasiLexer {
      * If it is reserved, it runs it.
      * */
     private void loadNextCommand(){
+        //TODO: this currently might end the file whenever a blankline is found. also can use scanner.hasNextLine
         try {
         currentCommand = fileScanner.nextLine();
         }

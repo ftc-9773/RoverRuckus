@@ -21,7 +21,6 @@ public class GoldPositionDetectorTestOpMode  extends LinearOpMode {
         // init the vision
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(),0);
         detector.enable();
-        //detector.onCameraViewStarted(1920,1080);
 
         // read vision and send telemetry
         while(!isStopRequested() && !isStopRequested()){

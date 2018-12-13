@@ -42,6 +42,8 @@ public class TeleOpMain extends LinearOpMode{
             robot.readSensors();
             robot.update();
             robot.drivebase.getPowersLogged(telemetry);
+            // probably remove sometime in the future
+            robot.intake.debugIntakeArmServos(telemetry);
             telemetry.update();
         }
 

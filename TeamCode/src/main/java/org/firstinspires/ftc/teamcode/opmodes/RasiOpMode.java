@@ -29,7 +29,7 @@ public class RasiOpMode extends LinearOpMode {
         FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         sendTelemetry("Robot created");
 
-        RasiInterpreter i = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/","init.rasi", this, robot);
+        RasiInterpreter interpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/","init.rasi", this, robot);
         RasiCommands r = new RasiCommands(this, robot);
         sendTelemetry("Waiting for start");
 
@@ -39,7 +39,7 @@ public class RasiOpMode extends LinearOpMode {
         sendTelemetry("Started");
         //r.drive(0, 10, 0);
 
-        i.runRasi();
+        interpreter.runRasi();
 
     }
     public void sendTelemetry(String msg){
