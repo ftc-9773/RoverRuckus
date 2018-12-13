@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.zachStuff;
+package org.firstinspires.ftc.teamcode.Vision;
 
 import android.util.Log;
 
@@ -6,7 +6,6 @@ import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.Core;

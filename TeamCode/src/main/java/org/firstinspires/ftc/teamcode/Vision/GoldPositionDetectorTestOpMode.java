@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.zachStuff;
+package org.firstinspires.ftc.teamcode.Vision;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
-import org.firstinspires.ftc.teamcode.zachStuff.GoldPositionDetectorTestOpMode.* ;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
