@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.I
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
-import org.firstinspires.ftc.teamcode.zachStuff.MyGoldDetector;
+import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 
 /**
  * Created by zacharye on 12/6/18.
