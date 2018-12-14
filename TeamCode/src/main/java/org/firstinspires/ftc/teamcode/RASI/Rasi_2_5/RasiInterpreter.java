@@ -5,6 +5,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,10 +41,11 @@ public class RasiInterpreter {
     private HashMap<String, Method> methodsHashMap;
     private boolean hasArguments;
     private Method method;
+    public static MyGoldDetector d;
 
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode, FTCRobotV1 robot){
         this.linearOpMode = opmode;
-        rasiCommands = new RasiCommands(opmode, robot);
+        rasiCommands = new RasiCommands(opmode, robot, d);
         rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();

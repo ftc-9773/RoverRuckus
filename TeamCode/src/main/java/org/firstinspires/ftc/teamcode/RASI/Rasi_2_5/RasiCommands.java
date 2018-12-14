@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.C
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
+import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
+import org.firstinspires.ftc.teamcode.Vision.Positions;
 
 import java.math.*;
 
@@ -43,16 +45,19 @@ import java.math.*;
  * are not used as statement terminators. Statements must be written on one line, and end with a newline. Otherwise,
  * all other functions should work.
  *
+ * NOTE: RASI 2.5 DOES NOT SUPPORT FUNCTIONS WITH STRING ARGUMENTS. THIS INCLUDES THE TAG MANIPULATION FUNCTIONS.
  * ----Please add documentation to the functions you create-----
- * @author caden
+ * @author cadence
  * @version 2.5
  * */
 
 public class RasiCommands {
-    Telemetry telemetry;
-    FTCRobotV1 robert;
-    LinearOpMode opMode;
-    PIDdriveUtil driver;
+    public Telemetry telemetry;
+    public FTCRobotV1 robert;
+    public LinearOpMode opMode;
+    public PIDdriveUtil driver;
+    MyGoldDetector detector;
+    Positions position;
 
     @Deprecated
     public RasiCommands(LinearOpMode opMode){
@@ -60,11 +65,13 @@ public class RasiCommands {
         this.opMode = opMode;
     }
 
-    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
+    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot, MyGoldDetector d){
         this.robert = robot;
         this.telemetry = opMode.telemetry;
         this.opMode = opMode;
         driver = new PIDdriveUtil(robot, opMode);
+        this.detector = d;
+        position = detector.getPosition();
     }
 
     /**
@@ -76,10 +83,15 @@ public class RasiCommands {
         driver.driveDistStraight(dist, pow);
     }
 
-
+    /**
+     * Causes the robot to descend from the lander.
+     * */
     public void drop(){
-        robert.lift.stop();
-        robert.lift.goToHangPos();
+        //TODO: Implement this. I am uncertain how to.
+    }
+
+    public void waitForStart(){
+        opMode.waitForStart();
     }
 
     /**
@@ -108,13 +120,4 @@ public class RasiCommands {
         while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
     }
 
-    /**
-     * As Wait but with a duration specified in milliseconds
-     * @param milli Amount of milliseconds to pause duration for.
-     * */
-//    public void waitMilli(double milli){
-//      System.out.println("Waiting for " + milli + " milliseconds");
-//      long startTime = System.currentTimeMillis();
-//      while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
-//    }
 }
