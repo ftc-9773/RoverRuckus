@@ -1,12 +1,9 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
+package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5_beta;
 
-
-import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
@@ -45,56 +42,58 @@ import java.math.*;
  *
  * ----Please add documentation to the functions you create-----
  * @author caden
- * @version 2.5
+ * @version 2.5.2
  * */
 
 public class RasiCommands {
     Telemetry telemetry;
     FTCRobotV1 robert;
     LinearOpMode opMode;
-    PIDdriveUtil driver;
 
-    @Deprecated
+
     public RasiCommands(LinearOpMode opMode){
-        this.telemetry = opMode.telemetry;
+        telemetry = opMode.telemetry;
         this.opMode = opMode;
-    }
-
-    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
-        this.robert = robot;
-        this.telemetry = opMode.telemetry;
-        this.opMode = opMode;
-        driver = new PIDdriveUtil(robot, opMode);
     }
 
     /**
-     * Move the robot in space
-     * @param dist distance to drive
-     * @param pow power to drive at
+     * Initialise the Robot
      * */
-    public void drive(double dist, double pow){
-        driver.driveDistStraight(dist, pow);
-    }
+    public void createRobot(){
+        MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
+        telemetry.addLine("Drivebase created");
+        telemetry.update();
 
+        Intake intake = new Intake(opMode.hardwareMap, opMode, true);
+        telemetry.addLine("Intake created");
+        telemetry.update();
 
-    public void drop(){
-        robert.lift.stop();
-        robert.lift.goToHangPos();
+        CubeLift lift = new CubeLift(opMode.hardwareMap, true);
+        telemetry.addLine("CubeLift created");
+        telemetry.update();
+
+        Gyro gyro = new Gyro(opMode.hardwareMap);
+        telemetry.addLine("Gyro created");
+        telemetry.update();
+
+        robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
+        telemetry.addLine("Robot created");
+        telemetry.update();
+        Wait(1);
     }
 
     /**
      * Write data to telemetry. Does not call telemetry.update()
      * @param caption String to write to telemetry
      * */
-    public void Write(double caption){
-        telemetry.addLine(caption + "");
+    public void Write(String caption){
+        telemetry.addLine(caption);
     }
 
     /**
      * Calls telemetry.update() on opMode telemetry
      * */
     public void telemUpdate(){
-        telemetry.addLine("telemUpdate");
         telemetry.update();
     }
 
@@ -112,9 +111,9 @@ public class RasiCommands {
      * As Wait but with a duration specified in milliseconds
      * @param milli Amount of milliseconds to pause duration for.
      * */
-//    public void waitMilli(double milli){
-//      System.out.println("Waiting for " + milli + " milliseconds");
-//      long startTime = System.currentTimeMillis();
-//      while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
-//    }
+    public void waitMilli(double milli){
+        System.out.println("Waiting for " + milli + " milliseconds");
+        long startTime = System.currentTimeMillis();
+        while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
+    }
 }

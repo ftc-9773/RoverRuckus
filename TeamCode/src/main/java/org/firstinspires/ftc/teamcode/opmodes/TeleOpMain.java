@@ -9,15 +9,23 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.C
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-import org.firstinspires.ftc.teamcode.Utilities.misc.initter;
 
 @TeleOp(name="TeleOpOpmode")
 public class TeleOpMain extends LinearOpMode{
 
     @Override
     public void runOpMode(){
-        initter.set(hardwareMap, telemetry, this);
-        FTCRobotV1 robot = initter.init();
+        MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
+        sendTelemetry("Drivebase created");
+        Intake intake = new Intake(hardwareMap, this, true);
+        sendTelemetry("Intake created");
+        CubeLift lift = new CubeLift(hardwareMap, true);
+        sendTelemetry("CubeLift created");
+        Gyro gyro;
+        gyro = new Gyro(hardwareMap);
+        sendTelemetry("Gyro created");
+        FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
+        sendTelemetry("Robot created");
 
         sendTelemetry("Waiting for start...");
         robot.drivebase.runWithoutEncoders();
