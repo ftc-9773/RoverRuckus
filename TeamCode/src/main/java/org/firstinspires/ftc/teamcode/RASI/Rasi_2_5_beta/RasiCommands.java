@@ -1,19 +1,14 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
+package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5_beta;
 
-
-import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
-import org.firstinspires.ftc.teamcode.Vision.Positions;
 
 import java.math.*;
 
@@ -45,79 +40,60 @@ import java.math.*;
  * are not used as statement terminators. Statements must be written on one line, and end with a newline. Otherwise,
  * all other functions should work.
  *
- * NOTE: RASI 2.5 DOES NOT SUPPORT FUNCTIONS WITH STRING ARGUMENTS. THIS INCLUDES THE TAG MANIPULATION FUNCTIONS.
  * ----Please add documentation to the functions you create-----
- * @author cadence
- * @version 2.5
+ * @author caden
+ * @version 2.5.2
  * */
 
 public class RasiCommands {
-    public Telemetry telemetry;
-    public FTCRobotV1 robot;
-    public LinearOpMode opMode;
-    public PIDdriveUtil driver;
-    Positions position;
+    Telemetry telemetry;
+    FTCRobotV1 robert;
+    LinearOpMode opMode;
 
-    @Deprecated
+
     public RasiCommands(LinearOpMode opMode){
-        this.telemetry = opMode.telemetry;
+        telemetry = opMode.telemetry;
         this.opMode = opMode;
-    }
-
-    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
-        this.robot = robot;
-        this.telemetry = opMode.telemetry;
-        this.opMode = opMode;
-        driver = new PIDdriveUtil(robot, opMode);
     }
 
     /**
-     * Move the robot in space
-     * @param dist distance to drive
-     * @param pow power to drive at
+     * Initialise the Robot
      * */
-    public void drive(double dist, double pow){
-        driver.driveDistStraight(dist, pow);
-    }
-
-
-    public void drop(){
-        robot.lift.unLatchStopper();
-        Wait(0.5);
-        robot.lift.goToHangPos();
-    }
-
-    public void liftDown(){
-        robot.lift.goToLowPos();
-    }
-
-    public void extendArm(double dist){
-        robot.intake.setPos(dist);
-        telemetry.addLine("Wrote dist " + dist + " to arm");
+    public void createRobot(){
+        MecanumDrivebase drivebase = new MecanumDrivebase(opMode.hardwareMap, telemetry);
+        telemetry.addLine("Drivebase created");
         telemetry.update();
-        Wait(3);
-    }
 
-    public void waitForStart(){
-        opMode.waitForStart();
+        Intake intake = new Intake(opMode.hardwareMap, opMode, true);
+        telemetry.addLine("Intake created");
+        telemetry.update();
+
+        CubeLift lift = new CubeLift(opMode.hardwareMap, true);
+        telemetry.addLine("CubeLift created");
+        telemetry.update();
+
+        Gyro gyro = new Gyro(opMode.hardwareMap);
+        telemetry.addLine("Gyro created");
+        telemetry.update();
+
+        robert = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
+        telemetry.addLine("Robot created");
+        telemetry.update();
+        Wait(1);
     }
 
     /**
      * Write data to telemetry. Does not call telemetry.update()
      * @param caption String to write to telemetry
      * */
-    public void Write(double caption){
-        telemetry.addLine(caption + "");
-    }
-    public void dropIntake(){
-        robot.intake.setPos(5);
+    public void Write(String caption){
+        telemetry.addLine(caption);
     }
 
     /**
      * Calls telemetry.update() on opMode telemetry
      * */
     public void telemUpdate(){
-        telemetry.addLine("telemUpdate");
         telemetry.update();
     }
 
@@ -128,18 +104,16 @@ public class RasiCommands {
     public void Wait(double timeInSeconds){
         System.out.println("Waiting for " + timeInSeconds);
         long startTime = System.currentTimeMillis();
-        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
-            robot.update();
-        }
+        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
     }
 
     /**
      * As Wait but with a duration specified in milliseconds
      * @param milli Amount of milliseconds to pause duration for.
      * */
-//    public void waitMilli(double milli){
-//      System.out.println("Waiting for " + milli + " milliseconds");
-//      long startTime = System.currentTimeMillis();
-//      while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
-//    }
+    public void waitMilli(double milli){
+        System.out.println("Waiting for " + milli + " milliseconds");
+        long startTime = System.currentTimeMillis();
+        while(startTime + milli > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
+    }
 }

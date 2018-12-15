@@ -1,0 +1,215 @@
+package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5_beta;
+
+
+import android.util.Log;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+/**
+ * This class acts as a lexer for RASI files to be used by RasiInterpreter
+ * In general, this class should not be used on its own.
+ * If you would like File input and Output, see FileRW or built in java utilities
+ *
+ * For more detail on RASI itself, see RasiCommands and RASI/guides/*
+ * TODO: create guides and documentation
+ *
+ * @author vikesh cadence
+ * @version 2.5.2
+ */
+public class RasiLexer {
+    //Tag to use for telemetry
+    private String TAG = "RasiCommands";
+
+    //Toggle for whether to send stuff to debug
+    private static boolean DEBUG = true;
+
+    //File io utilities
+    private File rasiFile;                  //File object for the rasi file
+    private Scanner fileScanner;            //Scanner object to read the file line by line
+    public boolean fileEnded = false;
+
+    //Objects to be returned to RasiInterpreter and Utilities for building them
+    private StringBuilder commandBuilder;   //StringBuilder object for miscellaneous manipulation
+    private String currentCommand;          //The String that will contain the current command
+    public String[] parameters;            //The String array that contains the parameters
+
+    //Utilites for managing tags and reserved commands.
+    private String Tag;
+    private String[] TAGS = new String[0];
+    private String[] reservedCommands = {"changetags", "addtag", "removetag", "endOpMode"};
+    private boolean shouldExecute = false;
+    private boolean isReservedCommand;
+
+    //LinearOpMode
+    private LinearOpMode opMode;
+
+    /**
+     * Initialise lexer to a file located at filepath, with name filename
+     *
+     * @param filepath Path to rasi file
+     * @param filename name of rasi file, including the extension .rasi
+     * @param opmode LinearOpMode
+     * */
+    public RasiLexer(String filepath, String filename, LinearOpMode opmode){
+
+        this.opMode = opmode;
+        Log.i(TAG, "Got file: " + filepath+filename);
+        Log.i(TAG, filename.split("\\.")[1].toLowerCase());
+
+        //Make sure file extension is rasi
+        if(filename.split("\\.")[1].toLowerCase().equals("rasi")){
+
+            rasiFile = new File(filepath + filename);
+            Log.i(TAG,filepath+filename);
+            try {
+                fileScanner = new Scanner(rasiFile);
+            } catch(FileNotFoundException e){
+                Log.e(TAG, "FileNotFoundException", e);
+            }
+      } else {
+            Log.e(TAG, "file " + filename + " does not have the .rasi extension");
+      }
+    }
+
+    /**
+     * Gets the next command from the file and stores it in currentCommand
+     * If it is reserved, it runs it.
+     * */
+    private void loadNextCommand(){
+        try {
+        currentCommand = fileScanner.nextLine();
+        }
+        catch (NoSuchElementException e) {
+            fileEnded = true;
+            return;
+        }
+
+        commandBuilder = new StringBuilder(currentCommand);
+
+        int index = 0;
+        while(index < commandBuilder.length()){
+            if(commandBuilder.charAt(index) == ' '){
+                commandBuilder.deleteCharAt(index);
+            }
+            else{
+                index++;
+            }
+        }
+        if(currentCommand.split(":").length>1) {
+            Tag = currentCommand.split(":")[0];
+        }
+        else{
+            Tag = "";
+        }
+        if(Tag != "") {
+            parameters = currentCommand.split(":")[1].split(",");
+        }
+        else{
+            parameters = currentCommand.split(",");
+        }
+        shouldExecute = false;
+        if ((Arrays.asList(TAGS).contains(Tag) || Tag.length() == 0) && !Arrays.asList(reservedCommands).contains(parameters[0])) {
+            shouldExecute = true;
+            isReservedCommand = false;
+        } else if (Arrays.asList(reservedCommands).contains(parameters[0])) {
+            shouldExecute = false;
+            isReservedCommand = true;
+        }
+
+        if(isReservedCommand){
+            runReservedCommand(parameters[0]);
+        }
+    }
+    /**
+     * Return the next command in file
+     * */
+    public String getCommand(){
+        //System.out.println("In get command");
+        if (fileEnded)
+            return null;
+        loadNextCommand();
+        while(!shouldExecute && !fileEnded) {
+            System.out.println("Skipped command: " + currentCommand);
+            loadNextCommand();
+        }
+        if (fileEnded){
+            return null;
+        }
+        if(parameters[0] != " " && parameters[0] != ""){ System.out.println("Returned command: " + parameters[0]);}
+        return parameters[0];
+    }
+    public String getParam(int paramNumber){
+        return parameters[paramNumber];
+    }
+
+    /**
+     * Run a reserved command
+     * */
+    public void runReservedCommand(String command){
+        switch (command){
+            case "changetags":
+                TAGS = new String[parameters.length-1];
+                for(int n = 0; n < TAGS.length; n++){
+                    TAGS[n] = parameters[n+1];
+                }
+                break;
+            case "addtag":
+                addTag(parameters[1]);
+                break;
+            case "removetag":
+                removeTag(parameters[1]);
+                break;
+            case "endOpMode":
+                opMode.requestOpModeStop();
+                while(opMode.opModeIsActive()){}
+                break;
+            case "end":
+                fileEnded = true;
+                break;
+        }
+    }
+
+    public void setTags(String rasiTags[]){
+        TAGS = rasiTags;
+    }
+
+    public void addTag(String rasiTag){
+        int y;
+        String[] tempTags = TAGS;
+        TAGS = new String[tempTags.length+1];
+        for(y = 0; y<TAGS.length; y++){
+            if(y+1<TAGS.length){
+                TAGS[y] = tempTags[y];
+            }
+            else{
+                TAGS[y] = rasiTag;
+            }
+        }
+    }
+    public void removeTag(String rasiTag){
+        int y;
+        String[] tempTags = TAGS;
+        if(Arrays.asList(tempTags).contains(rasiTag)){
+            TAGS = new String[tempTags.length-1];
+            for(y = 0; y<tempTags.length; y++){
+                if(!tempTags[y].equals(rasiTag)){
+                    TAGS[y] = tempTags[y];
+                }
+            }
+        }
+    }
+    public void debug(String msg){
+        if(DEBUG)
+            Log.d(TAG, msg);
+    }
+    public void debug(String msg, Exception e){
+        if(DEBUG)
+            Log.d(TAG, msg, e);
+    }
+}
