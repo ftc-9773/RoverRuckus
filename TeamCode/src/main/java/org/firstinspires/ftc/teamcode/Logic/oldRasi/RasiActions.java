@@ -27,7 +27,7 @@ public class RasiActions {
         this.drive = new PIDdriveUtil(robot, opMode);
         rasiParser = new RasiParser(rasiFilename,rasiTag);
         Log.i("RasiActions", "Done with Rasi init");
-    }
+        }
 
     // Run the rasi commands
     public void runRasi() throws InterruptedException {
@@ -37,6 +37,9 @@ public class RasiActions {
             Log.i("RasiActions", "Parameter - " + rasiParser.getParameter(0));
             switch (rasiParser.getParameter(0)) {
                 // put all your commands here
+                case "quickDrive":
+                    drive.driveQuick(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
+                    break;
                 case "drive":
                     drive.driveDistStraight(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
                     break;
@@ -66,6 +69,10 @@ public class RasiActions {
                     break;
                 case "strafeTime":
                     drive.strafeTime(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
+                    break;
+                case "deposit":
+                    robot.lift.setLefScoreSide();
+                    robot.lift.dump();
                     break;
                 case "end":
                     robot.stop();

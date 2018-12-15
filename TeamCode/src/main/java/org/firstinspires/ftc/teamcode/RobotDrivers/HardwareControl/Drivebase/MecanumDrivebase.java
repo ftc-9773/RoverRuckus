@@ -85,11 +85,8 @@ public class MecanumDrivebase {
     }
 
     // Clean Version
-    public void drive(double xIn, double yIn, double rotationIn, boolean scale) {
+    public void drive(double x, double y, double rotation, boolean scale) {
 
-        double x = xIn;
-        double y = yIn;
-        double rotation = rotationIn;
 
         if (scale)  {
             double[] arr = scaleDriving(x, y, rotation);

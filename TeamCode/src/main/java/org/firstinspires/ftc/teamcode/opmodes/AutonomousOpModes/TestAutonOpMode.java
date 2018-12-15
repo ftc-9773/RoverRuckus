@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes.BasicRasiAuton;
  * Created by zacharye on 12/6/18.
  */
 
-@Autonomous(name = "testAuton") // runs vision, and acts as a testing platform for autonomous testing
+@Autonomous(name = "rasitest") // runs vision, and acts as a testing platform for autonomous testing
 public class TestAutonOpMode extends BasicRasiAuton {
 
 

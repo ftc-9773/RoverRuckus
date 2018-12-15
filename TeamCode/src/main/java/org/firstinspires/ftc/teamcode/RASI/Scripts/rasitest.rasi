@@ -1,14 +1,40 @@
-COMMENT: drop;
+drop;
 wait, 2;
-drive, 3.0, 0.5;
-wait, 2;
+drive, 15.0, 0.25;
 
-L: turn, 22;
-R: turn, -22;
+L: turn, 45;
+R: turn, -45;
 
-extendIntake, 25;
-wait, 1;
+
+L: drive, 16, 0.25;
+R: drive, 16, 0.25;
+C: drive, 12, 0.25;
+
+
 liftLow;
-wait, 3;
+wait, 1;
+
+L: drive, -16, 0.6;
+R: drive, -16, 0.6;
+C: drive, -12, 0.6;
+
+wait, 1;
+
+turn, -115;
+
+drive, -40, 0.75;
+
+turn, -50;
+
+COMMENT: strafeTime, 1, -0.4;
+
+drive, -44, 0.5;
+
+deposit;
+wait, 1;
+
+drive, 7, 0.25;
+extendIntake, 30;
+wait, 2;
 
 end;

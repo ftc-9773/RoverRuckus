@@ -103,6 +103,62 @@ public class PIDdriveUtil {
         drivebase.runWithoutEncoders();
 
     }
+    public void driveQuick(double dist, double power){
+        double initialHeading = gyro.getHeading();
+        distPid.resetPID();
+        long[] initialEncoderDists = drivebase.getMotorPositions();
+
+        long lastCheckTime = System.currentTimeMillis();
+        double lastDist = 0;
+
+        drivebase.runWithEncoders();
+
+        while (!opMode.isStopRequested()) {
+            double error = dist - avgDistElapsedInches(initialEncoderDists);
+            Log.d("encoder", "" + initialEncoderDists[0]);
+            double correction = distPid.getPIDCorrection(error);
+            Log.d(TAG,"error:" + error);
+            Log.d(TAG, "correction" +correction);
+            // might change this
+            if(scalingClip) {
+                // scales continuously
+                correction = Range.clip(correction, -1, 1);
+                correction*= power;
+            } else {
+                // otherwise just clip
+                correction = Range.clip(correction, -power, power);
+            }
+
+
+            if(Math.abs(correction) < minDistPow){
+                correction = Math.signum(correction)*Math.abs(minDistPow);
+            }
+            //logs
+            Log.d(TAG+" error", Double.toString(error));
+            Log.d(TAG+" pow", Double.toString(correction));
+
+
+            driveHoldHeading(correction, 0, initialHeading);
+            double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
+            Log.d(TAG, "at position: " + distTraveled);
+
+            if( Math.signum(dist) * (distTraveled - dist) > -distTol)
+                break;
+
+            if (System.currentTimeMillis() - lastCheckTime > 300) {
+                double currentDist = avgDistElapsedInches(initialEncoderDists);
+                if (Math.abs(lastDist - currentDist) < minExitDist)
+                    break;
+
+                lastDist = currentDist;
+                lastCheckTime = System.currentTimeMillis();
+            }
+
+
+        }
+        drivebase.stop();
+    }
+
      public void driveDistStraight(double dist, double power){
          double initialHeading = gyro.getHeading();
          distPid.resetPID();
@@ -227,8 +283,8 @@ public class PIDdriveUtil {
          Log.d(TAG, "Error: " + error);
          double correction = headingPid.getPIDCorrection(error);
 
-         angle = Math.toRadians(angle -90);
-         angle = currHeading - angle;
+         angle = Math.toRadians(angle +90);
+         //angle = currHeading - angle;
 
          double x = Math.cos(angle)*magnitude;
          double y = Math.sin(angle)*magnitude;
