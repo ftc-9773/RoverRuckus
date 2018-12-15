@@ -1,14 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes;
 
-import android.util.Log;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.Logic.oldRasi.RasiActions;
-import org.firstinspires.ftc.teamcode.RASI.Rasi_2_5.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
@@ -18,13 +14,7 @@ import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 import org.firstinspires.ftc.teamcode.Vision.Positions;
 
-/**
- * Created by zacharye on 12/6/18.
- */
-
-@Autonomous(name = "testAuton") // runs vision, and acts as a testing platform for autonomous testing
-public class TestAutonOpMode extends LinearOpMode{
-
+public abstract class BasicRasiAuton extends LinearOpMode {
     Timer driveTimer;
     MyGoldDetector detector;
 
@@ -46,7 +36,7 @@ public class TestAutonOpMode extends LinearOpMode{
         //sendTelemetry("starting vision...");
         // wait to begin opMode
 
-        RasiActions rasiActions = new RasiActions("rasitest", null, robot, this);
+        RasiActions rasiActions = new RasiActions(fileName(), null, robot, this);
 
         // run vision
         detector = new MyGoldDetector();
@@ -83,6 +73,8 @@ public class TestAutonOpMode extends LinearOpMode{
         telemetry.addLine(msg);
         telemetry.update();
     }
+
+    public abstract String fileName();
 
 
 }

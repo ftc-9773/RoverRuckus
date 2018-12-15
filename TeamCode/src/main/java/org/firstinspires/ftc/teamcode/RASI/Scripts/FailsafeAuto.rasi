@@ -1,0 +1,14 @@
+drop;
+wait, 2;
+drive, 3.0, 0.5;
+wait, 2;
+
+L: turn, 22;
+R: turn, -22;
+
+extendIntake, 25;
+wait, 1;
+liftLow;
+wait, 3;
+
+end;

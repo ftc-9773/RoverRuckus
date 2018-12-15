@@ -1,4 +1,6 @@
+/*
 package org.firstinspires.ftc.teamcode.opmodes;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -55,3 +57,4 @@ public class RasiOpMode extends LinearOpMode {
         telemetry.update();
     }
 }
+*/
