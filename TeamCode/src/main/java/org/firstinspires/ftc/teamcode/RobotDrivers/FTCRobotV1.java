@@ -199,6 +199,12 @@ public class FTCRobotV1 {
         if(intake.isInTransferState()&&lift.isInTransferState()) {
             intake.transferMinerals();
         }
+        // homing thing
+        if(gp1.y){
+            lift.homingThing();
+        } else {
+            lift.homingThing = false;
+        }
 
 
 

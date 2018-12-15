@@ -45,6 +45,9 @@ public class CubeLift implements Attachment {
     boolean dumpState = false;
     Timer unLatching = null;
 
+    // pls no change
+    public boolean homingThing = false;
+
     int liftZeroPos = 0;
 
     // goal states
@@ -222,12 +225,16 @@ public class CubeLift implements Attachment {
             }
             else return;
         }
-        // correct motor, might eventually do other stuff;
-        double correction = pid.getPIDCorrection((double)liftTargetPosition, (double)getLiftPos());
+        //homing thing;
+        if(homingThing){
+        } else {
+            // correct motor, might eventually do other stuff;
 
-        setLiftPower(correction);
-        Log.d(TAG, " pid correction set:" + correction + " position: "  + getLiftPos());
+            double correction = pid.getPIDCorrection((double) liftTargetPosition, (double) getLiftPos());
 
+            setLiftPower(correction);
+            Log.d(TAG, " pid correction set:" + correction + " position: " + getLiftPos());
+        }
         if(getLiftPos() < 0){
             liftZeroPos = -leftLiftMotor.getCurrentPosition();
             Log.i(TAG, "adjusting zero position to " + liftZeroPos);
@@ -241,6 +248,15 @@ public class CubeLift implements Attachment {
         leftLiftMotor.setPower(0);
         rightLiftMotor.setPower(0);
         isEnded = true;
+    }
+
+    public void homingThing(){
+        homingThing = true;
+        setLiftPower(-0.25);
+        if(getLiftPos() < 0){
+            liftZeroPos = -leftLiftMotor.getCurrentPosition();
+            Log.i(TAG, "adjusting zero position to " + liftZeroPos);
+        }
     }
 
     public void unLatchStopper(){

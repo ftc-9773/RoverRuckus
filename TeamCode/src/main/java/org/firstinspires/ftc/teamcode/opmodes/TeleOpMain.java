@@ -8,8 +8,6 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-import org.firstinspires.ftc.teamcode.Utilities.misc.initter;
 
 @TeleOp(name="TeleOpOpmode")
 public class TeleOpMain extends LinearOpMode{

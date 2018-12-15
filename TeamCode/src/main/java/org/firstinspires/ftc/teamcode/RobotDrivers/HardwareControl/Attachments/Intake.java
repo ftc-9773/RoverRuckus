@@ -212,6 +212,7 @@ public class Intake {
         armTargetPos = armInPosition;
         intakeBucketServoPosition = carryPosition;
     }
+
     public void setPos(double pos){
         pidEnabled = true;
         armTargetPos = getArmPos() + (int) (pos * 1120 / (3 * Math.PI));
@@ -222,7 +223,7 @@ public class Intake {
      * lift, and servos, reading from hardware, and writing to it when done.
      */
     public void update(){
-        if(pidEnabled&&isInTransferState()) pidEnabled = false;
+        //if(pidEnabled&&isInTransferState()) pidEnabled = false;
         if(pidEnabled) {
             armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, getArmPos()));
         }

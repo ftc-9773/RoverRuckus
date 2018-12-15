@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.C
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-import org.firstinspires.ftc.teamcode.Utilities.misc.initter;
 import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 
 @Disabled
