@@ -37,8 +37,10 @@ public class RasiActions {
             Log.i("RasiActions", "Parameter - " + rasiParser.getParameter(0));
             switch (rasiParser.getParameter(0)) {
                 // put all your commands here
-                case "quickDrive":
+                case "driveQuick":
                     drive.driveQuick(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
+                    break;
+                case "driveEncoder":
                     break;
                 case "drive":
                     drive.driveDistStraight(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));

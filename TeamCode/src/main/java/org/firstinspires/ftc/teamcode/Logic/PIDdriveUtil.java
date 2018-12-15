@@ -103,6 +103,25 @@ public class PIDdriveUtil {
         drivebase.runWithoutEncoders();
 
     }
+
+    public void driveEncoder(double dist, double pow){
+        long[] encoderZeros = drivebase.getMotorPositions();
+
+        if (dist > 0)
+            drivebase.drivePolar(pow, 0, 0, false);
+        else if (dist< 0)
+            drivebase.drivePolar(-pow, 0, 0, false);
+        else return;
+
+        while(!opMode.isStopRequested()){
+
+            if (Math.abs(avgDistElapsedInches(encoderZeros)) > Math.abs(dist)){
+                break;
+            }
+        }
+        drivebase.stop();
+    }
+
     public void driveQuick(double dist, double power){
         double initialHeading = gyro.getHeading();
         distPid.resetPID();
@@ -142,7 +161,7 @@ public class PIDdriveUtil {
             double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
             Log.d(TAG, "at position: " + distTraveled);
 
-            if( Math.signum(dist) * (distTraveled - dist) > -distTol)
+            if( Math.signum(dist) * (distTraveled - dist) > distTol)
                 break;
 
             if (System.currentTimeMillis() - lastCheckTime > 300) {
