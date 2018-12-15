@@ -44,7 +44,7 @@ public class Gyro {
         parameters.loggingEnabled       = false;
         parameters.mode                 = BNO055IMU.SensorMode.IMU;
         parameters.loggingTag           = "IMU";
-        imuLeft                         = hardwareMap.get(BNO055IMU.class, "imuLeft");
+        imuLeft                         = hardwareMap.get(BNO055IMU.class, "imu");
 
         imuLeft.initialize(parameters);
 
@@ -101,6 +101,9 @@ public class Gyro {
 
     public boolean  isUpdated(){
         return System.currentTimeMillis() - lastReadTime > minReadDeltaTime;
+    }
+    public void close(){
+        imuLeft.close();
     }
 /*
     public void recordHeading() {

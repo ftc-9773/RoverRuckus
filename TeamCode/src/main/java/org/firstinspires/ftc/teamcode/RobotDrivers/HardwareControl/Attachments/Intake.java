@@ -123,7 +123,7 @@ public class Intake {
         armOutExtraThreshold = jsonReader.getInt("armOutExtraThreshold",300);
 
         opmode = op;
-        retractArm();
+        //retractArm();
         if(initArmPos) {
             reset();
         }

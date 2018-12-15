@@ -13,7 +13,7 @@ public class Timer {
      * @param delayInSeconds the amount of time in seconds before timer registers as done
      * */
     public Timer(double delayInSeconds) {
-        delayTimeMillis = (long) delayInSeconds * 1000;
+        delayTimeMillis = (long) (delayInSeconds * 1000.0);
         startTimeMillis = System.currentTimeMillis();
     }
     /**

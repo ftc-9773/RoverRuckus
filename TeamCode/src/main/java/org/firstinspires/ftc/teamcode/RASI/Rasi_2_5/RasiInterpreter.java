@@ -28,7 +28,7 @@ public class RasiInterpreter {
     private RasiLexer rasiParser;
     private LinearOpMode linearOpMode;
     private HashMap<String, String> hashMap;
-    private RasiCommands rasiCommands;
+    public RasiCommands rasiCommands;
     private String methodString;
     private String lcString;
     private String type;

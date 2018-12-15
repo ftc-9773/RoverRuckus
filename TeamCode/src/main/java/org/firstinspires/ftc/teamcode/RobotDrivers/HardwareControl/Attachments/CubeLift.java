@@ -43,6 +43,7 @@ public class CubeLift implements Attachment {
     private SafeJsonReader json;
     private PIDController pid ;
     boolean dumpState = false;
+    Timer unLatching = null;
 
     int liftZeroPos = 0;
 
@@ -214,6 +215,13 @@ public class CubeLift implements Attachment {
     @Override
     public void update() {
         if(isEnded) return;
+        if (unLatching!= null){
+            if (unLatching.isDone()){
+                unLatching = null;
+                return;
+            }
+            else return;
+        }
         // correct motor, might eventually do other stuff;
         double correction = pid.getPIDCorrection((double)liftTargetPosition, (double)getLiftPos());
 
@@ -234,6 +242,11 @@ public class CubeLift implements Attachment {
         rightLiftMotor.setPower(0);
         isEnded = true;
     }
+
+    public void unLatchStopper(){
+        unLatching = new Timer(0.5);
+        setLiftPower(-0.2);
+    }
     // used internally to set the power of the lift. might eventually make this public
     private void setLiftPower(double power){
         leftLiftMotor.setPower(-power);
@@ -253,6 +266,6 @@ public class CubeLift implements Attachment {
         if (input < min) return min;
         else if (input > max) return max;
         else return input;
-
     }
+
 }

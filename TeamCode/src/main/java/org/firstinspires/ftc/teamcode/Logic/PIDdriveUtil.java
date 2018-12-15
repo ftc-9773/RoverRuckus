@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.Mec
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
+import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
 import com.qualcomm.robotcore.util.Range;
 
@@ -44,6 +45,8 @@ public class PIDdriveUtil {
 
     // pid coeffs
     static double[] distPidCoeffs = new double[3];
+    final double minDistPow, minExitDist;
+    final double maxTurnPower;
     double distTol;
     PIDController distPid;
     static double[] rotPidCoeffs = new double[3];
@@ -77,6 +80,10 @@ public class PIDdriveUtil {
         distPid = new PIDController(distPidCoeffs[0],distPidCoeffs[1], distPidCoeffs[2]);
         Log.d(TAG, "created dist PID controller pid coeff array: " + Arrays.toString(distPidCoeffs));
         distTol = json.getDouble("distTol", 0.5);
+        minDistPow = json.getDouble("minDistPow", 0.2);
+        minExitDist = json.getDouble("minExitDist", 0.02);
+        maxTurnPower = json.getDouble("maxTurnPow", 0.6);
+
         //  rotPid
         rotPidCoeffs[0] = json.getDouble("rotKp",0.11);
         rotPidCoeffs[1] = json.getDouble("rotKi", 0);
@@ -93,13 +100,16 @@ public class PIDdriveUtil {
         headingPid = new PIDController(headingPidCoeffs[0],headingPidCoeffs[1], headingPidCoeffs[2]);
         Log.d(TAG, "created heading PID controller pid coeff array: " + Arrays.toString(headingPidCoeffs));
 
-
+        drivebase.runWithoutEncoders();
 
     }
      public void driveDistStraight(double dist, double power){
          double initialHeading = gyro.getHeading();
          distPid.resetPID();
          long[] initialEncoderDists = drivebase.getMotorPositions();
+
+         long lastCheckTime = System.currentTimeMillis();
+         double lastDist = 0;
 
          drivebase.runWithEncoders();
 
@@ -118,6 +128,11 @@ public class PIDdriveUtil {
                  // otherwise just clip
                  correction = Range.clip(correction, -power, power);
              }
+
+
+             if(Math.abs(correction) < minDistPow){
+                 correction = Math.signum(correction)*Math.abs(minDistPow);
+             }
              //logs
              Log.d(TAG+" error", Double.toString(error));
              Log.d(TAG+" pow", Double.toString(correction));
@@ -126,11 +141,36 @@ public class PIDdriveUtil {
              driveHoldHeading(correction, 0, initialHeading);
              double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
              Log.d(TAG, "at position: " + distTraveled);
+
              if( Math.abs(distTraveled - dist) < distTol)
                  break;
 
+             if (System.currentTimeMillis() - lastCheckTime > 300) {
+                 double currentDist = avgDistElapsedInches(initialEncoderDists);
+                 if (Math.abs(lastDist - currentDist) < minExitDist)
+                     break;
+
+                 lastDist = currentDist;
+                 lastCheckTime = System.currentTimeMillis();
+             }
+
+
          }
+         drivebase.stop();
     }
+
+    public void strafeTime(double time, double power) {
+        Timer mytimer = new Timer(time);
+
+        drivebase.drive(power, 0, 0, false);
+
+        while(!mytimer.isDone() && !opMode.isStopRequested()) {
+            robot.update();
+            Log.i("ftc9773_Strafe_Time", "timerTime = " + mytimer.timeElapsedSeconds());
+        }
+        drivebase.stop();
+    }
+
     public double avgDistElapsedInches(long[] initpositions){
          long[] positions = drivebase.getMotorPositions();
          double sum=0;
@@ -205,9 +245,9 @@ public class PIDdriveUtil {
      * @param goalHeading the indended feild centric heading in degrees.
      */
      public void turnToAngle(double goalHeading) {
-         Log.d(TAG,"startingTurnToAnlge: " +goalHeading);
+         Log.d(TAG,"startingTurnToAnlge: " + goalHeading);
 
-         final double targetAngleRad = goalHeading;
+         final double targetAngleRad = Math.toRadians(goalHeading);
 
          // For calculating rotational speed:
          double lastHeading;
@@ -226,28 +266,30 @@ public class PIDdriveUtil {
          while (!opMode.isStopRequested()) {
 
              // update time and headings:
-             lastHeading = currentHeading;
              currentHeading = gyro.getHeading();
 
              lastTime = currentTime;
              currentTime = System.currentTimeMillis();
 
              error = setOnNegToPosPi(targetAngleRad - currentHeading);
-
              double rotation = rotPid.getPIDCorrection(error);
-             Log.d("Error: ", "" + error);
-
-             Log.d(" Rotation Pow: ", "" + rotation);
 
              // may add this in if dt is too weak
-           if (rotation > 0 && Math.abs(rotation) <rotMinPow) {
-               rotation += rotMinPow;
+             if (rotation > 0 && Math.abs(rotation) <rotMinPow) {
+                 rotation = rotMinPow;
              } else if (rotation < 0 && Math.abs(rotation) <rotMinPow) {
-               rotation -= rotMinPow;
-            }
+                 rotation = -rotMinPow;
+             }
+
+             if (rotation > maxTurnPower)
+                 rotation = maxTurnPower;
+             else if (rotation < -maxTurnPower)
+                 rotation = -maxTurnPower;
+
+
              Log.d(TAG,"writingToDrive: Error: "+ error + " Correction: " + rotation );
              Log.d(TAG, "error in degrees: "+ Math.toDegrees(error));
-             drivebase.drivePolar(0.0, 0, -rotation, false);
+             drivebase.drive(0.0, 0, -rotation, false);
              drivebase.update();
 
              // Check to see if it's time to exit
@@ -269,6 +311,7 @@ public class PIDdriveUtil {
              robot.update();
              // temporary
          }
+         drivebase.stop();
         rotPid.resetPID();
      }
 

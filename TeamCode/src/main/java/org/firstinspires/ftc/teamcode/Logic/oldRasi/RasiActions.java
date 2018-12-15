@@ -1,0 +1,89 @@
+package org.firstinspires.ftc.teamcode.Logic.oldRasi;
+
+import android.util.Log;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+
+/**
+ * Created by vikesh on 1/5/18.
+ */
+
+public class RasiActions {
+    public RasiParser rasiParser;
+    public FTCRobotV1 robot;
+    public PIDdriveUtil drive;
+    private LinearOpMode opMode;
+
+    // Init
+    public RasiActions(String rasiFilename, String[] rasiTag, FTCRobotV1 robot, LinearOpMode opMode){
+        this.opMode = opMode;
+        this.robot = robot;
+        this.drive = new PIDdriveUtil(robot, opMode);
+        rasiParser = new RasiParser(rasiFilename,rasiTag);
+        Log.i("RasiActions", "Done with Rasi init");
+    }
+
+    // Run the rasi commands
+    public void runRasi() throws InterruptedException {
+        rasiParser.loadNextCommand();
+        while (!opMode.isStopRequested()) {
+            Log.i("RasiActions", "Started new loop!");
+            Log.i("RasiActions", "Parameter - " + rasiParser.getParameter(0));
+            switch (rasiParser.getParameter(0)) {
+                // put all your commands here
+                case "drive":
+                    drive.driveDistStraight(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
+                    break;
+                case"turn":
+                    drive.turnToAngle(rasiParser.getAsDouble(1));
+                    break;
+                case "drop":
+                    robot.lift.unLatchStopper();
+                    Wait(0.5);
+                    robot.lift.goToHangPos();
+                    break;
+                case"liftLow":
+                    robot.lift.goToLowPos();
+                    break;
+                case "extendIntake":
+                    double dist = rasiParser.getAsDouble(1);
+                    robot.intake.setPos(dist);
+                    opMode.telemetry.addLine("Wrote dist " + dist + " to arm");
+                    opMode.telemetry.update();
+                    break;
+                case "dropIntake":
+                    robot.intake.setPos(5);
+                    Wait(1);
+                    break;
+                case "wait":
+                    Wait(rasiParser.getAsDouble(1));
+                    break;
+                case "strafeTime":
+                    drive.strafeTime(rasiParser.getAsDouble(1), rasiParser.getAsDouble(2));
+                    break;
+                case "end":
+                    robot.stop();
+                    opMode.requestOpModeStop();
+                    return;
+                default:
+                    break;
+            }
+            rasiParser.loadNextCommand();
+        }
+    }
+
+    public void Wait(double timeInSeconds){
+        System.out.println("Waiting for " + timeInSeconds);
+        long startTime = System.currentTimeMillis();
+        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
+            robot.update();
+        }
+    }
+
+}

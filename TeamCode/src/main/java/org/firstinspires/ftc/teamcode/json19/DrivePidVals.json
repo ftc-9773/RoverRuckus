@@ -4,12 +4,16 @@
   "distKd": 0.02,
   "distTol": 0.25,
 
+  "minDistPow": 0.2,
+  "minExitDist": 0.02,
+
   "rotKp":0.5,
   "rotKi": 0.0003,
   "rotKd": 0.4,
   "rotTol": 0.0074533,
   "rotExitSpeed": 0.00032665,
-  "rotMinSpeed": 0.17,
+  "rotMinSpeed": 0.2,
+  "maxTurnPow": 0.8,
 
 
   "headingKp":0.01,

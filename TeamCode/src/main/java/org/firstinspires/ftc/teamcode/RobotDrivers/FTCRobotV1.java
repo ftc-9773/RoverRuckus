@@ -50,10 +50,13 @@ public class FTCRobotV1 {
     // teleop values
     Button toggleLeftRightButton = new Button();
     boolean leftRightState = false;
-    SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
-    double slowFactor = reader.getDouble("SlowFactor", 0.3);
+
+    double slowFactor;
 
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
+        SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
+        slowFactor = reader.getDouble("SlowFactor", 0.3);
+
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
@@ -67,10 +70,32 @@ public class FTCRobotV1 {
         this.telemetry = telemetry;
         this.lift = lift;
         this.intake = intake;
+    }
+
+    public FTCRobotV1(MecanumDrivebase drivebase, Telemetry telemetry, CubeLift lift, Intake intake){
+        SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
+        slowFactor = reader.getDouble("SlowFactor", 0.3);
+
+
+        this.pos = new Point( 0, 0);
+        this.heading = 0;
+        this.drivebase = drivebase;
+        if (reader.getBoolean("RunWithEncoders"))
+            this.drivebase.runWithEncoders();
+        else
+            this.drivebase.runWithoutEncoders();
+        //this.OC = odometryController;
+        this.telemetry = telemetry;
+        this.lift = lift;
+        this.intake = intake;
 
     }
 
     public FTCRobotV1(MecanumDrivebase drivebase,Telemetry telemetry) {
+        SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
+        slowFactor = reader.getDouble("SlowFactor", 0.3);
+
+
         this.pos = new Point( 0, 0);
         this.heading = 0;
         this.drivebase = drivebase;
@@ -231,5 +256,9 @@ public class FTCRobotV1 {
     public void stop() {
         this.lift.stop();
         this.drivebase.stop();
+        this.intake.stop();
+
+        if (this.gyro != null)
+            this.gyro.close();
     }
 }

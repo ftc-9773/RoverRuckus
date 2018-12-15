@@ -75,15 +75,13 @@ public class RasiCommands {
      * Causes the robot to descend from the lander.
      * */
     public void drop(){
+        robot.lift.unLatchStopper();
+        Wait(0.5);
         robot.lift.goToHangPos();
-        Wait(2);
     }
 
     public void liftDown(){
-        telemetry.addLine("Lift down");
-        telemetry.update();
         robot.lift.goToLowPos();
-        Wait(2);
     }
 
     public void extendArm(double dist){
@@ -124,7 +122,8 @@ public class RasiCommands {
         System.out.println("Waiting for " + timeInSeconds);
         long startTime = System.currentTimeMillis();
         while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
-            robot.update();}
+            robot.update();
+        }
     }
 
 }

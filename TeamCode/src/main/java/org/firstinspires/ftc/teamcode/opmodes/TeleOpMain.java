@@ -16,8 +16,19 @@ public class TeleOpMain extends LinearOpMode{
 
     @Override
     public void runOpMode(){
-        initter.set(hardwareMap, telemetry, this);
-        FTCRobotV1 robot = initter.init();
+
+        MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
+        sendTelemetry("Drivebase created");
+
+        Intake intake = new Intake(hardwareMap, this, true);
+        sendTelemetry("Intake created");
+
+        CubeLift lift = new CubeLift(hardwareMap, true);
+        sendTelemetry("CubeLift created");
+
+        FTCRobotV1 robot = new FTCRobotV1(drivebase,telemetry,lift,intake);
+        sendTelemetry("Robot created");
+
 
         sendTelemetry("Waiting for start...");
         robot.drivebase.runWithoutEncoders();

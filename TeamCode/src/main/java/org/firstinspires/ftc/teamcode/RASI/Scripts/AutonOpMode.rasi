@@ -1,5 +1,26 @@
-waitForStart,
+COMMENT: drop;
+drive, 15, 0.55;
+liftLow;
+L:turn, -45;
+R:turn, 45;
 
-drive, 2, 0.5
+L:drive, 14,0.5;
+L:drive, -14, 0.5;
+C:drive, 10, 0.5;
+C:drive, -10, 0.5;
+R:drive, 14,0.5;
+R:drive, -14, 0.5;
 
-end
+turn, 90;
+drive, -40, 0.5;
+turn,45;
+
+strafeTime, 1, -0.5;
+strafeTime, 0.33, 0.5;
+
+drive, -44, 0.5;
+COMMENT: dump
+
+dropIntake;
+drive, 50, 0.5; 
+end;

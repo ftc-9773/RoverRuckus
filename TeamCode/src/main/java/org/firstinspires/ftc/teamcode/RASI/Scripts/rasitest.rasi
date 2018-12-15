@@ -1,0 +1,4 @@
+drive, 10;
+wait, 2;
+drive, -10;
+end;

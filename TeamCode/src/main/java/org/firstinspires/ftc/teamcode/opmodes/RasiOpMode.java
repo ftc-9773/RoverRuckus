@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.Utilities.misc.initter;
 import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 
+@Disabled
 @Autonomous(name = "RASI")
 public class RasiOpMode extends LinearOpMode {
 
@@ -37,14 +39,13 @@ public class RasiOpMode extends LinearOpMode {
 //        detector.enable();
 //        RasiInterpreter.d = detector;
 
-        RasiInterpreter interpreter = new RasiInterpreter("/sdcard/FIRST/team9773/Rasi19/","init.rasi", this, robot);
-        sendTelemetry("Waiting for start");
-
-        lift.goToHangPos();
+//        RasiInterpreter interpreter = new RasiInterpreter("/sdcard/FIRST/team9773/Rasi19/","AutonOpMode.rasi", this, robot);
+//        sendTelemetry("Waiting for start");
 
         sendTelemetry("Started");
         waitForStart();
-        interpreter.runRasi();
+
+//        interpreter.runRasi();
         sendTelemetry("Done");
 
 

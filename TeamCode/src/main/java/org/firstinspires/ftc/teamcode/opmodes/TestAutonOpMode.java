@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.Logic.oldRasi.RasiActions;
 import org.firstinspires.ftc.teamcode.RASI.Rasi_2_5.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
@@ -13,6 +16,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.Mec
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
+import org.firstinspires.ftc.teamcode.Vision.Positions;
 
 /**
  * Created by zacharye on 12/6/18.
@@ -37,27 +41,43 @@ public class TestAutonOpMode extends LinearOpMode{
         Gyro gyro = new Gyro(hardwareMap);
         sendTelemetry("Gyro created");
         FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
-        sendTelemetry("Robot created");
+        //sendTelemetry("Robot created");
         PIDdriveUtil pidDrive = new PIDdriveUtil(robot,this);
-        sendTelemetry("Waiting for start...");
+        //sendTelemetry("starting vision...");
         // wait to begin opMode
-        RasiInterpreter rasi = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/","AutonCrater.rasi", this, robot);
 
+        RasiActions rasiActions = new RasiActions("rasitest", null, robot, this);
 
         // run vision
         detector = new MyGoldDetector();
         // init the vision
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(),0);
         detector.enable();
-
+        Positions goldPosition = Positions.center;
+        while (!opModeIsActive() && !isStopRequested()) {
+            Positions pos = detector.getPosition();
+            if (pos!= null) goldPosition = pos;
+            telemetry.addData("VisionReading", goldPosition.toString());
+            telemetry.update();
+        }
+        // pass tags to RASI
+        String [] tags = new String[1];
+        tags[0] = Character.toString(goldPosition.toString().charAt(0)).toUpperCase();
+        rasiActions.rasiParser.rasiTag = tags;
 
         waitForStart();
 
+        detector.disable();
+        // DO EVERYTHING
 
-
-
-
+        try {
+            rasiActions.runRasi();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        robot.stop();
     }
+
 
     private void sendTelemetry(String msg){
         telemetry.addLine(msg);
