@@ -41,11 +41,10 @@ public class RasiInterpreter {
     private HashMap<String, Method> methodsHashMap;
     private boolean hasArguments;
     private Method method;
-    public static MyGoldDetector d;
 
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode, FTCRobotV1 robot){
         this.linearOpMode = opmode;
-        rasiCommands = new RasiCommands(opmode, robot, d);
+        rasiCommands = new RasiCommands(opmode, robot);
         rasiParser = new RasiLexer(filepath, filename, opmode);
         hashMap = new HashMap<String, String>();
         infoHashmap = new HashMap<String, String[]>();
@@ -194,6 +193,7 @@ public class RasiInterpreter {
                     Log.e(LOG_TAG, "NullPointerException", e);
                 }
             command = rasiParser.getCommand();
+
         }
     }
     public void setTags(String[] Tags){ //sets the rasi tags

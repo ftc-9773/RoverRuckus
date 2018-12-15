@@ -20,7 +20,7 @@ public class MecanumDrivebase {
     static private final double     ROBOT_DIAMETER_INCHES   = 7.322 * 2;
     public static final double      COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV*WHEEL_TURNS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static private final double DRIVE_SCALING = 3; // Must be odd
+    static private final double DRIVE_SCALING = 3; // enMust be odd
     static private final double ROTATION_SCALING = 0.8; // 0 is none
 
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
@@ -149,7 +149,7 @@ public class MecanumDrivebase {
         return value;
     }
 
-    public void runWithEncoders(){for(DcMotor d:driveMotors){ /*/d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/}}
+    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}}
     public void runWithoutEncoders() { for (DcMotor d:driveMotors) {d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
     public void runToPosition(){for(DcMotor d:driveMotors){
         //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

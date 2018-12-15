@@ -1,8 +1,5 @@
 waitForStart,
 
-drop,
-
-CRATER : drive, 10, 0, 3.14,
-BASE   : wait, 10,
+drive, 2, 0.5
 
 end

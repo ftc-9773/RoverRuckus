@@ -212,6 +212,10 @@ public class Intake {
         armTargetPos = armInPosition;
         intakeBucketServoPosition = carryPosition;
     }
+    public void setPos(double pos){
+        pidEnabled = true;
+        armTargetPos = getArmPos() + (int) (pos * 1120 / (3 * Math.PI));
+    }
 
     /**
      * The main readSensors method of the class. this executes any actions needed to readSensors the position of the

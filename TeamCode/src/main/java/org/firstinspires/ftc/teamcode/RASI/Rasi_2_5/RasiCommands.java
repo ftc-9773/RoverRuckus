@@ -1,21 +1,12 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
 import org.firstinspires.ftc.teamcode.Vision.Positions;
-
-import java.math.*;
 
 /**
  * Class for defining functions that can be used in RASI. As of version 2.5, there is no way to
@@ -53,10 +44,9 @@ import java.math.*;
 
 public class RasiCommands {
     public Telemetry telemetry;
-    public FTCRobotV1 robert;
+    public FTCRobotV1 robot;
     public LinearOpMode opMode;
     public PIDdriveUtil driver;
-    MyGoldDetector detector;
     Positions position;
 
     @Deprecated
@@ -65,13 +55,11 @@ public class RasiCommands {
         this.opMode = opMode;
     }
 
-    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot, MyGoldDetector d){
-        this.robert = robot;
+    public RasiCommands(LinearOpMode opMode, FTCRobotV1 robot){
+        this.robot = robot;
         this.telemetry = opMode.telemetry;
         this.opMode = opMode;
         driver = new PIDdriveUtil(robot, opMode);
-        this.detector = d;
-        position = detector.getPosition();
     }
 
     /**
@@ -87,7 +75,22 @@ public class RasiCommands {
      * Causes the robot to descend from the lander.
      * */
     public void drop(){
-        //TODO: Implement this. I am uncertain how to.
+        robot.lift.goToHangPos();
+        Wait(2);
+    }
+
+    public void liftDown(){
+        telemetry.addLine("Lift down");
+        telemetry.update();
+        robot.lift.goToLowPos();
+        Wait(2);
+    }
+
+    public void extendArm(double dist){
+        robot.intake.setPos(dist);
+        telemetry.addLine("Wrote dist " + dist + " to arm");
+        telemetry.update();
+        Wait(3);
     }
 
     public void waitForStart(){
@@ -100,6 +103,9 @@ public class RasiCommands {
      * */
     public void Write(double caption){
         telemetry.addLine(caption + "");
+    }
+    public void dropIntake(){
+        robot.intake.setPos(5);
     }
 
     /**
@@ -117,7 +123,8 @@ public class RasiCommands {
     public void Wait(double timeInSeconds){
         System.out.println("Waiting for " + timeInSeconds);
         long startTime = System.currentTimeMillis();
-        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){continue;}
+        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
+            robot.update();}
     }
 
 }

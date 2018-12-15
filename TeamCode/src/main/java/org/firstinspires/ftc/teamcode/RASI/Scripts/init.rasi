@@ -1,5 +1,4 @@
-drop,
+drive, 10, 1
+wait, 5
 
-wait, 2,
-drive, 10, 1,
-wait, 1,
+end
