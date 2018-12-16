@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
 /**
  * Created by vikesh on 1/5/18.
@@ -80,6 +81,10 @@ public class RasiActions {
                     robot.stop();
                     opMode.requestOpModeStop();
                     return;
+                case "driveTime":
+                    robot.drivebase.drive(0, rasiParser.getAsDouble(2), 0, false);
+                    Wait(rasiParser.getAsDouble(1));
+                    robot.drivebase.stop();
                 default:
                     break;
             }

@@ -13,7 +13,7 @@
   "rotTol": 0.08,
   "Comment" : "rotTol used to be 0.074533",
   "rotExitSpeed": 0.00042665,
-  "rotMinSpeed": 0.205,
+  "rotMinSpeed": 0.25,
   "maxTurnPow": 0.8,
 
 

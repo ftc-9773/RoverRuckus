@@ -1,10 +1,10 @@
 drop;
 wait, 2;
-drive, 3.0, 0.5;
+driveTime, 0.5, 0.4;
 wait, 2;
 
-L: turn, 22;
-R: turn, -22;
+L: turn, 28;
+R: turn, -28;
 
 extendIntake, 25;
 wait, 1;

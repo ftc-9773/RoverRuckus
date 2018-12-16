@@ -350,9 +350,9 @@ public class PIDdriveUtil {
              double rotation = rotPid.getPIDCorrection(error);
 
              // may add this in if dt is too weak
-             if (rotation > 0 && Math.abs(rotation) <rotMinPow) {
+             if (rotation > 0 && rotation < rotMinPow) {
                  rotation = rotMinPow;
-             } else if (rotation < 0 && Math.abs(rotation) <rotMinPow) {
+             } else if (rotation < 0 && Math.abs(rotation) < rotMinPow) {
                  rotation = -rotMinPow;
              }
 
@@ -389,6 +389,8 @@ public class PIDdriveUtil {
          drivebase.stop();
         rotPid.resetPID();
      }
+
+
 
     private double setOnNegToPosPi (double num) {
         while (num > Math.PI) {

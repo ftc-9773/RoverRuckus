@@ -19,17 +19,17 @@ C: drive, -12, 0.3;
 
 turn, -115;
 
-driveEncoder, -34, 0.5;
+drive, -34, 0.5;
 
-turn, -50;
+turn, -45;
 
-driveEncoder, -40, 0.75;
+drive, -48, 0.75;
 
+extendIntake, 50;
 deposit;
 wait, 1;
 
-driveEncoder, 13, 0.75;
-extendIntake, 30;
+drive, 13, 0.75;
 wait, 2;
 
 end;
