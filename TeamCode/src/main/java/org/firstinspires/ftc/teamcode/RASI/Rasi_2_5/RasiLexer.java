@@ -1,7 +1,13 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
+//
+// import android.support.annotation.NonNull;
+// import android.util.
+//
+// import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+//
+// import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,7 +34,8 @@ import java.util.NoSuchElementException;
  */
 public class RasiLexer {
     //Tag to use for telemetry
-    private String TAG = "RasiCommands";
+    private String TAG = "RasiCommands:";
+    private LinearOpMode opMode;
 
     //Toggle for whether to send stuff to debug
     private static boolean DEBUG = true;
@@ -51,8 +58,6 @@ public class RasiLexer {
     private boolean isReservedCommand;
 
     //LinearOpMode
-    private LinearOpMode opMode;
-
     /**
      * Initialise lexer to a file located at filepath, with name filename
      *
@@ -61,23 +66,18 @@ public class RasiLexer {
      * @param opmode LinearOpMode
      * */
     public RasiLexer(String filepath, String filename, LinearOpMode opmode){
-
-        this.opMode = opmode;
-        Log.i(TAG, "Got file: " + filepath+filename);
-        Log.i(TAG, filename.split("\\.")[1].toLowerCase());
-
+        opMode = opmode;
         //Make sure file extension is rasi
         if(filename.split("\\.")[1].toLowerCase().equals("rasi")){
-
             rasiFile = new File(filepath + filename);
-            Log.i(TAG,filepath+filename);
+
             try {
                 fileScanner = new Scanner(rasiFile);
             } catch(FileNotFoundException e){
-                Log.e(TAG, "FileNotFoundException", e);
+                 Log.e(TAG, "File " + rasiFile + " not found.", e);
             }
       } else {
-            Log.e(TAG, "file " + filename + " does not have the .rasi extension");
+
       }
     }
 
@@ -106,12 +106,10 @@ public class RasiLexer {
                 index++;
             }
         }
-        if(currentCommand.split(":").length>1) {
-            Tag = currentCommand.split(":")[0];
-        }
-        else{
-            Tag = "";
-        }
+
+        if(currentCommand.split(":").length>1) {Tag = currentCommand.split(":")[0];}
+        else{Tag = "";}
+
         if(Tag != "") {
             parameters = currentCommand.split(":")[1].split(",");
         }
@@ -135,18 +133,15 @@ public class RasiLexer {
      * Return the next command in file
      * */
     public String getCommand(){
-        //System.out.println("In get command");
         if (fileEnded)
             return null;
         loadNextCommand();
         while(!shouldExecute && !fileEnded) {
-            System.out.println("Skipped command: " + currentCommand);
             loadNextCommand();
         }
         if (fileEnded){
             return null;
         }
-        if(parameters[0] != " " && parameters[0] != ""){ System.out.println("Returned command: " + parameters[0]);}
         return parameters[0];
     }
     public String getParam(int paramNumber){
@@ -211,11 +206,9 @@ public class RasiLexer {
         }
     }
     public void debug(String msg){
-        if(DEBUG)
-            Log.d(TAG, msg);
+
     }
     public void debug(String msg, Exception e){
-        if(DEBUG)
-            Log.d(TAG, msg, e);
+
     }
 }
