@@ -125,23 +125,12 @@ public class MecanumDrivebase {
 
 
     public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]); } }
+
     public void stop() {
         for (int i=0; i<4; i++) {motorPowers[i] = 0;}
         update();
     }
-    /*
-    public double[] arcStep(Arc arc, double speed, double currHeading) {
-        double headingChange = 2 * currHeading;
-        double steps = arc.getLength() / speed / 20; //20 steps minimum
 
-        double deltaX = Math.cos(arc.theta) / steps;
-        double deltaY = Math.sin(arc.theta) / steps;
-        double out[] = new double[3];
-        out[0] = deltaX;
-        out[1] = deltaY;
-        out[2] = headingChange / steps;
-        return out;
-    }  */
     public long[] getMotorPositions(){
         long[] value = new long[4];
         for (int i = 0; i< 4; i++)

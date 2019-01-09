@@ -1,26 +1,11 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
+package ftc.robocracy.rasi;
 
-
-
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-// import org.firstinspires.ftc.robotcore.external.Telemetry;
-// import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
-// import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
-// import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-// import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
-// import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
-// import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
-// import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
-// import org.firstinspires.ftc.teamcode.Vision.Positions;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
-
-import java.math.*;
 
 /**
  * Class for defining functions that can be used in RASI. As of version 2.5, there is no way to
@@ -69,6 +54,62 @@ public class RasiCommands {
         this.driver = new PIDdriveUtil(robert, opMode);
     }
 
+    public void driveQuick(double dist, double speed){
+        driver.driveQuick(dist, speed);
+    }
+
+    public void driveEncoder(double dist, double speed){
+        driver.driveDistStraight(dist, speed);
+    }
+
+    public void drive(double dist, double speed){
+        driver.driveDistStraight(dist, speed);
+    }
+
+    public void turn(double angle){
+        driver.turnToAngle(angle);
+    }
+
+    public void drop(){
+        robert.lift.unLatchStopper();
+        Wait(0.5);
+        robert.lift.goToHangPos();
+    }
+
+    public void liftLow(){
+        robert.lift.goToLowPos();
+    }
+
+    public void extendIntake(double dist){
+        robert.intake.setPos(dist);
+        opMode.telemetry.addLine("Wrote dist " + dist + " to arm");
+        opMode.telemetry.update();
+    }
+
+    public void dropIntake(){
+        robert.intake.setPos(5);
+        Wait(1);
+    }
+
+    public void strafeTime(double foo, double spam){
+        driver.strafeTime(foo, spam);
+    }
+
+    public void stop(){
+        robert.stop();
+        opMode.requestOpModeStop();
+    }
+
+    public void driveTime(double x, double y, double t){
+        robert.drivebase.drive(x, y, t, false);
+        Wait(1);
+        robert.drivebase.stop();
+    }
+
+    public void write(String msg){
+        telemetry.addLine(msg);
+        telemetry.update();
+    }
 
     /**
      * Stops executing for a duration of time
@@ -77,7 +118,7 @@ public class RasiCommands {
     public void Wait(double timeInSeconds){
         //System.out.println("Waiting for " + timeInSeconds);
         long startTime = System.currentTimeMillis();
-        while(startTime + timeInSeconds*1000 > System.currentTimeMillis()){
+        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
             continue;
         }
     }

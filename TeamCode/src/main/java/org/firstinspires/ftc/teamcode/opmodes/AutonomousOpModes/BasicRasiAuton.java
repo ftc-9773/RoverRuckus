@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
-import org.firstinspires.ftc.teamcode.RASI.OldVersions.oldRasi.RasiActions;
+import org.firstinspires.ftc.teamcode.RASI.Rasi.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
@@ -18,7 +18,10 @@ public abstract class BasicRasiAuton extends LinearOpMode {
     Timer driveTimer;
     MyGoldDetector detector;
 
-
+    //Override if you don't want to run the camera
+    public boolean doVision(){
+        return true;
+    }
 
     public void runOpMode(){
         // init robot.
@@ -36,35 +39,35 @@ public abstract class BasicRasiAuton extends LinearOpMode {
         //sendTelemetry("starting vision...");
         // wait to begin opMode
 
-        RasiActions rasiActions = new RasiActions(fileName(), null, robot, this);
+        RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/", fileName(), this, robot);
 
-        // run vision
-        detector = new MyGoldDetector();
-        // init the vision
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(),0);
-        detector.enable();
-        Positions goldPosition = Positions.center;
-        while (!opModeIsActive() && !isStopRequested()) {
-            Positions pos = detector.getPosition();
-            if (pos!= null) goldPosition = pos;
-            telemetry.addData("VisionReading", goldPosition.toString());
-            telemetry.update();
+        if (doVision()) {
+            // run vision
+            detector = new MyGoldDetector();
+            // init the vision
+            detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);
+            detector.enable();
+            Positions goldPosition = Positions.center;
+            while (!opModeIsActive() && !isStopRequested()) {
+                Positions pos = detector.getPosition();
+                if (pos != null) goldPosition = pos;
+                telemetry.addData("VisionReading", goldPosition.toString());
+                telemetry.update();
+            }
+            // pass tags to RASI
+            String[] tags = new String[1];
+            tags[0] = Character.toString(goldPosition.toString().charAt(0)).toUpperCase();
+            rasiInterpreter.setTags(tags);
         }
-        // pass tags to RASI
-        String [] tags = new String[1];
-        tags[0] = Character.toString(goldPosition.toString().charAt(0)).toUpperCase();
-        rasiActions.rasiParser.rasiTag = tags;
 
         waitForStart();
-
+        if (doVision()){
         detector.disable();
+        }
         // DO EVERYTHING
 
-        try {
-            rasiActions.runRasi();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        rasiInterpreter.runRasi();
+
         robot.stop();
     }
 

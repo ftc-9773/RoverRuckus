@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
-
- import android.util.Log;
+package org.firstinspires.ftc.teamcode.RASI.Rasi;
 
  import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -8,8 +6,7 @@ package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
+ import java.util.HashMap;
 
 /**
  * Main way to run RASI files from inside java

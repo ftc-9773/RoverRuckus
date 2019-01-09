@@ -284,4 +284,8 @@ public class CubeLift implements Attachment {
         else return input;
     }
 
+    @Override
+    public boolean inStableState() {
+        return pid.getPIDCorrection(liftTargetPosition, getLiftPos()) > 0.1;
+    }
 }

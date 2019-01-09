@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RASI.Rasi_2_5;
+package ftc.robocracy.rasi;
 
 //
 // import android.support.annotation.NonNull;
@@ -12,14 +12,11 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.ArrayIndexOutOfBoundsException;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * This class acts as a lexer for RASI files to be used by RasiInterpreter

@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
  * @version 1.0
  */
 
-public class Intake {
+public class Intake implements Attachment {
 
    // private enum IntakeState { Transfer, Intake, Returning}
 
@@ -262,6 +262,10 @@ public class Intake {
 
     public void stop() {
         armMotor.setPower(0.0);
+    }
 
+    @Override
+    public boolean inStableState(){
+        return extensionPID.getPIDCorrection(armTargetPos, getArmPos()) < 0.1 ;
     }
 }
