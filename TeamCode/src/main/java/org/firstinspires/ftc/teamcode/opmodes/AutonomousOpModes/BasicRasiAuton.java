@@ -59,14 +59,14 @@ public abstract class BasicRasiAuton extends LinearOpMode {
             tags[0] = Character.toString(goldPosition.toString().charAt(0)).toUpperCase();
             rasiInterpreter.setTags(tags);
         }
-
+        rasiInterpreter.preproccess();
         waitForStart();
         if (doVision()){
         detector.disable();
         }
         // DO EVERYTHING
 
-        rasiInterpreter.runRasi();
+        rasiInterpreter.run();
 
         robot.stop();
     }

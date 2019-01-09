@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.RASI.Rasi;
 
- import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import android.util.Log;
 
- import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
- import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Main way to run RASI files from inside java
@@ -14,7 +18,7 @@ import java.lang.reflect.Method;
  * construct with
  * RasiInterpreter rasi = new RasiInterpreter("Path/to/file", "filename.rasi", this);
  * (this is a LinearOpMode instance)
- * call rasi.runRasi() to run the file.
+ * call rasi.preproccess() to run the file.
  * */
 public class RasiInterpreter {
 
@@ -37,6 +41,9 @@ public class RasiInterpreter {
     private HashMap<String, Method> methodsHashMap;
     private boolean hasArguments;
     private Method method;
+
+    private ArrayList<Method> methodQueue = new ArrayList<>();
+    private ArrayList<Object[]> paramQueue = new ArrayList<>();
 
     public RasiInterpreter(String filepath, String filename, LinearOpMode opmode, FTCRobotV1 r){
         this.linearOpMode = opmode;
@@ -85,15 +92,15 @@ public class RasiInterpreter {
                 methodsHashMap.put(mixedCaseString, method);
             }
         }
-}
+    }
 
-    public void runRasi() {
+    public void preproccess() {
         command = rasiParser.getCommand();
         while (!rasiParser.fileEnded && !linearOpMode.isStopRequested()) {
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
-                 paramsAreNull = false;
+                paramsAreNull = false;
             } else {
-                 paramsAreNull = true;
+                paramsAreNull = true;
             }
             if (!paramsAreNull) {
                 finalParameters = new Object[infoHashmap.get(hashMap.get(command.toLowerCase())).length];
@@ -131,29 +138,43 @@ public class RasiInterpreter {
                     String command_lower = command.toLowerCase();
                     String hash = hashMap.get(command_lower);
                     Method method = methodsHashMap.get(hash);
-                    method.invoke(rasiCommands, finalParameters);
-                } catch (IllegalAccessException e) {
-                } catch (InvocationTargetException e) {
+                    appendMethod(method, finalParameters);
+                    //method.invoke(rasiCommands, finalParameters);
                 } catch (NullPointerException e){
                 }
             } else {
-                try{
+                try {
                     String command_lower = command.toLowerCase();
                     String hash = hashMap.get(command_lower);
                     Method method = methodsHashMap.get(hash);
-                    method.invoke(rasiCommands);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    appendMethod(method, finalParameters);
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
                 }
             }
             command = rasiParser.getCommand();
 
         }
     }
+    public void runRasi(){
+        preproccess();
+        run();
+    }
+    public void run(){
+        Method currmethod;
+        Object[] param;
+        while (!methodQueue.isEmpty() && !paramQueue.isEmpty()){
+            currmethod = methodQueue.get(0);
+            param      = paramQueue.get(0);
+            try {
+                currmethod.invoke(rasiCommands, param);
+            }catch (Exception e){
+                Log.e(LOG_TAG, "Exception occured in Run", e);
+            }
+            methodQueue.remove(0);
+            paramQueue.remove(0);
+        }
+    }
+
     public void setTags(String[] Tags){ //sets the rasi tags
         rasiParser.setTags(Tags);
     }
@@ -164,4 +185,8 @@ public class RasiInterpreter {
         rasiParser.removeTag(tag);
     }
 
+    private void appendMethod(Method m, Object[] p){
+        methodQueue.add(m);
+        paramQueue.add(p);
+    }
 }
