@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.Mec
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
+import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
 
@@ -128,7 +129,9 @@ public class FTCRobotV1 {
      * As driveSpeed but scaled for more precision at lower input values.
      */
     public void driveSpeedScaled(double x, double y, double rot) {
-        drivebase.drive(x, y, rot, true);
+        Vector vec = new Vector(true, x, y);
+        //vec.rotateVector(heading);
+        drivebase.drive(vec.getX(), vec.getY(), rot, true);
     }
 
     // teleop functions

@@ -1,7 +1,5 @@
-write,Beginning Rasi
+drive 10 1
 
-drop
+write "Dropped"
 
-write,Dropped
-
-wait, 5
+wait 5

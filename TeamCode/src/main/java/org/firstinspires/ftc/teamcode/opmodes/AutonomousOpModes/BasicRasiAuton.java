@@ -60,6 +60,7 @@ public abstract class BasicRasiAuton extends LinearOpMode {
             rasiInterpreter.setTags(tags);
         }
         rasiInterpreter.preproccess();
+        sendTelemetry("Wating for start");
         waitForStart();
         if (doVision()){
         detector.disable();

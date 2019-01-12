@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
@@ -77,6 +78,68 @@ public class RasiLexer {
 
       }
     }
+    private void load(){
+        try {
+            currentCommand = fileScanner.nextLine();
+        }
+        catch (NoSuchElementException e) {
+            fileEnded = true;
+            return;
+        }
+
+        commandBuilder = new StringBuilder(currentCommand);
+        if (currentCommand.split(":").length > 1){
+            Tag = deleteWhitespace(currentCommand.split(":")[0]);
+            currentCommand = deleteFrontWhitespace(currentCommand.split(":")[1]);
+        } else {
+            Tag = "";
+            currentCommand = deleteWhitespace(currentCommand);
+        }
+
+        boolean containsString = currentCommand.split("\"").length > 1;
+        if (containsString){
+            parameters = new String[2];
+            parameters[0] = currentCommand.split(" ", 1)[0];
+            parameters[1] = currentCommand.split(" ", 1)[1];
+        } else{
+            parameters = currentCommand.split(" ");
+        }
+        Log.d("Got command", Arrays.toString(parameters));
+
+        shouldExecute = false;
+        if ((Arrays.asList(TAGS).contains(Tag) || Tag.length() == 0) && !Arrays.asList(reservedCommands).contains(parameters[0])) {
+            shouldExecute = true;
+            isReservedCommand = false;
+        } else if (Arrays.asList(reservedCommands).contains(parameters[0])) {
+            shouldExecute = false;
+            isReservedCommand = true;
+        }
+
+        if(isReservedCommand){
+            runReservedCommand(parameters[0]);
+        }
+    }
+    private String deleteFrontWhitespace(String str){
+        StringBuilder b = new StringBuilder(str);
+        Character c = b.charAt(0);
+        while (c == ' '){
+            b.deleteCharAt(0);
+            c = b.charAt(0);
+        }
+        return b.toString();
+    }
+    private String deleteWhitespace(String str){
+        StringBuilder b = new StringBuilder(str);
+        int index = 0;
+        while (index < b.length()){
+            if (b.charAt(index) == ' '){
+                b.deleteCharAt(index);
+            } else {
+                index++;
+            }
+        }
+        return b.toString();
+    }
 
     /**
      * Gets the next command from the file and stores it in currentCommand
@@ -95,23 +158,23 @@ public class RasiLexer {
         commandBuilder = new StringBuilder(currentCommand);
 
         int index = 0;
-        while(index < commandBuilder.length()){
-            if(commandBuilder.charAt(index) == ' '){
-                commandBuilder.deleteCharAt(index);
-            }
-            else{
-                index++;
-            }
-        }
+//        while(index < commandBuilder.length()){
+//            if(commandBuilder.charAt(index) == ' '){
+//                commandBuilder.deleteCharAt(index);
+//            }
+//            else{
+//                index++;
+//            }
+//        }
 
         if(currentCommand.split(":").length>1) {Tag = currentCommand.split(":")[0];}
         else{Tag = "";}
 
         if(Tag != "") {
-            parameters = currentCommand.split(":")[1].split(",");
+            parameters = currentCommand.split(":")[1].split(" ");
         }
         else{
-            parameters = currentCommand.split(",");
+            parameters = currentCommand.split(" ");
         }
         shouldExecute = false;
         if ((Arrays.asList(TAGS).contains(Tag) || Tag.length() == 0) && !Arrays.asList(reservedCommands).contains(parameters[0])) {
