@@ -12,6 +12,9 @@ public interface Attachment {
      * */
     void stop();
 
+    /**
+     * Checks whether the attachment is in the state that it should be
+     */
     boolean inStableState();
 
 }

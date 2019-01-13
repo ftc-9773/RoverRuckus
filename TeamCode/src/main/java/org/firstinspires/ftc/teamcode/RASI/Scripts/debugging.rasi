@@ -1,4 +1,4 @@
-drive 10 1
+drive 10 0.001
 
 write "Dropped"
 

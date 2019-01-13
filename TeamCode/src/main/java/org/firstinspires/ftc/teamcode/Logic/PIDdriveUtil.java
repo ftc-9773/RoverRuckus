@@ -80,7 +80,7 @@ public class PIDdriveUtil {
         distPid = new PIDController(distPidCoeffs[0],distPidCoeffs[1], distPidCoeffs[2]);
         Log.d(TAG, "created dist PID controller pid coeff array: " + Arrays.toString(distPidCoeffs));
         distTol = json.getDouble("distTol", 0.5);
-        minDistPow = json.getDouble("minDistPow", 0.2);
+        minDistPow = json.getDouble("minDistPow", 0.02);
         minExitDist = json.getDouble("minExitDist", 0.02);
         maxTurnPower = json.getDouble("maxTurnPow", 0.6);
 

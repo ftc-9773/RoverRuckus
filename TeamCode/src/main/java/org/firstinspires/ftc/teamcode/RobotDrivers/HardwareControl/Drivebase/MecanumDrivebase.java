@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RASI.RasiCommands.RasiCommands;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Arc;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
@@ -34,7 +37,7 @@ public class MecanumDrivebase {
     private double[] motorPowers = new double[4];
 
     Telemetry telemetry;
-//    SafeJsonReader reader = new SafeJsonReader("DrivePidVals.json");
+    SafeJsonReader reader = new SafeJsonReader("DrivePidVals");
 
     public MecanumDrivebase(HardwareMap hwMap, Telemetry telem) {
         // init wheels
@@ -124,7 +127,8 @@ public class MecanumDrivebase {
     }
 
 
-    public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]); } }
+    public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]);
+        Log.d("Drivebase", "Wrote power " + motorPowers[i] + " to motor " + i); } }
 
     public void stop() {
         for (int i=0; i<4; i++) {motorPowers[i] = 0;}
@@ -138,7 +142,7 @@ public class MecanumDrivebase {
         return value;
     }
 
-    public void runWithEncoders(){for(DcMotor d:driveMotors){ /*/d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/}}
+    public void runWithEncoders(){for(DcMotor d:driveMotors){ d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}}
     public void runWithoutEncoders() { for (DcMotor d:driveMotors) {d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}}
     public void runToPosition(){for(DcMotor d:driveMotors){
         //d.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -154,6 +158,57 @@ public class MecanumDrivebase {
         pos[3] = driveMotors[3].getCurrentPosition();
         return pos;
     }
+
+    public double getMinPower(LinearOpMode o){
+        runWithEncoders();
+        long[] init = getMotorPositions();
+        telemetry.addData("Init", init);
+        telemetry.update();
+        double pow = 0.01;
+        setMotorPowers(pow);
+        double speed = 0;
+        double start = System.currentTimeMillis();
+        while (speed < 0.1 && !o.isStopRequested()){
+            pow += 0.01;
+            setMotorPowers(pow);
+            speed = minus(getMotorPositions(), init) / (System.currentTimeMillis() - start);
+            //start = System.currentTimeMillis();
+            Log.d("Drivebase", "Speed = " + speed);
+            Log.d("Drivebase", "Power = " + pow);
+            telemetry.addData("Speed", speed);
+            telemetry.addData("SetPower", pow);
+            telemetry.update();
+            //Wait(1, o);
+        }
+        setMotorPowers(0);
+        return pow;
+    }
+
+    private void Wait(double t, LinearOpMode o){
+        double start = System.currentTimeMillis();
+        while(System.currentTimeMillis() - start < t && !o.isStopRequested()){
+            continue;
+        }
+
+    }
+
+    private void setMotorPowers(double pow){
+        for (int i = 0; i < 4; i++){
+            driveMotors[i].setPower(( i % 2 == 0 ? -1:1) * pow);
+        }
+    }
+
+    private double minus(long[] a, long[] y){
+        double sum = 0;
+        if (a.length != y.length){
+            return -1;
+        }
+        for (int i = 0; i <a.length; i++){
+            sum += (a[i] - y[i]) * (a[i] - y[i]);
+        }
+        return Math.sqrt(sum);
+    }
+
     public void getPowersLogged(Telemetry telemetry){
         for(int i = 0; i< 4; i++){
             telemetry.addData("Motor power of motor: "+ i, driveMotors[i].getPower());

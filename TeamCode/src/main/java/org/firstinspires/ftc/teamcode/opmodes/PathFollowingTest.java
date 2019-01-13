@@ -3,8 +3,8 @@
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //
-//import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-//import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+//import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.V1.CubeLift;
+//import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.V1.Intake;
 //import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 //import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 //import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.V1.CubeLift;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.V1.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
@@ -146,7 +146,7 @@ public class FTCRobotV1 {
         if (gp1.left_trigger > 0.2){
             x   *= slowFactor;
             y   *= slowFactor;
-            //rot *= slowFactor;
+            rot *= slowFactor;
         }
 
         telemetry.addData("X Power", x);
