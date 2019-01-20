@@ -19,7 +19,7 @@ public class MecanumDrivebase {
 
     static private final double     COUNTS_PER_MOTOR_REV    = 560;    //
     static private final double     WHEEL_TURNS_PER_MOTOR_REV = 30.0 / 38.0;
-    static private final double     WHEEL_DIAMETER_INCHES   = 3.94 ;     // For figuring circumference
+    static private final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static private final double     ROBOT_DIAMETER_INCHES   = 7.322 * 2;
     public static final double      COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV*WHEEL_TURNS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
@@ -128,7 +128,7 @@ public class MecanumDrivebase {
 
 
     public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]);
-        Log.d("Drivebase", "Wrote power " + motorPowers[i] + " to motor " + i); } }
+        /*Log.d("Drivebase", "Wrote power " + motorPowers[i] + " to motor " + i); */} }
 
     public void stop() {
         for (int i=0; i<4; i++) {motorPowers[i] = 0;}
@@ -211,7 +211,7 @@ public class MecanumDrivebase {
 
     public void getPowersLogged(Telemetry telemetry){
         for(int i = 0; i< 4; i++){
-            telemetry.addData("Motor power of motor: "+ i, driveMotors[i].getPower());
+            //telemetry.addData("Motor power of motor: "+ i, driveMotors[i].getPower());
             Log.d("ftc9773_motorPowers", "motor " + i + driveMotors[i].getPowerFloat());
 
         }
