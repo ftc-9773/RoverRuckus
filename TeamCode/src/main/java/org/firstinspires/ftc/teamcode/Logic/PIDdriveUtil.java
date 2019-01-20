@@ -389,9 +389,7 @@ public class PIDdriveUtil {
          drivebase.stop();
         rotPid.resetPID();
      }
-
-
-
+     
     private double setOnNegToPosPi (double num) {
         while (num > Math.PI) {
             num -= 2*Math.PI;
