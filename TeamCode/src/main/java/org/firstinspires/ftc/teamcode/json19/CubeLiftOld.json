@@ -6,11 +6,11 @@
   "rightSorterUpPos": 0.5,
   "rightSorterDownPos": 0.8,
 
-  "distributorLeftPos": 0.63,
-  "distributorRightPos": 0.43,
+  "distributorLeftPos": 0.54,
+  "distributorRightPos": 0.37,
 
-  "hookOpenPos": 0.5,
-  "hookClosedPos": 0.1,
+  "hookOpenPos": 0.0,
+  "hookClosedPos": 0.38,
 
 
   "liftLowPos":30,

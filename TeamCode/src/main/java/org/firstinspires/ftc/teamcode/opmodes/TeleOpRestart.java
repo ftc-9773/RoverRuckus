@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.C
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 
-@TeleOp(name="TeleOpOpmode")
-public class TeleOpMain extends LinearOpMode{
+@TeleOp(name = "TeleOpRestart")
+public class TeleOpRestart extends LinearOpMode {
 
     @Override
     public void runOpMode(){
@@ -17,18 +17,18 @@ public class TeleOpMain extends LinearOpMode{
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         sendTelemetry("Drivebase created");
 
-        Intake intake = new Intake(hardwareMap, this, true);
+        Intake intake = new Intake(hardwareMap, this, false);
         sendTelemetry("Intake created");
 
-        CubeLift lift = new CubeLift(hardwareMap, true);
+        CubeLift lift = new CubeLift(hardwareMap, false);
         sendTelemetry("CubeLift created");
 
         FTCRobotV1 robot = new FTCRobotV1(drivebase,telemetry,lift,intake);
         sendTelemetry("Robot created");
 
-
         sendTelemetry("Waiting for start...");
         robot.drivebase.runWithoutEncoders();
+
         // opmode start
         waitForStart();
         boolean temp = true;
@@ -44,7 +44,6 @@ public class TeleOpMain extends LinearOpMode{
             robot.drivebase.getPowersLogged(telemetry);
             // probably remove sometime in the future
             robot.intake.debugIntakeArmServos(telemetry);
-            telemetry.addData ("liftPosition", robot.lift.getLiftPos());
             telemetry.update();
         }
 

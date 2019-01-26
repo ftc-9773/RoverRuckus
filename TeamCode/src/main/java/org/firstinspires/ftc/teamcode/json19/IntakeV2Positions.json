@@ -11,7 +11,7 @@
   "liftKi": 0.0009,
   "liftKd": 0.0002,
 
-   "armInPosition": 10,
+  "armInPosition": 10,
   "transferThreshold": 80,
   "armOutExtraThreshold": 300
 
