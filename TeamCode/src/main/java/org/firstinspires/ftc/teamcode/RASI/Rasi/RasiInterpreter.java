@@ -161,6 +161,7 @@ public class RasiInterpreter {
                     RasiCommands rc = rcHashMap.get(hash);
                     appendMethod(method, finalParameters, rc);
                     //method.invoke(rasiCommands, finalParameters);
+                    Log.d(LOG_TAG, "Preproccesed command " + method);
                 } catch (NullPointerException e){
                 }
             } else {
@@ -170,6 +171,7 @@ public class RasiInterpreter {
                     Method method = methodsHashMap.get(hash);
                     RasiCommands rc = rcHashMap.get(hash);
                     appendMethod(method, finalParameters, rc);
+                    Log.d(LOG_TAG, "Preproccessed command " + method);
                 } catch (NullPointerException e) {
                 }
             }

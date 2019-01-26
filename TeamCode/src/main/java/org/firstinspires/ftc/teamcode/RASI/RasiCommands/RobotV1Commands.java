@@ -52,6 +52,9 @@ public class RobotV1Commands extends RasiCommands {
         opMode.telemetry.update();
     }
 
+    public void driveMP(double dist){
+        driver.driveStraight(dist);
+    }
     public void dropIntake(){
         robert.intake.setPos(5);
         Wait(1);

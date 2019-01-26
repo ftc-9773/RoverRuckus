@@ -2,7 +2,7 @@
   "distKp": 0.05,
   "distKi": 0,
   "distKd": 0.03,
-  "distTol": 1.00,
+  "distTol": 0.250,
 
   "minDistPow": 0.1,
   "minExitDist": 0.05,

@@ -56,6 +56,17 @@ public class PIDdriveUtil {
     static double[] headingPidCoeffs = new double[3];
     PIDController headingPid;
 
+    final static double km = (4.2 / 40) / 8.5; //Proportionality constant (torque)
+    final static double ke = 12 / (150 * 40); // Proportionality constant (emf)
+    final static double rw = 0.0064; // Wheel radius
+    final static double m  = 17.6; //Robot mass (kg)
+    final static double tf = (4.2 / 40) * 0.2 * 4 / 8.5; //Friction torque in motor (stall torque * no load current * num motor / stall current)
+    final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
+    double omega = 0; // The small omega (motor rotational speed)
+    double v = 0; //
+    double a = (1.3) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
+    double s;
+
     /**
      * Constructor for the PID drive Util class.
      * initializes all of the parts, and reads values from JSON
@@ -102,6 +113,47 @@ public class PIDdriveUtil {
 
         drivebase.runWithoutEncoders();
 
+    }
+
+    public void driveStraight(double dist){
+        drivebase.stop();
+        drivebase.update();
+        s = 0;
+        double pow;
+        double sign;
+        double accerlating = 1;
+        v = minDistPow;
+        long[] inits = drivebase.getMotorPositions();
+        Log.d(TAG, "Got inits " + inits);
+        driveHoldHeading(v, 0, gyro.getHeading());
+        while((dist - s) > distTol &&  !opMode.isStopRequested()){
+            Log.d(TAG, "dsError:" + (dist - s));
+            Log.d(TAG, "Velocity: " + v);
+            if (dist - s > dist / 2){
+                v = (2 * a * s);
+                accerlating = 1;
+            }else {
+                v = (2 * a * (dist - s));
+                accerlating = -1;
+            }
+            sign = Math.signum(v);
+            Log.d(TAG, "V^2: " + v);
+            v = Math.sqrt(v);
+            omega = sign * v * (1 / 560) * 60; //Magic equation
+            pow =  (accerlating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
+            s = avgDistElapsedInches(inits);
+            pow = Math.max(minDistPow, pow);;
+            if (sign == 1){
+                pow = Math.min(1, pow);
+            } else {
+                pow = Math.max(-1, pow);
+            }
+            driveHoldHeading(pow, 0, gyro.getHeading());
+            Log.d(TAG, "Wrote power " + pow);
+        }
+        driveHoldHeading(0, 0, gyro.getHeading());
+        drivebase.stop();
+        drivebase.update();
     }
 
     public void driveEncoder(double dist, double pow){
@@ -256,7 +308,8 @@ public class PIDdriveUtil {
              sum +=diff;
          }
           sum /=4;
-        sum /= drivebase.COUNTS_PER_INCH;
+        sum /= drivebase.COUNTS_PER_INCH;;
+        Log.d(TAG, "INCHES " + sum);
         return sum ;
     }
 
@@ -308,7 +361,7 @@ public class PIDdriveUtil {
          double x = Math.cos(angle)*magnitude;
          double y = Math.sin(angle)*magnitude;
 
-         Log.d(TAG, "wrote to drive. correction was" + correction +" x was " + x + " y was " + y);
+         Log.d(TAG, "Wrote to drive. correction was" + correction +" x was " + x + " y was " + y);
 
          drivebase.drive(x, y, -correction, false);
          drivebase.update();
@@ -389,7 +442,7 @@ public class PIDdriveUtil {
          drivebase.stop();
         rotPid.resetPID();
      }
-     
+
     private double setOnNegToPosPi (double num) {
         while (num > Math.PI) {
             num -= 2*Math.PI;
