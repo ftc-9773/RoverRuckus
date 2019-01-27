@@ -1,11 +1,15 @@
-package org.firstinspires.ftc.teamcode.RASI.OldVersions.oldRasi;
+package org.firstinspires.ftc.teamcode.Logic.oldRasi;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
+import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
 /**
  * Created by vikesh on 1/5/18.
@@ -24,7 +28,7 @@ public class RasiActions {
         this.drive = new PIDdriveUtil(robot, opMode);
         rasiParser = new RasiParser(rasiFilename,rasiTag);
         Log.i("RasiActions", "Done with Rasi init");
-        }
+    }
 
     // Run the rasi commands
     public void runRasi() throws InterruptedException {
@@ -54,7 +58,6 @@ public class RasiActions {
                     robot.lift.goToLowPos();
                     break;
                 case "extendIntake":
-                    robot.intake.transferMinerals();
                     double dist = rasiParser.getAsDouble(1);
                     robot.intake.setPos(dist);
                     opMode.telemetry.addLine("Wrote dist " + dist + " to arm");
@@ -82,10 +85,6 @@ public class RasiActions {
                     robot.drivebase.drive(0, rasiParser.getAsDouble(2), 0, false);
                     Wait(rasiParser.getAsDouble(1));
                     robot.drivebase.stop();
-                    break;
-                case "driveStraightMP":
-                    drive.driveStraight(rasiParser.getAsDouble(1));
-                    break;
                 default:
                     break;
             }

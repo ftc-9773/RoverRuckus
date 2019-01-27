@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 
 @TeleOp(name = "TeleOpRestart")
@@ -17,7 +18,7 @@ public class TeleOpRestart extends LinearOpMode {
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         sendTelemetry("Drivebase created");
 
-        Intake intake = new Intake(hardwareMap, this, false);
+        IntakeV2 intake = new IntakeV2(hardwareMap, this, false);
         sendTelemetry("Intake created");
 
         CubeLift lift = new CubeLift(hardwareMap, false);
@@ -44,6 +45,7 @@ public class TeleOpRestart extends LinearOpMode {
             robot.drivebase.getPowersLogged(telemetry);
             // probably remove sometime in the future
             robot.intake.debugIntakeArmServos(telemetry);
+            robot.lift.writePositionsToTelem(telemetry, false);
             telemetry.update();
         }
 

@@ -93,8 +93,8 @@ public class CubeLift implements Attachment {
 
         distributorLeftPos = json.getDouble("distributorLeftPos",0.54);
         distributorRightPos = json.getDouble("distributorRightPos", 0.37);
-        hookOpenPos = json.getDouble("hookOpenPos", 0.05);
-        hookClosedPos = json.getDouble("hookClosedPos", 0.38);
+        hookOpenPos = json.getDouble("hookOpenPos", 0.5);
+        hookClosedPos = json.getDouble("hookClosedPos", 1.0);
 
         // lift
         liftLowPos = json.getInt("liftLowPos",195);
@@ -204,7 +204,7 @@ public class CubeLift implements Attachment {
     }
     //todo: code the home() method.
     public void zero(){
-        liftZeroPos = -leftLiftMotor.getCurrentPosition();
+        liftZeroPos = leftLiftMotor.getCurrentPosition();
     }
 
     /**
@@ -272,18 +272,19 @@ public class CubeLift implements Attachment {
     }
     // used internally to set the power of the lift. might eventually make this public
     private void setLiftPower(double power){
-        leftLiftMotor.setPower(-power);
-        rightLiftMotor.setPower(power);
+        leftLiftMotor.setPower(power);
+        rightLiftMotor.setPower(-power);
     }
     // used internally to find the position of the lift
     public int getLiftPos(){
         //todo: make this less sketchy
-        return ((-leftLiftMotor.getCurrentPosition())- liftZeroPos);
+        return ((leftLiftMotor.getCurrentPosition())- liftZeroPos);
     }
 
     public void closeLatch(){
         hookServo.setPosition(hookClosedPos);
     }
+    public void openLatch()  { hookServo.setPosition(hookOpenPos);}
 
     // used internally to bound the function
     private int bound(int min, int max, int input){

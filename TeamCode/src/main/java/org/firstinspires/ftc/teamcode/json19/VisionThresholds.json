@@ -1,15 +1,15 @@
 {
-  "minDetectionThreshold" : 0.08,
+  "minDetectionThreshold" : 0.015,
 
-  "BoxOneTopRightX":     0.1818,
-  "BoxOneTopRightY":     0.4718137255,
-  "BoxOneBottomLeftX":   0.3880,
-  "BoxOneBottomLeftY":   0.6050857843,
+  "BoxOneTopRightX":     0.009009009009,
+  "BoxOneTopRightY":     0.1809,
+  "BoxOneBottomLeftX":   0.360360,
+  "BoxOneBottomLeftY":   0.45105,
 
-  "BoxTwoTopRightX":     0.7761437908,
-  "BoxTwoTopRightY":     0.5208333333,
-  "BoxTwoBottomLeftX":   0.9803921569,
-  "BoxTwoBottomLeftY":   0.6740196078,
+  "BoxTwoTopRightX":     0.5700,
+  "BoxTwoTopRightY":     0.1421,
+  "BoxTwoBottomLeftX":   0.9729,
+  "BoxTwoBottomLeftY":   0.528,
   "returnMat":           true
 
 }

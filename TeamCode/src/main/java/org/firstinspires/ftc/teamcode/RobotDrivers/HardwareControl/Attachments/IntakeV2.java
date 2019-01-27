@@ -99,7 +99,7 @@ public class IntakeV2 implements Attachment {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // Initialize all values from configuration files
@@ -267,7 +267,7 @@ public class IntakeV2 implements Attachment {
     }
 
     public int getArmPos(){
-        return (int)(((double)(armMotor.getCurrentPosition() - zeroPosition))* 0.5);
+        return (int)(((double)(armMotor.getCurrentPosition() - zeroPosition)));
     }
 
 
@@ -282,6 +282,7 @@ public class IntakeV2 implements Attachment {
 
     public void stop() {
         armMotor.setPower(0.0);
+        intakeMotor.setPower(0.0);
     }
 
     public void  writeTelemPositions(Telemetry telem){

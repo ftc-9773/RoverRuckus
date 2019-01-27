@@ -1,25 +1,25 @@
 {
   "COMMENT: ": "blue is left",
-  "leftSorterUpPos": 0.89,
-  "leftSorterDownPos": 0.55,
+  "leftSorterUpPos": 0.82,
+  "leftSorterDownPos": 0.35,
 
-  "rightSorterUpPos": 0.5,
-  "rightSorterDownPos": 0.8,
+  "rightSorterUpPos": 0.2,
+  "rightSorterDownPos": 0.55,
 
   "distributorLeftPos": 0.63,
   "distributorRightPos": 0.43,
 
-  "hookOpenPos": 0.5,
-  "hookClosedPos": 0.1,
+  "hookOpenPos": 0.35,
+  "hookClosedPos": 1.0,
 
 
-  "liftLowPos":30,
-  "liftHookPos":2718,
-  "liftScorePos":3700,
-  "minLiftPosition": -10,
+  "liftLowPos":20,
+  "liftHookPos":3597,
+  "liftScorePos":3742,
+  "minLiftPosition": -20,
   "maxLiftPosition":4200,
   "transferTol": 20,
-  "joggingScalar": 30,
+  "joggingScalar": 40,
 
   "kp":0.0030,
   "ki": 0.012,

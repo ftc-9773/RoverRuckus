@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
@@ -24,7 +25,7 @@ import java.util.Arrays;
 public class FTCRobotV1 {
     //Attachments
     public MecanumDrivebase drivebase;
-    public Intake intake;
+    public IntakeV2 intake;
     public OdometryController odometry;
     public CubeLift lift;
 
@@ -50,7 +51,7 @@ public class FTCRobotV1 {
 
     double slowFactor;
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, Intake intake) {
+    public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, IntakeV2 intake) {
         SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
         slowFactor = reader.getDouble("SlowFactor", 0.3);
 
@@ -69,7 +70,7 @@ public class FTCRobotV1 {
         this.intake = intake;
     }
 
-    public FTCRobotV1(MecanumDrivebase drivebase, Telemetry telemetry, CubeLift lift, Intake intake){
+    public FTCRobotV1(MecanumDrivebase drivebase, Telemetry telemetry, CubeLift lift, IntakeV2 intake){
         SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
         slowFactor = reader.getDouble("SlowFactor", 0.3);
 
@@ -111,7 +112,7 @@ public class FTCRobotV1 {
         drivebase = new MecanumDrivebase(hwmap, telem);
         odometry = new OdometryController(hwmap);
         lift = new CubeLift(hwmap,reZero);
-        intake = new Intake(hwmap, op, reZero);
+        intake = new IntakeV2(hwmap, op, reZero);
     }
 
     /**

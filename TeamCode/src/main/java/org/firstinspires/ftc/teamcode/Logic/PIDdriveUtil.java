@@ -243,27 +243,28 @@ public class PIDdriveUtil {
          while (!opMode.isStopRequested()) {
              double error = dist - avgDistElapsedInches(initialEncoderDists);
              Log.d("encoder", "" + initialEncoderDists[0]);
-             double correction = distPid.getPIDCorrection(error);
-             Log.d(TAG,"error:" + error);
-             Log.d(TAG, "correction" +correction);
-             // might change this
-             if(scalingClip) {
-                 // scales continuously
-                 correction = Range.clip(correction, -1, 1);
-                 correction*= power;
-             } else {
-                 // otherwise just clip
-                 correction = Range.clip(correction, -power, power);
-             }
-
-
-             if(Math.abs(correction) < minDistPow){
-                 correction = Math.signum(correction)*Math.abs(minDistPow);
-             }
-             //logs
-             Log.d(TAG+" error", Double.toString(error));
-             Log.d(TAG+" pow", Double.toString(correction));
-
+             double correction;
+             correction = distPid.getPIDCorrection(error);
+//             Log.d(TAG,"error:" + error);
+//             Log.d(TAG, "correction" +correction);
+//             // might change this
+//             if(scalingClip) {
+//                 // scales continuously
+//                 correction = Range.clip(correction, -1, 1);
+//                 correction*= power;
+//             } else {
+//                 // otherwise just clip
+//                 correction = Range.clip(correction, -power, power);
+//             }
+//
+//
+//             if(Math.abs(correction) < minDistPow){
+//                 correction = Math.signum(correction)*Math.abs(minDistPow);
+//             }
+//             //logs
+//             Log.d(TAG+" error", Double.toString(error));
+//             Log.d(TAG+" pow", Double.toString(correction));
+//
 
              driveHoldHeading(correction, 0, initialHeading);
              double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
@@ -400,37 +401,46 @@ public class PIDdriveUtil {
              currentTime = System.currentTimeMillis();
 
              error = setOnNegToPosPi(targetAngleRad - currentHeading);
-             double rotation = rotPid.getPIDCorrection(error);
-
-             // may add this in if dt is too weak
-             if (rotation > 0 && rotation < rotMinPow) {
-                 rotation = rotMinPow;
-             } else if (rotation < 0 && Math.abs(rotation) < rotMinPow) {
-                 rotation = -rotMinPow;
+//             double rotation = rotPid.getPIDCorrection(error);
+//
+//             // may add this in if dt is too weak
+//             if (rotation > 0 && rotation < rotMinPow) {
+//                 rotation = rotMinPow;
+//             } else if (rotation < 0 && Math.abs(rotation) < rotMinPow) {
+//                 rotation = -rotMinPow;
+//             }
+//
+//             if (rotation > maxTurnPower)
+//                 rotation = maxTurnPower;
+//             else if (rotation < -maxTurnPower)
+//                 rotation = -maxTurnPower;
+//
+             double rotation =0;
+             if( error < 0){
+                rotation  = -1*rotMinPow;
+             } else if (error == 0){
+                 return;}
+                 else if (error > 0) {
+                  rotation = rotMinPow;
              }
-
-             if (rotation > maxTurnPower)
-                 rotation = maxTurnPower;
-             else if (rotation < -maxTurnPower)
-                 rotation = -maxTurnPower;
-
-
              Log.d(TAG,"writingToDrive: Error: "+ error + " Correction: " + rotation );
              Log.d(TAG, "error in degrees: "+ Math.toDegrees(error));
              drivebase.drive(0.0, 0, -rotation, false);
              drivebase.update();
 
+
+
              // Check to see if it's time to exit
              // Calculate speed
-             double speed;
-             if (currentTime == lastTime || firstTime) {
-                 speed = 0.003;
-             } else {
-                 speed = Math.abs(error - lastError) / (currentTime - lastTime);
-             }
-             lastError = error;
+//             double speed;
+//             if (currentTime == lastTime || firstTime) {
+//                 speed = 0.003;
+//             } else {
+//                 speed = Math.abs(error - lastError) / (currentTime - lastTime);
+//             }
+//             lastError = error;
 
-             if ((speed < rotExitSpeed ) && Math.abs(error) < Math.abs(rotTol)) {
+             if ( Math.abs(error) < Math.abs(rotTol)) {
                  Log.i(TAG, "ending rotation, should be at heading");
                  break;
              }

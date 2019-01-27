@@ -7,10 +7,9 @@ public class debuggingRasiAuto extends BasicRasiAuton {
 
     @Override()
     public String fileName(){
-        return "debugging.rasi";
+        return "debugging";
     }
 
-    @Override
     public boolean doVision(){
         return false;
     }
