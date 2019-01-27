@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes;
+package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes.OldAuton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes.BasicRasiAuton;
 
 /**
  * Created by zacharye on 12/6/18.
