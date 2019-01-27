@@ -83,7 +83,7 @@ public class RasiActions {
                     Wait(rasiParser.getAsDouble(1));
                     robot.drivebase.stop();
                     break;
-                case "driveStraightMP":
+                case "driveMP":
                     drive.driveStraight(rasiParser.getAsDouble(1));
                     break;
                 default:

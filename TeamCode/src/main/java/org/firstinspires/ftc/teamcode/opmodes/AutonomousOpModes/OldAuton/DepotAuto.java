@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes.OldAuton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-@Autonomous(name = "DepotAuton") // does autonomous for depot side
-public class DepotAuton extends BasicRasiAuton {
+@Disabled
+@Autonomous(name = "DepotAut") // does autonomous for depot side
+public class DepotAuto extends BasicRasiAuton {
 
     @Override
     public String fileName() {

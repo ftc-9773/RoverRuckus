@@ -179,6 +179,7 @@ public class RasiInterpreter {
 
         }
     }
+
     public void runRasi(){
         preproccess();
         run();
@@ -196,7 +197,7 @@ public class RasiInterpreter {
             try {
                 currmethod.invoke(rasiCommands, param);
             }catch (Exception e){
-                Log.e(LOG_TAG, "Exception occured in Run", e);
+                //Log.e(LOG_TAG, "Exception occured in Run", e);
             }
             rcQueue.remove(0);
             methodQueue.remove(0);

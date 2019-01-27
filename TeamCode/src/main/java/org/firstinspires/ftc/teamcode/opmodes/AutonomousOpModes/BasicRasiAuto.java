@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.RASI.Rasi.RasiInterpreter;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.Vision.MyGoldDetector;
@@ -28,7 +29,7 @@ public abstract class BasicRasiAuto extends LinearOpMode {
         // init robot.
         MecanumDrivebase drivebase = new MecanumDrivebase(hardwareMap, telemetry);
         sendTelemetry("Drivebase created");
-        Intake intake = new Intake(hardwareMap, this, true);
+        IntakeV2 intake = new IntakeV2(hardwareMap, this, true);
         sendTelemetry("Intake created");
         CubeLift lift = new CubeLift(hardwareMap, true);
         sendTelemetry("CubeLift created");
@@ -61,7 +62,8 @@ public abstract class BasicRasiAuto extends LinearOpMode {
             rasiInterpreter.setTags(tags);
         }
         rasiInterpreter.preproccess();
-        sendTelemetry("Wating for start");
+        telemetry.update();
+        sendTelemetry("Waiting for start");
         waitForStart();
         if (doVision()){
             detector.disable();

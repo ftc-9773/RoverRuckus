@@ -66,6 +66,7 @@ public class RasiLexer {
     public RasiLexer(String filepath, String filename, LinearOpMode opmode){
         opMode = opmode;
         //Make sure file extension is rasi
+        try{
         if(filename.split("\\.")[1].toLowerCase().equals("rasi")){
             rasiFile = new File(filepath + filename);
 
@@ -75,8 +76,22 @@ public class RasiLexer {
                  Log.e(TAG, "File " + rasiFile + " not found.", e);
             }
       } else {
+            rasiFile = new File(filepath + filename + ".rasi");
 
-      }
+            try {
+                fileScanner = new Scanner(rasiFile);
+            } catch(FileNotFoundException e){
+                Log.e(TAG, "File " + rasiFile + " not found.", e);
+            }
+      }} catch(ArrayIndexOutOfBoundsException et) {
+            rasiFile = new File(filepath + filename + ".rasi");
+
+            try {
+                fileScanner = new Scanner(rasiFile);
+            } catch(FileNotFoundException e){
+                Log.e(TAG, "File " + rasiFile + " not found.", e);
+            }
+        }
     }
     private void load(){
         try {

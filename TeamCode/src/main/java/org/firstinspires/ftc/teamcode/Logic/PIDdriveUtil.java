@@ -64,7 +64,7 @@ public class PIDdriveUtil {
     final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
     double omega = 0; // The small omega (motor rotational speed)
     double v = 0; //
-    double a = (1.3) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
+    double a = (1) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
     double s;
 
     /**

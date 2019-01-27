@@ -1,0 +1,36 @@
+COMMENT: drop
+wait 2
+drive 12 0.23
+
+L: turn 45
+R: turn -45
+
+
+L: drive 19.5 0.23
+R: drive 19.5 0.23
+C: drive 16.5 0.23
+
+
+liftLow
+
+L: drive -19.5 0.3
+R: drive -19.5 0.3
+C: drive -16.5 0.3
+
+turn -115
+
+drive -34 0.5
+
+turn -45
+strafeTime 1 -0.5
+
+drive -48 0.75
+
+extendIntake 50
+deposit
+wait 1
+
+drive 13 0.75
+wait 2
+
+end

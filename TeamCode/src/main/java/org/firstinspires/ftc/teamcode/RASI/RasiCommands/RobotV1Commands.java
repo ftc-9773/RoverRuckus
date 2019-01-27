@@ -55,6 +55,7 @@ public class RobotV1Commands extends RasiCommands {
     public void driveMP(double dist){
         driver.driveStraight(dist);
     }
+
     public void dropIntake(){
         robert.intake.setPos(5);
         Wait(1);
@@ -64,15 +65,14 @@ public class RobotV1Commands extends RasiCommands {
         driver.strafeTime(foo, spam);
     }
 
-//    public void stop(){
-//        robert.stop();
-//        opMode.requestOpModeStop();
-//    }
+    public void stop(){
+        robert.stop();
+        opMode.requestOpModeStop();
+    }
 
     public void driveTime(double x, double y, double t){
         robert.drivebase.drive(x, y, t, false);
         Wait(1);
         robert.drivebase.stop();
     }
-
 }
