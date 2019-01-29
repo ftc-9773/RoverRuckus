@@ -1,5 +1,5 @@
-drive 10 0.5
 
 wait 2
+turn 60
 
-driveMP 10
+wait 2

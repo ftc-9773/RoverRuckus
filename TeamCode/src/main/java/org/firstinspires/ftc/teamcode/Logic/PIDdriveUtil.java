@@ -42,7 +42,6 @@ public class PIDdriveUtil {
     // Json
     SafeJsonReader json;
 
-
     // pid coeffs
     static double[] distPidCoeffs = new double[3];
     final double minDistPow, minExitDist;
@@ -64,7 +63,7 @@ public class PIDdriveUtil {
     final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
     double omega = 0; // The small omega (motor rotational speed)
     double v = 0; //
-    double a = (1) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
+    double a = (0.9) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
     double s;
 
     /**
