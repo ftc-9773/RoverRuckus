@@ -1,13 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.Logic.DriveUtil;
 import org.firstinspires.ftc.teamcode.RASI.Rasi.RasiInterpreter;
+import org.firstinspires.ftc.teamcode.RASI.RasiCommands.RobotV1Commands;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
@@ -37,11 +39,11 @@ public abstract class BasicRasiAuto extends LinearOpMode {
         sendTelemetry("Gyro created");
         FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         //sendTelemetry("Robot created");
-        PIDdriveUtil pidDrive = new PIDdriveUtil(robot,this);
+        DriveUtil pidDrive = new DriveUtil(robot,this);
         //sendTelemetry("starting vision...");
         // wait to begin opMode
-
-        RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/", fileName(), this, robot);
+        RobotV1Commands rc = new RobotV1Commands(this, robot);
+        RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/", fileName(), this, rc);
 
         if (doVision()) {
             // run vision
@@ -50,18 +52,22 @@ public abstract class BasicRasiAuto extends LinearOpMode {
             detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);
             detector.enable();
             Positions goldPosition = Positions.center;
+            int i = 0;
             while (!opModeIsActive() && !isStopRequested()) {
                 Positions pos = detector.getPosition();
                 if (pos != null) goldPosition = pos;
                 telemetry.addData("VisionReading", goldPosition.toString());
                 telemetry.update();
+                i++;
             }
             // pass tags to RASI
             String[] tags = new String[1];
             tags[0] = Character.toString(goldPosition.toString().charAt(0)).toUpperCase();
             rasiInterpreter.setTags(tags);
+            sendTelemetry("Set tags to " + tags[0]);
+            Log.d("RasiAuto", "Set tag to " + tags[0]);
         }
-        rasiInterpreter.preproccess();
+        //rasiInterpreter.runRasiActually();
         telemetry.update();
         sendTelemetry("Waiting for start");
         waitForStart();
@@ -69,8 +75,8 @@ public abstract class BasicRasiAuto extends LinearOpMode {
             detector.disable();
         }
         // DO EVERYTHING
-
-        rasiInterpreter.run();
+        rasiInterpreter.runRasiActually();
+        //rasiInterpreter.run();
 
         robot.stop();
     }

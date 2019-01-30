@@ -4,11 +4,10 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.Logic.DriveUtil;
 import org.firstinspires.ftc.teamcode.Logic.oldRasi.RasiActions;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
-import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.Intake;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
@@ -34,7 +33,7 @@ public abstract class BasicRasiAuton extends LinearOpMode {
         sendTelemetry("Gyro created");
         FTCRobotV1 robot = new FTCRobotV1(drivebase,gyro,telemetry,lift,intake);
         //sendTelemetry("Robot created");
-        PIDdriveUtil pidDrive = new PIDdriveUtil(robot,this);
+        DriveUtil pidDrive = new DriveUtil(robot,this);
         //sendTelemetry("starting vision...");
         // wait to begin opMode
 

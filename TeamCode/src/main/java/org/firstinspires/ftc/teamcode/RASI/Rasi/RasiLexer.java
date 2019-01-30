@@ -119,6 +119,7 @@ public class RasiLexer {
         } else{
             parameters = currentCommand.split(" ");
         }
+        if (DEBUG)
         Log.d("Got command", Arrays.toString(parameters));
 
         shouldExecute = false;
@@ -212,8 +213,13 @@ public class RasiLexer {
             return null;
         loadNextCommand();
         while(!shouldExecute && !fileEnded) {
+            if (DEBUG)
+            Log.d("RasiLexer", "Dropped command " + currentCommand + ", tags are " + Arrays.toString(TAGS));
             loadNextCommand();
         }
+        if (DEBUG){
+        Log.d("RasiLexer", "Returned command " + currentCommand + ", tags are " + Arrays.toString(TAGS));
+        Log.d("RasiLexer", "Parameters are " + Arrays.toString(parameters));}
         if (fileEnded){
             return null;
         }
