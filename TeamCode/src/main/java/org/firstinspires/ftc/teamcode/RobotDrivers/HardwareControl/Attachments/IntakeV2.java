@@ -47,6 +47,8 @@ public class IntakeV2 implements Attachment {
     int armTargetPos;
     boolean pidEnabled = true;
     double gamepadArmPower;
+    boolean retracting = false;
+
 
     // Servo positions
     private double bucketServoTransferPosition ;
@@ -55,6 +57,10 @@ public class IntakeV2 implements Attachment {
     private double intakeStartPosition;
 
     final static boolean doubleSpeed = true;
+
+
+    // liftThing
+    static boolean liftBucketWhenNotIntaking = false;
 
     //double 393 servo vals
     private double stopVal, forwardsVal, backwardsVal;
@@ -114,6 +120,8 @@ public class IntakeV2 implements Attachment {
         stopVal = jsonReader.getDouble("intakeStopVal", 0.0);
         forwardsVal = jsonReader.getDouble("intakeFowardsVal",-1.0);
         backwardsVal = jsonReader.getDouble("intakeBackwardsVal",0.85);
+
+        liftBucketWhenNotIntaking = jsonReader.getBoolean("liftIntakeWhileStopped", false);
         // liftCoefficents
         double kp = jsonReader.getDouble("liftKp",0.0025);
         double ki = jsonReader.getDouble("liftKi", 0.0009);
@@ -129,7 +137,6 @@ public class IntakeV2 implements Attachment {
         if(initArmPos) {
             reset();
         }
-        bucketServo.setPosition(intakeStartPosition);
 
     }
 
@@ -139,7 +146,7 @@ public class IntakeV2 implements Attachment {
      */
     public void stopIntake() {
         intakeMotorPower = stopVal;
-        if(getArmPos() > (armInPosition + armOutExtraThreshold)) {
+        if(getArmPos() > (armInPosition + armOutExtraThreshold) && liftBucketWhenNotIntaking) {
             intakeBucketServoPosition = carryPosition;
         }
     }
@@ -201,6 +208,7 @@ public class IntakeV2 implements Attachment {
     public void setExtensionPowerFromGamepad(double power){
         if(Math.abs(power) >= 0.09 ) {
             pidEnabled = false;
+            retracting = false;
             gamepadArmPower = -power;
         } else gamepadArmPower = 0.0;
     }
@@ -220,9 +228,10 @@ public class IntakeV2 implements Attachment {
      * Note that the readSensors() function must be called after this for any action to happen
      */
     public void goToTransfer(){
-        pidEnabled = true;
+        pidEnabled = retracting = true;
         armTargetPos = armInPosition;
         intakeBucketServoPosition = carryPosition;
+        reverseIntake();
     }
 
     /**
@@ -244,6 +253,10 @@ public class IntakeV2 implements Attachment {
         //if(pidEnabled&&isInTransferState()) pidEnabled = false;
         if(pidEnabled) {
             armMotor.setPower(extensionPID.getPIDCorrection(armTargetPos, getArmPos()));
+            if (isInTransferState() && retracting){
+                stopIntake();
+                retracting = false;
+            }
         }
         else
             armMotor.setPower(gamepadArmPower);
@@ -277,6 +290,10 @@ public class IntakeV2 implements Attachment {
      */
     public boolean isInTransferState(){
         return Math.abs(getArmPos())< Math.abs(transferThreshold);
+    }
+
+    public void setBucketServoToStartPos(){
+        bucketServo.setPosition(intakeStartPosition);
     }
 
 

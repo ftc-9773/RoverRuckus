@@ -43,6 +43,8 @@ public abstract class BasicRasiAuto extends LinearOpMode {
 
         RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/", fileName(), this, robot);
 
+        intake.setBucketServoToStartPos();
+
         if (doVision()) {
             // run vision
             detector = new MyGoldDetector();
