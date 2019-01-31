@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.Logic.DriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 /**
@@ -14,14 +14,14 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 public class RasiActions {
     public RasiParser rasiParser;
     public FTCRobotV1 robot;
-    public PIDdriveUtil drive;
+    public DriveUtil drive;
     private LinearOpMode opMode;
 
     // Init
     public RasiActions(String rasiFilename, String[] rasiTag, FTCRobotV1 robot, LinearOpMode opMode){
         this.opMode = opMode;
         this.robot = robot;
-        this.drive = new PIDdriveUtil(robot, opMode);
+        this.drive = new DriveUtil(robot, opMode);
         rasiParser = new RasiParser(rasiFilename,rasiTag);
         Log.i("RasiActions", "Done with Rasi init");
         }

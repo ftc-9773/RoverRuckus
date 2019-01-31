@@ -1,0 +1,43 @@
+COMMENT: drop
+COMMENT: wait 2
+driveMP 3.0
+
+L: turn 45
+R: turn -45
+wait 2
+
+L: extendIntake 10
+R: driveMP 19.5
+C: driveMP 16
+
+wait 2
+
+liftLow
+
+wait 2
+L: driveMP -19.5
+R: driveMP -19.5
+C: driveMP -16.5
+
+wait 2
+
+turn -115
+
+wait 2
+driveMP -34
+
+wait 2
+turn -45
+
+strafeTime 1 -0.5
+
+driveMP -48
+
+extendIntake 50
+deposit
+wait 1.5
+
+driveMP 13
+wait 2
+
+end

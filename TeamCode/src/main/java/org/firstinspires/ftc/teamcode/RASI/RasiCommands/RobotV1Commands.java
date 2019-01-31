@@ -1,39 +1,45 @@
 package org.firstinspires.ftc.teamcode.RASI.RasiCommands;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+import org.firstinspires.ftc.teamcode.Logic.DriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 public class RobotV1Commands extends RasiCommands {
     FTCRobotV1 robert;
     LinearOpMode opMode;
     Telemetry telemetry;
-    PIDdriveUtil driver;
+    DriveUtil driver;
 
     public RobotV1Commands(LinearOpMode o, FTCRobotV1 r) {
         super(o);
         this.robert = r;
         this.opMode = o;
         this.telemetry = o.telemetry;
-        this.driver = new PIDdriveUtil(robert, opMode);
+        this.driver = new DriveUtil(robert, opMode);
     }
 
+    @Deprecated
     public void driveQuick(double dist, double speed){
         driver.driveQuick(dist, speed);
     }
 
+    @Deprecated
     public void driveEncoder(double dist, double speed){
         driver.driveDistStraight(dist, speed);
     }
 
+    @Deprecated
     public void drive(double dist, double speed){
         driver.driveDistStraight(dist, speed);
     }
 
     public void turn(double angle){
         driver.turnToAngle(angle);
+        Log.d("RASI-RV1", "Turned to angle " + angle);
     }
 
     public void drop(){
@@ -52,8 +58,29 @@ public class RobotV1Commands extends RasiCommands {
         opMode.telemetry.update();
     }
 
+    public void retractIntake(){
+        robert.intake.setPos(0);
+    }
+
+    public void intakeOn(){
+        robert.intake.intakeOn();
+    }
+
+    public void intakeOff(){
+        robert.intake.intakeOff();
+    }
+
+    public void carry(){robert.intake.carryPos();}
+
+    //Use this one. It is the motion profiling
     public void driveMP(double dist){
         driver.driveStraight(dist);
+        Log.d("RASI-RV1", "Drove to dist " + dist);
+    }
+
+    public void dropMarker(){
+        robert.lift.setRightScoreSide();
+        robert.lift.dump();
     }
 
     public void dropIntake(){
@@ -70,9 +97,17 @@ public class RobotV1Commands extends RasiCommands {
         opMode.requestOpModeStop();
     }
 
+    @Deprecated
     public void driveTime(double x, double y, double t){
         robert.drivebase.drive(x, y, t, false);
         Wait(1);
         robert.drivebase.stop();
+    }
+
+    public void Wait(double time){
+        long startTime = System.currentTimeMillis();
+        while(startTime + time*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
+            robert.update();
+        }
     }
 }

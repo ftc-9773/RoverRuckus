@@ -4,8 +4,6 @@ package org.firstinspires.ftc.teamcode.RASI.RasiCommands;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
-import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 /**
  * Class for defining functions that can be used in RASI. As of version 2.5, there is no way to
@@ -70,12 +68,6 @@ public class RasiCommands {
      * Stops executing for a duration of time
      * @param timeInSeconds The amount of seconds to pause execution
      * */
-    public void Wait(double timeInSeconds){
-        //System.out.println("Waiting for " + timeInSeconds);
-        long startTime = System.currentTimeMillis();
-        while(startTime + timeInSeconds*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
-            continue;
-        }
-    }
+
 
 }

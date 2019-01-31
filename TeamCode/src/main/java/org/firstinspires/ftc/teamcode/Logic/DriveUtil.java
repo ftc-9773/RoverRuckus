@@ -26,7 +26,7 @@ import java.util.Arrays;
  * @version 1.0
  * */
 
-public class PIDdriveUtil {
+public class DriveUtil {
 
     static final String TAG = "ftc9773_drivePID";
     static final boolean scalingClip = false;
@@ -74,7 +74,7 @@ public class PIDdriveUtil {
      * @param robot
      * @param opMode
      */
-    public PIDdriveUtil(FTCRobotV1 robot, LinearOpMode opMode){
+    public DriveUtil(FTCRobotV1 robot, LinearOpMode opMode){
         this.robot = robot;
         this.opMode = opMode;
         drivebase = robot.drivebase;
@@ -115,6 +115,9 @@ public class PIDdriveUtil {
     }
 
     public void driveStraight(double dist){
+        Log.d(TAG, "Driving with MP " + dist);
+        double distSign = Math.signum(dist);
+        dist = dist * distSign;
         drivebase.stop();
         drivebase.update();
         s = 0;
@@ -140,12 +143,12 @@ public class PIDdriveUtil {
             v = Math.sqrt(v);
             omega = sign * v * (1 / 560) * 60; //Magic equation
             pow =  (accerlating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
-            s = avgDistElapsedInches(inits);
+            s = distSign * avgDistElapsedInches(inits);
             pow = Math.max(minDistPow, pow);;
             if (sign == 1){
-                pow = Math.min(1, pow);
+                pow = distSign * Math.min(1, pow);
             } else {
-                pow = Math.max(-1, pow);
+                pow = distSign * Math.max(-1, pow);
             }
             driveHoldHeading(pow, 0, gyro.getHeading());
             Log.d(TAG, "Wrote power " + pow);

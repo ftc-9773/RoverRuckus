@@ -1,37 +1,55 @@
-COMMENT: drop
+driveMP 3
+
+L:turn 12
+R:turn -12
+L:wait 1
+R:wait 1
+
+extendIntake 3
+
+wait 0.3
+
+intakeOn
+
+wait 0.2
+
+L:extendIntake 4
+R:extendIntake 4
+L:wait 1.7
+R:wait 1.7
+
+carry
+wait 0.1
+
+C:extendIntake -3
+R:extendIntake -7
+L:extendIntake -7
+wait 1
+
+intakeOff
+
 wait 2
-driveMP 3.0
 
-L: turn 45
-R: turn -45
+turn -90
 
-
-L: driveMP 19.5
-R: driveMP 19.5
-C: driveMP 16
+wait 1.7
 
 
-liftLow
+driveMP -2
 
-L: driveMP -19.5
-R: driveMP -19.5
-C: driveMP -16.5
-
-turn -115
+wait 2
 
 driveMP -34
 
 turn -45
 
-strafeTime 1 -0.5
-
-driveMP -48
-
-extendIntake 50
-deposit
-wait 1.5
-
-driveMP 13
 wait 2
 
-end
+driveMP -50
+
+dropMarker
+wait 0.2
+
+driveMP 10
+extendIntake 25
+wait 4

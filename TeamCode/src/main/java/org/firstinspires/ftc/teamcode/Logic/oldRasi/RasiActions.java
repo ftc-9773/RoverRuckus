@@ -3,13 +3,9 @@ package org.firstinspires.ftc.teamcode.Logic.oldRasi;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Logic.PIDdriveUtil;
+
+import org.firstinspires.ftc.teamcode.Logic.DriveUtil;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
-import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
 /**
  * Created by vikesh on 1/5/18.
@@ -18,14 +14,14 @@ import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 public class RasiActions {
     public RasiParser rasiParser;
     public FTCRobotV1 robot;
-    public PIDdriveUtil drive;
+    public DriveUtil drive;
     private LinearOpMode opMode;
 
     // Init
     public RasiActions(String rasiFilename, String[] rasiTag, FTCRobotV1 robot, LinearOpMode opMode){
         this.opMode = opMode;
         this.robot = robot;
-        this.drive = new PIDdriveUtil(robot, opMode);
+        this.drive = new DriveUtil(robot, opMode);
         rasiParser = new RasiParser(rasiFilename,rasiTag);
         Log.i("RasiActions", "Done with Rasi init");
     }

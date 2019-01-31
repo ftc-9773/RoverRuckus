@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -18,7 +19,7 @@ import java.util.HashMap;
  * construct with
  * RasiInterpreter rasi = new RasiInterpreter("Path/to/file", "filename.rasi", this);
  * (this is a LinearOpMode instance)
- * call rasi.preproccess() to run the file.
+ * call rasi.runRasiActually() to run the file.
  * */
 public class RasiInterpreter {
 
@@ -114,7 +115,7 @@ public class RasiInterpreter {
         processRasiCommands(new RobotV1Commands(opmode, r));
     }
 
-    public void preproccess() {
+    public void runRasiActually() {
         command = rasiLexer.getCommand();
         while (!rasiLexer.fileEnded && !linearOpMode.isStopRequested()) {
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
@@ -160,9 +161,9 @@ public class RasiInterpreter {
                     Method method = methodsHashMap.get(hash);
                     RasiCommands rc = rcHashMap.get(hash);
                     appendMethod(method, finalParameters, rc);
-                    //method.invoke(rasiCommands, finalParameters);
-                    Log.d(LOG_TAG, "Preproccesed command " + method);
-                } catch (NullPointerException e){
+                    method.invoke(rc, finalParameters);
+                    Log.d(LOG_TAG, "Invoked command " + method + " with params " + Arrays.toString(finalParameters));
+                } catch (Exception e){
                 }
             } else {
                 try {
@@ -171,8 +172,9 @@ public class RasiInterpreter {
                     Method method = methodsHashMap.get(hash);
                     RasiCommands rc = rcHashMap.get(hash);
                     appendMethod(method, finalParameters, rc);
-                    Log.d(LOG_TAG, "Preproccessed command " + method);
-                } catch (NullPointerException e) {
+                    method.invoke(rc, finalParameters);
+                    Log.d(LOG_TAG, "Invoked command " + method);
+                } catch (Exception e) {
                 }
             }
             command = rasiLexer.getCommand();
@@ -181,7 +183,7 @@ public class RasiInterpreter {
     }
 
     public void runRasi(){
-        preproccess();
+        runRasiActually();
         run();
     }
 
@@ -196,6 +198,7 @@ public class RasiInterpreter {
             Log.d(LOG_TAG, "Got command " + currmethod);
             try {
                 currmethod.invoke(rasiCommands, param);
+                Log.d(LOG_TAG, "Finished invoking command " + currmethod + " with params " + Arrays.toString(param) + " and rasi commands " + rasiCommands);
             }catch (Exception e){
                 //Log.e(LOG_TAG, "Exception occured in Run", e);
             }
