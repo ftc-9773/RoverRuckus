@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Button;
+import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
 import java.util.Arrays;
 
@@ -28,6 +29,9 @@ public class FTCRobotV1 {
     public IntakeV2 intake;
     public OdometryController odometry;
     public CubeLift lift;
+
+    boolean isRetractingArm = false;
+    Timer transferTimer;
 
     //sensors
     public Gyro gyro;

@@ -36,9 +36,12 @@ public class CubeLift implements Attachment {
     private boolean isEnded = false;
     // servo positions
     private double leftSorterUpPos,leftSorterDownPos, rightSorterUpPos, rightSorterDownPos, distributorLeftPos,distributorRightPos;
+    private double leftSorterFlowPos, rightSorterFlowPos;
     private double hookOpenPos, hookClosedPos;
+    // update stuff
+    private double leftSorterPos, rightSorterPos;
     // lift stuff
-    private int liftLowPos, liftHookPos, liftScorePos, minLiftPosition, maxLiftPosition;
+    private int liftLowPos, liftHookPos, liftScorePos, minLiftPosition, maxLiftPosition, liftUpTol;
     private int transferTol;
     private double joggingScalar;
     private double kp, ki,kd;
@@ -85,11 +88,16 @@ public class CubeLift implements Attachment {
         json = new SafeJsonReader("CubeLift");
 
         //servos
-        leftSorterUpPos = json.getDouble("leftSorterUpPos", 0.9);
+        leftSorterUpPos = json.getDouble("leftSorterUpPos", 0.82);
         leftSorterDownPos = json.getDouble("leftSorterDownPos", 0.55);
+        leftSorterFlowPos = json.getDouble("leftSorterFlowPos", 0.73);
+
 
         rightSorterUpPos = json.getDouble("rightSorterUpPos", 0.5);
         rightSorterDownPos = json.getDouble("rightSorterDownPos", 0.8);
+        rightSorterFlowPos = json.getDouble("rightSorterFlowPos", 0.30);
+
+
 
         distributorLeftPos = json.getDouble("distributorLeftPos",0.54);
         distributorRightPos = json.getDouble("distributorRightPos", 0.37);
@@ -100,6 +108,9 @@ public class CubeLift implements Attachment {
         liftLowPos = json.getInt("liftLowPos",195);
         liftHookPos = json.getInt ("liftHookPos",2718);
         liftScorePos = json.getInt ("liftScorePos",3700);
+
+        liftUpTol = json.getInt("liftUpPos", 350);
+
         minLiftPosition = json.getInt("minLiftPosition", -20);
         maxLiftPosition = json.getInt("maxLiftPosition",4200);
         transferTol = json.getInt("transferTol", 20);
@@ -114,6 +125,9 @@ public class CubeLift implements Attachment {
 
         Log.d(TAG, "Read and set from JSON");
         setLefScoreSide();
+
+        leftSorterPos = leftSorterUpPos;
+        rightSorterPos = rightSorterUpPos;
     }
     /**
      * Void method that tells the lift to go to the low position.
@@ -151,8 +165,8 @@ public class CubeLift implements Attachment {
     public void dump(){
         // avoid unnecessary actions
         if(dumpState) return;
-        if(isDistributorRight) rightSorterServo.setPosition(rightSorterDownPos);
-        else leftSorterServo.setPosition(leftSorterDownPos);
+        if(isDistributorRight) rightSorterPos = rightSorterDownPos;
+        else leftSorterPos = (leftSorterDownPos);
         // readSensors dumpState
         dumpState = true;
         Log.v(TAG, "Set dump state");
@@ -163,8 +177,8 @@ public class CubeLift implements Attachment {
     public void stopDump(){
         // avoid unnecessary actions
         if(!dumpState)
-        leftSorterServo.setPosition(leftSorterUpPos);
-        rightSorterServo.setPosition(rightSorterUpPos);
+        leftSorterPos = leftSorterUpPos;
+        rightSorterPos = rightSorterUpPos;
         // readSensors dumpState
         dumpState = false;
         Log.v(TAG, "Moved away from dump state");
@@ -238,8 +252,20 @@ public class CubeLift implements Attachment {
             double correction = pid.getPIDCorrection((double) liftTargetPosition, (double) getLiftPos());
 
             setLiftPower(correction);
-            Log.d(TAG, " pid correction set:" + correction + " position: " + getLiftPos());
 
+            Log.d(TAG, " pid correction set:" + correction + " position: " + getLiftPos());
+            // if the lift is up, set the servos to the flow position.
+            if(isLiftUp()){
+                // check if right side is dumping. If its selected, but not Dumping, move sorter to flow pos
+                if(isDistributorRight && !dumpState)
+                    rightSorterPos = rightSorterFlowPos;
+                // check if left side is dumping. If its selected but not dumping, move sorter to flow pos
+                // use shortcut logic to save a computational step
+                else if (!dumpState)
+                    leftSorterPos = leftSorterFlowPos;
+            }
+            leftSorterServo.setPosition(leftSorterPos);
+            rightSorterServo.setPosition(rightSorterPos);
 
         }
         if(getLiftPos() < 0){
@@ -304,6 +330,12 @@ public class CubeLift implements Attachment {
             leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+    }
+
+    public boolean isLiftUp(){
+        if(liftTargetPosition >= (liftScorePos - liftUpTol) && getLiftPos() >= liftScorePos -liftUpTol)
+        return true;
+        else return false;
     }
 
     @Override

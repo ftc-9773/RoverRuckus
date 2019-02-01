@@ -263,6 +263,9 @@ public class IntakeV2 implements Attachment {
         }
         else
             armMotor.setPower(gamepadArmPower);
+        if(retracting){
+            intakeMotorPower = backwardsVal;
+        }
         // set servoPositions
         intakeMotor.setPower(intakeMotorPower);
         bucketServo.setPosition(intakeBucketServoPosition);
