@@ -281,13 +281,12 @@ public class FTCRobotV1 {
                 lift.goToScorePos();
             } else intake.transferMinerals();
         }
-        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()
-
+        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp() {
             intake.transferMinerals();
             transferTimer = new Timer(intake.getTransferTimeSecs());
-        }
+            }
 
-        this.lift.update();
+        lift.update();
         this.intake.update();
         this.drivebase.update();
         // temproary
