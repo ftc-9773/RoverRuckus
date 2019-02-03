@@ -114,6 +114,8 @@ public class DriveUtil {
 
     }
 
+
+    // Motion Profiling Drive - MAIN DRIVE AS OF PACE COMP
     public void driveStraight(double dist){
         Log.d(TAG, "Driving with MP " + dist);
         double distSign = Math.signum(dist);
@@ -158,24 +160,67 @@ public class DriveUtil {
         drivebase.update();
     }
 
-    public void driveEncoder(double dist, double pow){
-        long[] encoderZeros = drivebase.getMotorPositions();
+    // Strafe Motion Profiling
+    public void strafeStraight(double dist){
+        Log.d(TAG, "Driving with MP " + dist);
 
-        if (dist > 0)
-            drivebase.drivePolar(pow, 0, 0, false);
-        else if (dist< 0)
-            drivebase.drivePolar(-pow, 0, 0, false);
-        else return;
+        //Deal with negative distances
+        double distSign = Math.signum(dist);
+        dist = dist * distSign;
 
-        while(!opMode.isStopRequested()){
-
-            if (Math.abs(avgDistElapsedInches(encoderZeros)) > Math.abs(dist)){
-                break;
-            }
-        }
         drivebase.stop();
+        drivebase.update();
+
+        s = 0;
+        double pow;
+        double sign;
+        double accerlating = 1;
+        v = minDistPow;
+        long[] inits = drivebase.getMotorPositions();
+
+        Log.d(TAG, "Got inits " + inits);
+
+        driveHoldHeading(v, 0, gyro.getHeading());
+
+        while((dist - s) > distTol &&  !opMode.isStopRequested()){
+
+            Log.d(TAG, "dsError:" + (dist - s));
+            Log.d(TAG, "Velocity: " + v);
+
+            if (dist - s > dist / 2){
+                v = (2 * a * s);
+                accerlating = 1;
+            }else {
+                v = (2 * a * (dist - s));
+                accerlating = -1;
+            }
+            sign = Math.signum(v);
+            Log.d(TAG, "V^2: " + v);
+
+            v = Math.sqrt(v);
+            omega = sign * v * (1 / 560) * 60; //Magic equation
+            pow =  (accerlating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
+
+            s = absoluteDistElapsedInches(inits);
+            pow = Math.max(minDistPow, pow);;
+
+            if (sign == 1){
+                pow = distSign * Math.min(1, pow);
+            } else {
+                pow = distSign * Math.max(-1, pow);
+            }
+
+            drivebase.drive(0, pow, 0, false);
+            Log.d(TAG, "Wrote power " + pow);
+        }
+
+        drivebase.stop();
+        drivebase.update();
     }
 
+
+    // OLD
+@Deprecated
     public void driveQuick(double dist, double power){
         double initialHeading = gyro.getHeading();
         distPid.resetPID();
@@ -232,6 +277,8 @@ public class DriveUtil {
         drivebase.stop();
     }
 
+    // OLD
+    @Deprecated
      public void driveDistStraight(double dist, double power){
          double initialHeading = gyro.getHeading();
          distPid.resetPID();
@@ -306,7 +353,7 @@ public class DriveUtil {
          double sum=0;
          for(int i = 0; i<4; i++){
              double diff = (double) positions[i] - initpositions[i];
-             Log.d(TAG, "adding motor position: " +i+" ticks: " + positions[i]  + " diff:" + diff);
+             //Log.d(TAG, "adding motor position: " +i+" ticks: " + positions[i]  + " diff:" + diff);
              if(i==0 ||i==2) diff *=-1;
              sum +=diff;
          }
@@ -316,6 +363,19 @@ public class DriveUtil {
         return sum ;
     }
 
+    public double absoluteDistElapsedInches(long[] initpositions){
+        long[] positions = drivebase.getMotorPositions();
+        double sum=0;
+        for(int i = 0; i<4; i++){
+            double diff = (double) positions[i] - initpositions[i];
+            sum += Math.abs(diff);
+        }
+        sum /=4;
+        sum /= drivebase.COUNTS_PER_INCH;;
+        Log.d(TAG, "INCHES " + sum);
+        return sum ;
+
+    }
     // todo: implement this using the kinematics described in this paper:
     //    public void drivePolar(double distance, double theta, double power ) { // may be less accurate
 //         double initialHeading = gyro.getHeading();
