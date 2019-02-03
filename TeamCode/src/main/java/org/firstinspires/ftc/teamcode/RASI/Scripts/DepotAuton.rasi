@@ -1,6 +1,16 @@
 COMMENT: drop
 wait 2
-drive 15.0 0.23
+driveMP 3
+
+
+C: extendIntake 3
+C: wait 0.2
+C: intakeOn
+C: wait 0.1
+C: driveMP 44
+
+
+
 
 L: turn 45
 R: turn -45

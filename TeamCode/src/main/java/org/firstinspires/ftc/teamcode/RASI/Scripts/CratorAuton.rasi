@@ -1,3 +1,4 @@
+COMMENT: drop
 driveMP 3
 
 L:turn 12
@@ -5,37 +6,17 @@ R:turn -12
 L:wait 1
 R:wait 1
 
-extendIntake 3
-
-wait 0.3
-
-intakeOn
-
-wait 0.2
-
-L:extendIntake 4
-R:extendIntake 4
-L:wait 1.7
-R:wait 1.7
-
-carry
+C: driveMP 16
+L: driveMP 7
+R: driveMP 7
 wait 0.1
-
-C:extendIntake -3
-R:extendIntake -7
-L:extendIntake -7
-wait 1
-
-intakeOff
-
-wait 2
-
-turn -90
-
-wait 1.7
+C: driveMP -16
+L: driveMP -7
+R: driveMP -7
 
 
-driveMP -2
+turn -115
+wait 0.5
 
 wait 2
 
@@ -50,6 +31,6 @@ driveMP -50
 dropMarker
 wait 0.2
 
-driveMP 10
+driveMP 25
 extendIntake 25
 wait 4

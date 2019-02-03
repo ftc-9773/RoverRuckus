@@ -1,43 +1,36 @@
-COMMENT: drop
-COMMENT: wait 2
-driveMP 3.0
+COMMENT: drop;
+wait, 2;
+drive, 12, 0.23;
 
-L: turn 45
-R: turn -45
-wait 2
+L: turn,45;
+R: turn, -45;
 
-L: extendIntake 10
-R: driveMP 19.5
-C: driveMP 16
 
-wait 2
+L: drive, 19.5, 0.23;
+R: drive, 19.5, 0.23;
+C: drive, 16.5, 0.23;
 
-liftLow
 
-wait 2
-L: driveMP -19.5
-R: driveMP -19.5
-C: driveMP -16.5
+liftLow;
 
-wait 2
+L: drive, -19.5, 0.3;
+R: drive, -19.5, 0.3;
+C: drive, -16.5, 0.3;
 
-turn -115
+turn, -115;
 
-wait 2
-driveMP -34
+drive, -34, 0.5;
 
-wait 2
-turn -45
+turn, -45;
+strafeTime, 1, -0.5;
 
-strafeTime 1 -0.5
+drive, -48, 0.75;
 
-driveMP -48
+extendIntake, 50;
+deposit;
+wait, 1;
 
-extendIntake 50
-deposit
-wait 1.5
+drive, 13, 0.75;
+wait, 2;
 
-driveMP 13
-wait 2
-
-end
+end;
