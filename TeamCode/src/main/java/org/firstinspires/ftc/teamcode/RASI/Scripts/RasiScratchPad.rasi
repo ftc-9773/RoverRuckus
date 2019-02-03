@@ -1,1 +1,5 @@
-driveMP -30
+turn 90
+
+wait 0.5
+
+turn 75

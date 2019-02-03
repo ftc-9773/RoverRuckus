@@ -11,6 +11,6 @@ public class RasiScratchPad extends BasicRasiAuto {
 
     @Override
     public boolean doVision() {
-        return true;
+        return false;
     }
 }

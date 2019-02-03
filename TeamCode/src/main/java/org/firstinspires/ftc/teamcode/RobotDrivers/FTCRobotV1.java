@@ -30,7 +30,8 @@ public class FTCRobotV1 {
     public OdometryController odometry;
     public CubeLift lift;
 
-     boolean automateLiftingSequence = false;
+    boolean automateLiftingSequence = false;
+    boolean isTeleop = false;
 
     boolean isRetractingArm = false;
     Timer transferTimer;
@@ -144,6 +145,7 @@ public class FTCRobotV1 {
 
     // teleop functions
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
+        isTeleop=true;
         // readSensors button objects
         toggleLeftRightButton.recordNewValue(gp2.x);
         // drive functions
@@ -273,18 +275,20 @@ public class FTCRobotV1 {
             }
     }
     public void update(){
-        // transfer and lift co-automation
-        if(transferTimer != null){
-            if(transferTimer.isDone()){
-                isRetractingArm = false;
-                transferTimer = null;
-                lift.goToScorePos();
-            } else intake.transferMinerals();
-        }
-        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()) {
-            intake.transferMinerals();
-            transferTimer = new Timer(intake.getTransferTimeSecs());
-            }
+
+       if (isTeleop) {
+           // transfer and lift co-automation
+           if (transferTimer != null) {
+               if (transferTimer.isDone()) {
+                   isRetractingArm = false;
+                   transferTimer = null;
+                   lift.goToScorePos();
+               } else intake.transferMinerals();
+           } else if (intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()) {
+               intake.transferMinerals();
+               transferTimer = new Timer(intake.getTransferTimeSecs());
+           }
+       }
 
         lift.update();
         this.intake.update();

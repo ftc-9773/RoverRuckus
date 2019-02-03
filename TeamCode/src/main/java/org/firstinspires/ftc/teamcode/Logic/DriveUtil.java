@@ -463,28 +463,21 @@ public class DriveUtil {
              currentTime = System.currentTimeMillis();
 
              error = setOnNegToPosPi(targetAngleRad - currentHeading);
-//             double rotation = rotPid.getPIDCorrection(error);
-//
-//             // may add this in if dt is too weak
-//             if (rotation > 0 && rotation < rotMinPow) {
-//                 rotation = rotMinPow;
-//             } else if (rotation < 0 && Math.abs(rotation) < rotMinPow) {
-//                 rotation = -rotMinPow;
-//             }
-//
-//             if (rotation > maxTurnPower)
-//                 rotation = maxTurnPower;
-//             else if (rotation < -maxTurnPower)
-//                 rotation = -maxTurnPower;
-//
-             double rotation =0;
-             if( error < 0){
-                rotation  = -1*rotMinPow;
-             } else if (error == 0){
-                 return;}
-                 else if (error > 0) {
-                  rotation = rotMinPow;
+             double rotation = rotPid.getPIDCorrection(error);
+
+             // may add this in if dt is too weak
+             if (rotation > 0 && rotation < rotMinPow) {
+                 rotation = rotMinPow;
+             } else if (rotation < 0 && Math.abs(rotation) < rotMinPow) {
+                 rotation = -rotMinPow;
              }
+
+             if (rotation > maxTurnPower)
+                 rotation = maxTurnPower;
+             else if (rotation < -maxTurnPower)
+                 rotation = -maxTurnPower;
+
+
              Log.d(TAG,"writingToDrive: Error: "+ error + " Correction: " + rotation );
              Log.d(TAG, "error in degrees: "+ Math.toDegrees(error));
              drivebase.drive(0.0, 0, -rotation, false);
@@ -494,15 +487,15 @@ public class DriveUtil {
 
              // Check to see if it's time to exit
              // Calculate speed
-//             double speed;
-//             if (currentTime == lastTime || firstTime) {
-//                 speed = 0.003;
-//             } else {
-//                 speed = Math.abs(error - lastError) / (currentTime - lastTime);
-//             }
-//             lastError = error;
+             double speed;
+             if (currentTime == lastTime || firstTime) {
+                 speed = 0.003;
+             } else {
+                 speed = Math.abs(error - lastError) / (currentTime - lastTime);
+             }
+             lastError = error;
 
-             if ( Math.abs(error) < Math.abs(rotTol)) {
+             if ( Math.abs(error) < Math.abs(rotTol) && speed < rotExitSpeed) {
                  Log.i(TAG, "ending rotation, should be at heading");
                  break;
              }
