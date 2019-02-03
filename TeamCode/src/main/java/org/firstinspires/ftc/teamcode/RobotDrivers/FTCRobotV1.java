@@ -281,7 +281,7 @@ public class FTCRobotV1 {
                 lift.goToScorePos();
             } else intake.transferMinerals();
         }
-        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp() {
+        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()) {
             intake.transferMinerals();
             transferTimer = new Timer(intake.getTransferTimeSecs());
             }
