@@ -273,6 +273,10 @@ public class CubeLift implements Attachment {
             Log.i(TAG, "adjusting zero position to " + liftZeroPos);
         }
     }
+
+    public boolean isGoingUp(){
+        return liftTargetPosition >= liftHookPos - liftUpTol;
+    }
     /**
      * ends all motion of the components allows for ending of all functions.
      */
@@ -337,6 +341,7 @@ public class CubeLift implements Attachment {
         return true;
         else return false;
     }
+
 
     @Override
     public boolean inStableState() {

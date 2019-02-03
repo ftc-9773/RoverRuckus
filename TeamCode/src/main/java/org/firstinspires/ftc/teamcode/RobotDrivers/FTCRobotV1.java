@@ -30,6 +30,8 @@ public class FTCRobotV1 {
     public OdometryController odometry;
     public CubeLift lift;
 
+     boolean automateLiftingSequence = false;
+
     boolean isRetractingArm = false;
     Timer transferTimer;
 
@@ -58,6 +60,7 @@ public class FTCRobotV1 {
     public FTCRobotV1(MecanumDrivebase drivebase, Gyro gyro, Telemetry telemetry, CubeLift lift, IntakeV2 intake) {
         SafeJsonReader reader = new SafeJsonReader("FTCRobotJson");
         slowFactor = reader.getDouble("SlowFactor", 0.3);
+        automateLiftingSequence = reader.getBoolean("automateLiftingSequence", true);
 
         this.pos = new Point( 0, 0);
         this.heading = 0;
@@ -164,10 +167,25 @@ public class FTCRobotV1 {
         if(gp2.a) {
             lift.goToLowPos();
             intake.carryPos();
-        } else if(gp2.b) {lift.goToScorePos(); intake.carryPos();}
+            if(isRetractingArm || transferTimer != null){
+                isRetractingArm = false;
+                transferTimer = null;
+            }
+        } else if(gp2.b) {
+            lift.goToScorePos();
+            intake.carryPos();
+            if(isRetractingArm || transferTimer != null){
+                isRetractingArm = false;
+                transferTimer = null;
+            }
+        }
         else if (gp2.y) {
             lift.goToHangPos();
             intake.carryPos();
+            if(isRetractingArm || transferTimer != null){
+                isRetractingArm = false;
+                transferTimer = null;
+            }
         }
 
         // lift "jog" functions
@@ -193,6 +211,7 @@ public class FTCRobotV1 {
         if(gp2.dpad_down) {
             intake.goToTransfer();
             lift.goToLowPos();
+            isRetractingArm = true;
         }
         if (gp2.dpad_right) intake.carryPos();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
@@ -200,7 +219,8 @@ public class FTCRobotV1 {
         else
             intake.stopIntake();
         if (gp2.dpad_left) intake.transferMinerals();
-        if(intake.isInTransferState()&&lift.isInTransferState()) {
+
+        if(intake.isInTransferState()&&lift.isInTransferState() && !lift.isGoingUp()) {
             intake.transferMinerals();
         }
         // homing thing
@@ -253,13 +273,23 @@ public class FTCRobotV1 {
             }
     }
     public void update(){
-        if(intake.isInTransferState() && lift.isInTransferState()){
-            intake.transferMinerals();
+        // transfer and lift co-automation
+        if(transferTimer != null){
+            if(transferTimer.isDone()){
+                isRetractingArm = false;
+                transferTimer = null;
+                lift.goToScorePos();
+            } else intake.transferMinerals();
         }
+        else if(intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()
+
+            intake.transferMinerals();
+            transferTimer = new Timer(intake.getTransferTimeSecs());
+        }
+
         this.lift.update();
         this.intake.update();
         this.drivebase.update();
-
         // temproary
     }
 

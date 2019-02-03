@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,10 +22,6 @@ public class MecanumDrivebase {
     static private final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static private final double     ROBOT_DIAMETER_INCHES   = 7.322 * 2;
     public static final double      COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV*WHEEL_TURNS_PER_MOTOR_REV ) / (WHEEL_DIAMETER_INCHES * Math.PI);
-    public static final boolean     ARC_TURNING             = true;
-    public static final double      ARC_CONSTANT            = 3; // Meters
-    public static final double      ARC_WHEEL_DIST          = 0.495; // Meters
-    public static final double[]    ARC_WHEEL_PHIS          = {3.0/4.0*Math.PI, 1.0/4.0*Math.PI, 5.0/4.0*Math.PI, 7.0/4.0*Math.PI};
 
     static private final double DRIVE_SCALING = 3; // Must be odd
     static private final double ROTATION_SCALING = 0.8; // 0 is none
@@ -102,29 +99,18 @@ public class MecanumDrivebase {
         }
 
         runWithEncoders();
-        if (ARC_TURNING && !(x==0 && y==0)) {
-            double theta = Math.atan2(y, x);
-            double radius = (1/rotation - 1) * ARC_CONSTANT;
 
-            motorPowers[0] = (y + x) * (1 + ARC_WHEEL_DIST * Math.sin(ARC_WHEEL_PHIS[0] - theta) / radius);
-            motorPowers[1] = (y - x) * (1 + ARC_WHEEL_DIST * Math.sin(ARC_WHEEL_PHIS[1] - theta) / radius);
-            motorPowers[2] = (y - x) * (1 + ARC_WHEEL_DIST * Math.sin(ARC_WHEEL_PHIS[2] - theta) / radius);
-            motorPowers[3] = (y + x) * (1 + ARC_WHEEL_DIST * Math.sin(ARC_WHEEL_PHIS[3] - theta) / radius);
+        motorPowers[0] = y + x + rotation;
+        motorPowers[1] = y - x - rotation;
+        motorPowers[2] = y - x + rotation;
+        motorPowers[3] = y +  x - rotation;
 
-            motorPowers[0] *= -1;
-            motorPowers[2] *= -1;
-        } else {
-            motorPowers[0] = y + x + rotation;
-            motorPowers[1] = y - x - rotation;
-            motorPowers[2] = y - x + rotation;
-            motorPowers[3] = y + x - rotation;
+        motorPowers[0] *= -1;
+        motorPowers[2] *= -1;
 
-            motorPowers[0] *= -1;
-            motorPowers[2] *= -1;
-        }
 
         double maxVal = Math.max(Math.max(Math.abs(motorPowers[0]), Math.abs(motorPowers[1])),
-                Math.max(Math.abs(motorPowers[2]), Math.abs(motorPowers[3])));
+                        Math.max(Math.abs(motorPowers[2]), Math.abs(motorPowers[3])));
 
         // Check that values are < 1. Normalize otherwise
         if (maxVal > 1) { for (int i = 0; i < 4; i++) { motorPowers[i] /= maxVal;} }
@@ -173,13 +159,6 @@ public class MecanumDrivebase {
         return pos;
     }
 
-    private void Wait(double t, LinearOpMode o){
-        double start = System.currentTimeMillis();
-        while(System.currentTimeMillis() - start < t && !o.isStopRequested()){
-            continue;
-        }
-
-    }
     public double getMinPower(LinearOpMode o){
         runWithEncoders();
         long[] init = getMotorPositions();
@@ -204,12 +183,20 @@ public class MecanumDrivebase {
         setMotorPowers(0);
         return pow;
     }
+
+    private void Wait(double t, LinearOpMode o){
+        double start = System.currentTimeMillis();
+        while(System.currentTimeMillis() - start < t && !o.isStopRequested()){
+            continue;
+        }
+
+    }
+
     private void setMotorPowers(double pow){
         for (int i = 0; i < 4; i++){
             driveMotors[i].setPower(( i % 2 == 0 ? -1:1) * pow);
         }
     }
-
 
     private double minus(long[] a, long[] y){
         double sum = 0;

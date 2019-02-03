@@ -71,6 +71,8 @@ public class IntakeV2 implements Attachment {
 
      int zeroPosition = 0;
 
+     final double transferTimeSecs;
+
      static final String TAG = "ftc9773_Intake";
 
     private double intakeMotorPower, intakeBucketServoPosition;
@@ -128,9 +130,13 @@ public class IntakeV2 implements Attachment {
         double kd = jsonReader.getDouble("liftKd", 0.0002);
         extensionPID = new PIDController(kp,ki,kd);
 
+        transferTimeSecs = jsonReader.getDouble("transferTimeSecs", 0.75);
+
         armInPosition= jsonReader.getInt("armInPosition", 10);
         transferThreshold =jsonReader.getInt("transferThreshold", 70);
         armOutExtraThreshold = jsonReader.getInt("armOutExtraThreshold",20);
+
+
 
         opmode = op;
         //retractArm();
@@ -287,6 +293,10 @@ public class IntakeV2 implements Attachment {
 
     public int getArmPos(){
         return (int)(((double)(armMotor.getCurrentPosition() - zeroPosition)));
+    }
+
+    public double getTransferTimeSecs(){
+        return transferTimeSecs;
     }
 
 
