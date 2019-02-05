@@ -53,6 +53,7 @@ public class RobotV1Commands extends RasiCommands {
     }
 
     public void extendIntake(double dist){
+        robert.intake.transferMinerals();
         robert.intake.setPos(dist);
         opMode.telemetry.addLine("Wrote dist " + dist + " to arm");
         opMode.telemetry.update();
@@ -79,7 +80,7 @@ public class RobotV1Commands extends RasiCommands {
     }
 
     public void dropMarker(){
-        robert.lift.setRightScoreSide();
+        robert.lift.setLefScoreSide();
         robert.lift.dump();
     }
 
@@ -109,5 +110,8 @@ public class RobotV1Commands extends RasiCommands {
         while(startTime + time*1000 > System.currentTimeMillis() && !opMode.isStopRequested()){
             robert.update();
         }
+    }
+    public void killOpmode(){
+        this.opMode.requestOpModeStop();
     }
 }

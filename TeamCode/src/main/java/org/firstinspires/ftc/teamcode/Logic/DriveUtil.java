@@ -63,7 +63,7 @@ public class DriveUtil {
     final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
     double omega = 0; // The small omega (motor rotational speed)
     double v = 0; //
-    double a = (0.9) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
+    final double a = (0.9) / 39.37 / 4 * 560; // meters / s^2 in paranthesis, change that
     double s;
 
     /**
@@ -125,7 +125,7 @@ public class DriveUtil {
         s = 0;
         double pow;
         double sign;
-        double accerlating = 1;
+        double accelerating = 1;
         v = minDistPow;
         long[] inits = drivebase.getMotorPositions();
         Log.d(TAG, "Got inits " + inits);
@@ -135,17 +135,17 @@ public class DriveUtil {
             Log.d(TAG, "Velocity: " + v);
             if (dist - s > dist / 2){
                 v = (2 * a * s);
-                accerlating = 1;
+                accelerating = 1;
             }else {
                 v = (2 * a * (dist - s));
-                accerlating = -1;
+                accelerating = -1;
             }
             sign = Math.signum(v);
             Log.d(TAG, "V^2: " + v);
             v = Math.sqrt(v);
             omega = sign * v * (1 / 560) * 60; //Magic equation
-            pow =  (accerlating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
-            s = distSign * avgDistElapsedInches(inits);
+            pow =  (accelerating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
+            s = Math.abs(avgDistElapsedInches(inits));
             pow = Math.max(minDistPow, pow);;
             if (sign == 1){
                 pow = distSign * Math.min(1, pow);
@@ -174,7 +174,7 @@ public class DriveUtil {
         s = 0;
         double pow;
         double sign;
-        double accerlating = 1;
+        double accelerating = 1;
         v = minDistPow;
         long[] inits = drivebase.getMotorPositions();
 
@@ -189,17 +189,17 @@ public class DriveUtil {
 
             if (dist - s > dist / 2){
                 v = (2 * a * s);
-                accerlating = 1;
+                accelerating = 1;
             }else {
                 v = (2 * a * (dist - s));
-                accerlating = -1;
+                accelerating = -1;
             }
             sign = Math.signum(v);
             Log.d(TAG, "V^2: " + v);
 
             v = Math.sqrt(v);
             omega = sign * v * (1 / 560) * 60; //Magic equation
-            pow =  (accerlating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
+            pow =  (accelerating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
 
             s = absoluteDistElapsedInches(inits);
             pow = Math.max(minDistPow, pow);;

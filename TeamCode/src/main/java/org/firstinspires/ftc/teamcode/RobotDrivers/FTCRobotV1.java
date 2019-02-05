@@ -192,6 +192,10 @@ public class FTCRobotV1 {
 
         // lift "jog" functions
         lift.adjustLift(-2*gp2.right_stick_y);
+        // experimental
+        if(gp1.y){
+            lift.home();
+        }
 
         // left/right side toggle
         if (toggleLeftRightButton.isJustOn() && gp2.left_bumper){
@@ -284,7 +288,7 @@ public class FTCRobotV1 {
                    transferTimer = null;
                    lift.goToScorePos();
                } else intake.transferMinerals();
-           } else if (intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp()) {
+           } else if (intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp() && isRetractingArm) {
                intake.transferMinerals();
                transferTimer = new Timer(intake.getTransferTimeSecs());
            }

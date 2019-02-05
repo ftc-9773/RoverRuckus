@@ -1,36 +1,41 @@
-COMMENT: drop;
-wait, 2;
-drive, 12, 0.23;
+COMMENT: drop
+wait 2
+driveMP 3
+wait 0.05
 
-L: turn,45;
-R: turn, -45;
+L:turn 35
+R:turn -35
+
+wait 0.05
+L:driveMP 16
+R:driveMP 16
+C:driveMP 13
+
+comment: liftLow
+
+wait 0.1
+
+L:driveMP -15.5
+R:driveMP -15.5
+C:driveMP -13
 
 
-L: drive, 19.5, 0.23;
-R: drive, 19.5, 0.23;
-C: drive, 16.5, 0.23;
+turn -115
 
 
-liftLow;
+driveMP -34
 
-L: drive, -19.5, 0.3;
-R: drive, -19.5, 0.3;
-C: drive, -16.5, 0.3;
+turn -45
+strafeTime 1 -0.25
 
-turn, -115;
+driveMP -48
 
-drive, -34, 0.5;
+dropMarker
 
-turn, -45;
-strafeTime, 1, -0.5;
+driveMP 15
 
-drive, -48, 0.75;
+extendIntake 50
+wait 3
 
-extendIntake, 50;
-deposit;
-wait, 1;
 
-drive, 13, 0.75;
-wait, 2;
-
-end;
+end

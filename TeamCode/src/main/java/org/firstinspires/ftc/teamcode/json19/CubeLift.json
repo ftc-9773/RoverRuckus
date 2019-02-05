@@ -1,7 +1,7 @@
 {
   "COMMENT: ": "blue is left",
   "leftSorterUpPos": 0.83,
-  "leftSorterDownPos": 0.55,
+  "leftSorterDownPos": 0.48,
 
   "rightSorterUpPos": 0.2,
   "rightSorterDownPos": 0.55,
@@ -13,15 +13,15 @@
   "hookClosedPos": 1.0,
 
 
-  "liftLowPos":20,
+  "liftLowPos":30,
   "liftHookPos":3597,
   "liftScorePos":3742,
-  "minLiftPosition": -20,
+  "minLiftPosition": -15,
   "maxLiftPosition":4200,
   "transferTol": 20,
   "joggingScalar": 40,
 
-  "kp":0.0030,
+  "kp":0.0015,
   "ki": 0.012,
-  "kd": 0.0003
+  "kd": 0.010
 }

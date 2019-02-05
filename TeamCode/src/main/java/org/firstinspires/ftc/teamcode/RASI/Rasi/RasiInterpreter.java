@@ -118,6 +118,7 @@ public class RasiInterpreter {
     public void runRasiActually() {
         command = rasiLexer.getCommand();
         while (!rasiLexer.fileEnded && !linearOpMode.isStopRequested()) {
+            Log.d(LOG_TAG, "Got command " + command);
             if (infoHashmap.get(hashMap.get(command.toLowerCase())) != null) {
                 paramsAreNull = false;
             } else {
@@ -164,6 +165,7 @@ public class RasiInterpreter {
                     method.invoke(rc, finalParameters);
                     Log.d(LOG_TAG, "Invoked command " + method + " with params " + Arrays.toString(finalParameters));
                 } catch (Exception e){
+                    Log.d(LOG_TAG, "Failed on command" + command);
                 }
             } else {
                 try {
@@ -175,6 +177,7 @@ public class RasiInterpreter {
                     method.invoke(rc, finalParameters);
                     Log.d(LOG_TAG, "Invoked command " + method);
                 } catch (Exception e) {
+                    Log.d(LOG_TAG, "Failed on Command " + command);
                 }
             }
             command = rasiLexer.getCommand();

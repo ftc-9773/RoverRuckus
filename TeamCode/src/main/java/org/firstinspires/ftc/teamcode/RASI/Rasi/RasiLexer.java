@@ -101,6 +101,8 @@ public class RasiLexer {
             fileEnded = true;
             return;
         }
+        if (DEBUG)
+        Log.d(TAG, "Read command " + currentCommand);
 
         commandBuilder = new StringBuilder(currentCommand);
         if (currentCommand.split(":").length > 1){
@@ -120,7 +122,7 @@ public class RasiLexer {
             parameters = currentCommand.split(" ");
         }
         if (DEBUG)
-        Log.d("Got command", Arrays.toString(parameters));
+        Log.d(TAG, "Got command " + Arrays.toString(parameters));
 
         shouldExecute = false;
         if ((Arrays.asList(TAGS).contains(Tag) || Tag.length() == 0) && !Arrays.asList(reservedCommands).contains(parameters[0])) {
@@ -219,6 +221,7 @@ public class RasiLexer {
         }
         if (DEBUG){
         Log.d("RasiLexer", "Returned command " + currentCommand + ", tags are " + Arrays.toString(TAGS));
+        if (DEBUG)
         Log.d("RasiLexer", "Parameters are " + Arrays.toString(parameters));}
         if (fileEnded){
             return null;

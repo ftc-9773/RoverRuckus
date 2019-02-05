@@ -43,7 +43,7 @@ public abstract class BasicRasiAuto extends LinearOpMode {
         //sendTelemetry("starting vision...");
         // wait to begin opMode
         RobotV1Commands rc = new RobotV1Commands(this, robot);
-        RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/rasi19/", fileName(), this, rc);
+        RasiInterpreter rasiInterpreter = new RasiInterpreter("/sdcard/FIRST/team9773/MercurialRasi/", fileName(), this, rc);
 
         intake.setBucketServoToStartPos();
 
