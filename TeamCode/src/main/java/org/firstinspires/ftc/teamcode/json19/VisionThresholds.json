@@ -1,15 +1,15 @@
 {
   "minDetectionThreshold" : 0.015,
 
-  "BoxOneTopRightX":     0.009009009009,
-  "BoxOneTopRightY":     0.1809,
-  "BoxOneBottomLeftX":   0.360360,
-  "BoxOneBottomLeftY":   0.45105,
+  "BoxOneTopRightX":     0.14,
+  "BoxOneTopRightY":     0.35,
+  "BoxOneBottomLeftX":   0.44,
+  "BoxOneBottomLeftY":   0.55,
 
-  "BoxTwoTopRightX":     0.5700,
-  "BoxTwoTopRightY":     0.1421,
-  "BoxTwoBottomLeftX":   0.9729,
-  "BoxTwoBottomLeftY":   0.528,
+  "BoxTwoTopRightX":     0.65,
+  "BoxTwoTopRightY":     0.3421,
+  "BoxTwoBottomLeftX":   1.0,
+  "BoxTwoBottomLeftY":   0.55,
   "returnMat":           true
 
 }

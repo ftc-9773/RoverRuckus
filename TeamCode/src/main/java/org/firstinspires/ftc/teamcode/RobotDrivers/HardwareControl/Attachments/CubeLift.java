@@ -42,6 +42,7 @@ public class CubeLift implements Attachment {
     private double leftSorterPos, rightSorterPos;
     // lift stuff
     private int liftLowPos, liftHookPos, liftScorePos, minLiftPosition, maxLiftPosition, liftUpTol;
+    private int minHookOpenPosition;
     private int transferTol;
     private double joggingScalar;
     private double kp, ki,kd;
@@ -50,7 +51,8 @@ public class CubeLift implements Attachment {
     boolean dumpState = false;
     Timer unLatching = null;
     //stuff
-    static final double scaleLiftCoeffs = 0.725;
+
+    boolean openHook = false;
 
     // pls no change
     public boolean homingThing = false;
@@ -107,15 +109,16 @@ public class CubeLift implements Attachment {
         hookClosedPos = json.getDouble("hookClosedPos", 1.0);
 
         // lift
-        liftLowPos = (int)((double)(json.getInt("liftLowPos",20))*scaleLiftCoeffs) ;
-        liftHookPos = (int)((double)(json.getInt ("liftHookPos",3597))*scaleLiftCoeffs);
-        liftScorePos = (int)((double)(json.getInt ("liftScorePos",3742))*scaleLiftCoeffs);
+        liftLowPos = json.getInt("liftLowPos",20);
+        liftHookPos = json.getInt ("liftHookPos",1510);
+        liftScorePos = json.getInt ("liftScorePos",1480);
+        minHookOpenPosition = json.getInt ("minHookOpenPosition",3500);
 
-        liftUpTol = (int)((double)(json.getInt("liftUpPos", 350))*scaleLiftCoeffs);
+        liftUpTol = json.getInt("liftUpPos", 350);
 
-        minLiftPosition = (int)((double)(json.getInt("minLiftPosition", -20)));
-        maxLiftPosition = (int)((double)(json.getInt("maxLiftPosition",4200))*scaleLiftCoeffs);
-        transferTol = (int)((double)(json.getInt("transferTol", 20))*scaleLiftCoeffs);
+        minLiftPosition = json.getInt("minLiftPosition", -20);
+        maxLiftPosition =json.getInt("maxLiftPosition",1530);
+        transferTol = json.getInt("transferTol", 25);
 
         joggingScalar = json.getDouble("joggingScalar", 3);
 
@@ -146,7 +149,7 @@ public class CubeLift implements Attachment {
     public void goToLowPos(){
         Log.v(TAG, "Set target position to Low position");
         liftTargetPosition = liftLowPos;
-        hookServo.setPosition(hookClosedPos);
+        openHook = false;
     }
     /**
      * Void method that tells the lift to go to the scoring position. also opens the hanging hook to avoid accidental catching on the latch
@@ -155,7 +158,7 @@ public class CubeLift implements Attachment {
     public void goToScorePos(){
         Log.v(TAG, "Set target position to scoring position");
         liftTargetPosition = liftScorePos;
-        hookServo.setPosition(hookClosedPos);
+        openHook = false;
     }
 
 
@@ -167,7 +170,7 @@ public class CubeLift implements Attachment {
     public void goToHangPos(){
         Log.v(TAG, "Set target to hang pos");
         liftTargetPosition = liftHookPos;
-        hookServo.setPosition(hookOpenPos);
+        openHook = true;
     }
 
     /**
@@ -242,6 +245,9 @@ public class CubeLift implements Attachment {
     public boolean isInTransferState(){
         return (Math.abs(getLiftPos()) < Math.abs(liftLowPos) + Math.abs(transferTol) );
     }
+    public void stopHoming(){
+        homingThing = false;
+    }
 
     /**
      * The main readSensors method of the class. this executes any actions needed to readSensors the position of the
@@ -260,8 +266,8 @@ public class CubeLift implements Attachment {
         }
         //homing thing;
         if(homingThing){
-            homingThing = false;
-            setLiftPower(-0.5);
+            closeLatch();
+            setLiftPower(-0.25);
             zero();
             return;
         } else {
@@ -286,6 +292,12 @@ public class CubeLift implements Attachment {
             rightSorterServo.setPosition(rightSorterPos);
 
         }
+        if(openHook && getLiftPos() > minHookOpenPosition){
+            openLatch();
+        } else{
+            closeLatch();
+        }
+
         if(getLiftPos() < 0){
             liftZeroPos = -leftLiftMotor.getCurrentPosition();
             Log.i(TAG, "adjusting zero position to " + liftZeroPos);
@@ -331,8 +343,9 @@ public class CubeLift implements Attachment {
 
     public void closeLatch(){
         hookServo.setPosition(hookClosedPos);
+        openHook = false;
     }
-    public void openLatch()  { hookServo.setPosition(hookOpenPos);}
+     void openLatch()  { hookServo.setPosition(hookOpenPos);}
 
     // used internally to bound the function
     private int bound(int min, int max, int input){

@@ -195,6 +195,8 @@ public class FTCRobotV1 {
         // experimental
         if(gp1.y){
             lift.home();
+        } else {
+            lift.stopHoming();
         }
 
         // left/right side toggle
@@ -280,19 +282,6 @@ public class FTCRobotV1 {
     }
     public void update(){
 
-       if (isTeleop) {
-           // transfer and lift co-automation
-           if (transferTimer != null) {
-               if (transferTimer.isDone()) {
-                   isRetractingArm = false;
-                   transferTimer = null;
-                   lift.goToScorePos();
-               } else intake.transferMinerals();
-           } else if (intake.isInTransferState() && lift.isInTransferState() && !lift.isGoingUp() && isRetractingArm) {
-               intake.transferMinerals();
-               transferTimer = new Timer(intake.getTransferTimeSecs());
-           }
-       }
 
         lift.update();
         this.intake.update();

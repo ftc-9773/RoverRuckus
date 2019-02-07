@@ -6,6 +6,8 @@
   "rightSorterUpPos": 0.2,
   "rightSorterDownPos": 0.55,
 
+  "minHookOpenPosition": 1085,
+
   "distributorLeftPos": 0.63,
   "distributorRightPos": 0.43,
 
@@ -13,12 +15,12 @@
   "hookClosedPos": 1.0,
 
 
-  "liftLowPos":30,
-  "liftHookPos":3597,
-  "liftScorePos":3742,
+  "liftLowPos":20,
+  "liftHookPos":1510,
+  "liftScorePos":1480,
   "minLiftPosition": -15,
-  "maxLiftPosition":4200,
-  "transferTol": 20,
+  "maxLiftPosition":1530,
+  "transferTol": 25,
   "joggingScalar": 40,
 
   "kp":0.0015,
