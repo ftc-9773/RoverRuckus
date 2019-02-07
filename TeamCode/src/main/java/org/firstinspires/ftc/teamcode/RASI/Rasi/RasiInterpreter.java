@@ -177,7 +177,7 @@ public class RasiInterpreter {
                     method.invoke(rc, finalParameters);
                     Log.d(LOG_TAG, "Invoked command " + method);
                 } catch (Exception e) {
-                    Log.d(LOG_TAG, "Failed on Command " + command);
+                    //Log.d(LOG_TAG, "Failed on Command " + command);
                 }
             }
             command = rasiLexer.getCommand();

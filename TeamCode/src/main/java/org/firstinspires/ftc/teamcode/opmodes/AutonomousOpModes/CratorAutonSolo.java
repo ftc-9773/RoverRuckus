@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.opmodes.AutonomousOpModes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
-@Autonomous(name = "CratorAuton")
-public class CratorAuton extends BasicRasiAuto {
+@Autonomous(name = "CratorAutonSolo")
+public class CratorAutonSolo extends BasicRasiAuto {
     @Override
     public String fileName() {
-        return "CratorAuton";
+        return "CratorAutonSolo";
     }
 }
 

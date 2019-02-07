@@ -70,7 +70,6 @@ public abstract class BasicRasiAuto extends LinearOpMode {
             Log.d("RasiAuto", "Set tag to " + tags[0]);
         }
         //rasiInterpreter.runRasiActually();
-        telemetry.update();
         sendTelemetry("Waiting for start");
         waitForStart();
         if (doVision()){

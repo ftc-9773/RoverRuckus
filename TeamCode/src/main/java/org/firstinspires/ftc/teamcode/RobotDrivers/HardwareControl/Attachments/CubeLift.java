@@ -372,6 +372,11 @@ public class CubeLift implements Attachment {
         return true;
         else return false;
     }
+    // only for use for auton ONLY ONLY ONLY
+    public void openHookServo(){
+        openHook = true;
+        hookServo.setPosition(hookOpenPos);
+    }
 
 
     @Override

@@ -1,5 +1,4 @@
-turn 90
-
-wait 0.5
-
-turn 75
+drop
+wait 1
+unlatchHook
+wait 1000

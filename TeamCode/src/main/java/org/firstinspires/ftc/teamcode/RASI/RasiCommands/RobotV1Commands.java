@@ -48,6 +48,12 @@ public class RobotV1Commands extends RasiCommands {
         robert.lift.goToHangPos();
     }
 
+    public void unlatchHook(){
+        robert.lift.goToHangPos();
+        robert.lift.update();
+        robert.lift.openHookServo();
+    }
+
     public void liftLow(){
         robert.lift.goToLowPos();
     }
