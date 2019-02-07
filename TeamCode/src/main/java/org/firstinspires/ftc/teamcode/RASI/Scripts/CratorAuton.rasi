@@ -1,36 +1,41 @@
 COMMENT: drop
+wait 2
 driveMP 3
+wait 0.05
 
-L:turn 12
-R:turn -12
-L:wait 1
-R:wait 1
+L:turn 35
+R:turn -35
 
-C: driveMP 16
-L: driveMP 7
-R: driveMP 7
+wait 0.05
+L:driveMP 16
+R:driveMP 16
+C:driveMP 13
+
+comment: liftLow
+
 wait 0.1
-C: driveMP -16
-L: driveMP -7
-R: driveMP -7
+
+L:driveMP -15.5
+R:driveMP -15.5
+C:driveMP -13
 
 
 turn -115
-wait 0.5
 
-wait 2
 
 driveMP -34
 
 turn -45
+strafeTime 1 -0.25
 
-wait 2
-
-driveMP -50
+driveMP -48
 
 dropMarker
-wait 0.2
 
-driveMP 25
-extendIntake 25
-wait 4
+driveMP 15
+
+extendIntake 50
+wait 3
+
+
+end

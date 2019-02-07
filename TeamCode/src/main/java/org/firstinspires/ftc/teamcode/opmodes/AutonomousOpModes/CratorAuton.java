@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class CratorAuton extends BasicRasiAuto {
     @Override
     public String fileName() {
-        return "CratorAutonOld";
+        return "CratorAuton";
     }
 }
 
