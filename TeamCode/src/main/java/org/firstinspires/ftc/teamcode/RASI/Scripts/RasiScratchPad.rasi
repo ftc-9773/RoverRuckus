@@ -1,4 +1,3 @@
-drop
-wait 1
-unlatchHook
-wait 1000
+strafeForever 0.2
+
+wait 10

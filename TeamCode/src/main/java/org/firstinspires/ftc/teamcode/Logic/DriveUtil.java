@@ -58,7 +58,7 @@ public class DriveUtil {
     final static double km = (4.2 / 40) / 8.5; //Proportionality constant (torque)
     final static double ke = 12 / (150 * 40); // Proportionality constant (emf)
     final static double rw = 0.0064; // Wheel radius
-    final static double m  = 16.8; //Robot mass (kg) //Old robot mass was 17.6
+    final static double m  = 17.7; //Robot mass (kg) //Old robot mass was 17.6
     final static double tf = (4.2 / 40) * 0.2 * 4 / 8.5; //Friction torque in motor (stall torque * no load current * num motor / stall current)
     final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
     double omega = 0; // The small omega (motor rotational speed)
@@ -342,7 +342,9 @@ public class DriveUtil {
         drivebase.drive(power, 0, 0, false);
 
         while(!mytimer.isDone() && !opMode.isStopRequested()) {
+            drivebase.drive(power, 0, 0, false);
             robot.update();
+            drivebase.update();
             Log.i("ftc9773_Strafe_Time", "timerTime = " + mytimer.timeElapsedSeconds());
         }
         drivebase.stop();

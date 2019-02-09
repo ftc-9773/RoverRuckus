@@ -1,7 +1,7 @@
-drop
-wait 2
-unlatchHook
-wait 2
+COMMENT: drop
+COMMENT: wait 2
+COMMENT: unlatchHook
+COMMENT: wait 2
 
 driveMP 3
 wait 0.05
@@ -13,7 +13,7 @@ wait 0.1
 
 L:driveMP 16
 R:driveMP 16
-C:driveMP 13
+C:driveMP 13.5
 
 liftLow
 
@@ -21,28 +21,53 @@ wait 0.1
 
 L:driveMP -15
 R:driveMP -15
-C:driveMP -13
+C:driveMP -12
 
 
 turn -115
 wait 0.1
 
-driveMP -32
+driveMP -34
 wait 0.1
+
 
 turn -45
 wait 0.1
 
-L:strafeTime 0.4 -0.25
-C:strafeTime 0.4 -0.25
+L:strafeTime 0.5 -0.35
+C:strafeTime 0.5 -0.35
 
-driveMP -48
+driveMP -43
 wait 0.1
 
-R:strafeTime 0.4 -0.25
+
+R:strafeTime 0.6 -0.25
 
 dropMarker
-wait 0.5
+wait 1
+resetServo
+wait 1
+
+L:driveMP -5
+C:driveMP -5
+
+C:turn -98
+C:wait 0.1
+C:driveMP 14
+C:wait 0.1
+C:driveMP -14
+C:turn -45
+C:wait 0.1
+C:strafeTime 0.3 -0.3
+C:driveMP 5
+
+L:turn -105
+L:wait 0.1
+L:driveMP 11
+L:wait 0.1
+L:driveMP -11
+L:turn -45
+L:driveMP 5
 
 driveMP 35
 
