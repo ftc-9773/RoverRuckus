@@ -92,11 +92,9 @@ public class RobotV1Commands extends RasiCommands {
 
     public void resetServo(){
         robert.lift.stopDump();
+        robert.lift.update();
     }
 
-    public void naiveStrafe(double dist){
-        robert.drivebase.drive(0, dist, 0, false);
-    }
 
     public void dropIntake(){
         robert.intake.setPos(5);
@@ -107,9 +105,6 @@ public class RobotV1Commands extends RasiCommands {
         driver.strafeTime(foo, spam);
     }
 
-    public void strafeForever(double pow){
-        robert.drivebase.drive(pow, 0, 0, false);
-    }
 
     public void stop(){
         robert.stop();

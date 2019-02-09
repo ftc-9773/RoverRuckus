@@ -1,3 +1,5 @@
-strafeForever 0.2
-
+dropMarker
+wait 1
+resetServo
+wait 1
 wait 10

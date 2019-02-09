@@ -26,7 +26,7 @@ C:driveMP -13
 turn 245
 wait 0.1
 
-driveMP -32
+driveMP -31
 wait 0.1
 
 turn 135
@@ -37,8 +37,13 @@ strafeTime 0.4 0.25
 driveMP -33
 wait 0.1
 
+turn 145
+wait 0.5
 
 dropMarker
+wait 0.5
+
+turn 135
 wait 0.5
 
 driveMP 45

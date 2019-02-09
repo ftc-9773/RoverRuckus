@@ -93,16 +93,13 @@ public class CubeLift implements Attachment {
         json = new SafeJsonReader("CubeLift");
 
         //servos
-        leftSorterUpPos = json.getDouble("leftSorterUpPos", 0.82);
+        leftSorterUpPos = json.getDouble("leftSorterUpPos", 0.83);
         leftSorterDownPos = json.getDouble("leftSorterDownPos", 0.55);
         leftSorterFlowPos = json.getDouble("leftSorterFlowPos", 0.73);
 
-
-        rightSorterUpPos = json.getDouble("rightSorterUpPos", 0.5);
+        rightSorterUpPos = json.getDouble("rightSorterUpPos", 0.2);
         rightSorterDownPos = json.getDouble("rightSorterDownPos", 0.8);
         rightSorterFlowPos = json.getDouble("rightSorterFlowPos", 0.30);
-
-
 
         distributorLeftPos = json.getDouble("distributorLeftPos",0.54);
         distributorRightPos = json.getDouble("distributorRightPos", 0.37);
@@ -195,7 +192,6 @@ public class CubeLift implements Attachment {
      */
     public void stopDump(){
         // avoid unnecessary actions
-        if(!dumpState)
         leftSorterPos = leftSorterUpPos;
         rightSorterPos = rightSorterUpPos;
         // readSensors dumpState

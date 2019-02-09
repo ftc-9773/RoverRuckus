@@ -11,17 +11,17 @@ R:turn -35
 
 wait 0.1
 
-L:driveMP 16
-R:driveMP 16
-C:driveMP 13.5
+L:driveMP 15
+R:driveMP 15
+C:driveMP 12.5
 
 liftLow
 
 wait 0.1
 
-L:driveMP -15
-R:driveMP -15
-C:driveMP -12
+L:driveMP -14
+R:driveMP -14
+C:driveMP -11
 
 
 turn -115
@@ -44,9 +44,11 @@ wait 0.1
 R:strafeTime 0.6 -0.25
 
 dropMarker
-wait 1
+wait 0.75
+strafeTime 0.25 .25
 resetServo
 wait 1
+
 
 L:driveMP -5
 C:driveMP -5
@@ -61,13 +63,17 @@ C:wait 0.1
 C:strafeTime 0.3 -0.3
 C:driveMP 5
 
-L:turn -105
+L:driveMP -4
+L:turn -120
 L:wait 0.1
-L:driveMP 11
+L:driveMP 20
 L:wait 0.1
-L:driveMP -11
+L:driveMP -20
 L:turn -45
 L:driveMP 5
+
+L:strafeTime 0.5 -0.35
+C:strafeTime 0.5 -0.35
 
 driveMP 35
 
