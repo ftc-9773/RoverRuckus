@@ -224,8 +224,9 @@ public class FTCRobotV1 {
         if (gp2.dpad_right) intake.carryPos();
         if(gp2.left_trigger > 0.5) intake.intakeOn();
         else if(gp2.right_trigger >0.5) intake.reverseIntake();
-        else
+        else {
             intake.stopIntake();
+        }
         if (gp2.dpad_left) intake.transferMinerals();
 
         if(intake.isInTransferState()&&lift.isInTransferState() && !lift.isGoingUp()) {

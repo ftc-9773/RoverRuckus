@@ -42,6 +42,7 @@ public class CubeLift implements Attachment {
     private double leftSorterPos, rightSorterPos;
     // lift stuff
     private int liftLowPos, liftHookPos, liftScorePos, minLiftPosition, maxLiftPosition, liftUpTol;
+    private int zeroToNegativePos;
     private int minHookOpenPosition;
     private int transferTol;
     private double joggingScalar;
@@ -108,6 +109,8 @@ public class CubeLift implements Attachment {
         hookOpenPos = json.getDouble("hookOpenPos", 0.5);
         hookClosedPos = json.getDouble("hookClosedPos", 1.0);
 
+
+
         // lift
         liftLowPos = json.getInt("liftLowPos",20);
         liftHookPos = json.getInt ("liftHookPos",1510);
@@ -121,6 +124,8 @@ public class CubeLift implements Attachment {
         transferTol = json.getInt("transferTol", 25);
 
         joggingScalar = json.getDouble("joggingScalar", 3);
+
+        zeroToNegativePos = json.getInt("zeroToNegativePos", 20);
 
         // pid
         kp = json.getDouble("kp",0.0025);
@@ -235,7 +240,7 @@ public class CubeLift implements Attachment {
     }
     //todo: code the home() method.
     public void zero(){
-        liftZeroPos = leftLiftMotor.getCurrentPosition();
+        liftZeroPos = leftLiftMotor.getCurrentPosition() + zeroToNegativePos;
     }
 
     /**

@@ -60,7 +60,7 @@ public class IntakeV2 implements Attachment {
 
 
     // liftThing
-    static boolean liftBucketWhenNotIntaking = false;
+    static boolean liftBucketWhenNotIntaking = true;
 
     //double 393 servo vals
     private double stopVal, forwardsVal, backwardsVal;
