@@ -1,26 +1,36 @@
-package org.firstinspires.ftc.teamcode.RASI.RasiB;
+package org.firstinspires.ftc.teamcode.RASI.RasiB.Core;
 
+import org.firstinspires.ftc.teamcode.RASI.RasiB.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class RasiLine{
-    int lineNumber;
     int printLineNumber;
-    boolean is_goto;
-    int target = -1;
     ArrayList<String> tags = new ArrayList<>();
-    String method;
-    ArrayList<String> params = new ArrayList<>();
-
-    private class foo{
+    String method_name; //Name of the method, determined on creation.
+    ArrayList<stringWrapper> params_strings = new ArrayList<>(); //determined on creation
+    Method method = null;
+    Object callableRoot = null;
+    Object[] params = null;
+    /**
+     * Has something to do with parsing strings
+     * */
+    public class stringWrapper {
         public boolean isString;
         public String str;
-        public foo(String str, boolean isString){
+        public stringWrapper(String str, boolean isString){
             this.isString = isString;
             this.str = str;
         }
     }
 
-    public RasiLine(String line){
+    /**
+     * Create and parse a line.
+     * */
+    public RasiLine(String line, int pln){
+        printLineNumber = pln;
         String commandString;
         try { //Extract and parse tags
             String taglistString = line.split(":")[0];
@@ -38,36 +48,35 @@ public class RasiLine{
 
         try {
             String parameters;
-            method = StringUtils.deleteWhitespace(commandString.split(" ", 1)[0]);
+            method_name = StringUtils.deleteWhitespace(commandString.split(" ", 1)[0]);
             parameters = StringUtils.deleteFrontWhitespace(commandString.split(" ", 1)[1]);
             if (containsString){
                 String[] strings = parameters.split("\"");
                 if (strings.length % 2 != 0){throw new ArithmeticException("Your Rasi Strings are wrong in line " + printLineNumber);}
-                foo[] stuffs = new foo[strings.length];
+                stringWrapper[] stuffs = new stringWrapper[strings.length];
                 int magic = parameters.charAt(0) == '"' ? 0 : 1;
                 for (int i = 0; i < strings.length; i++){
-                    if ((i + magic) % 2 == 0){stuffs[i] = new foo(strings[i], true);}
+                    if ((i + magic) % 2 == 0){stuffs[i] = new stringWrapper(strings[i], true);}
                 }
-                for (foo bar : stuffs){
+                for (stringWrapper bar : stuffs){
                     if (bar.isString){
-                        params.add(bar.str);
+                        params_strings.add(bar);
                     } else {
                         String[] moreMagic = StringUtils.deleteFrontWhitespace(bar.str).split(" ");
                         for (String str : moreMagic){
-                            params.add(StringUtils.deleteWhitespace(str));
+                            params_strings.add(new stringWrapper(StringUtils.deleteWhitespace(str), false));
                         }
                     }
                 }
             }
         } catch (IndexOutOfBoundsException e) { // There are no parameters
-            method = StringUtils.deleteWhitespace(commandString);
+            method_name = StringUtils.deleteWhitespace(commandString);
         }
-        if (method == "goto"){
-            is_goto = true;
-            target = Integer.valueOf(params.get(0));
-        }
-
     }
+
+    /**
+     * Whether or not to execute the command.
+     * */
     public boolean doExecute(ArrayList<String> activeTags){
         //Run stuff here
         boolean doRun = false;
@@ -84,5 +93,15 @@ public class RasiLine{
         return true; //Execute
     }
 
+    /**
+     * Add another tag that could be active.
+     * */
     public void addTag(String tag){this.tags.add(tag);}
+
+    /**
+     * Should be called in RasiInterpreter
+     * */
+    public void execute() throws InvocationTargetException, IllegalAccessException {
+        method.invoke(callableRoot, params);
+    }
 }
