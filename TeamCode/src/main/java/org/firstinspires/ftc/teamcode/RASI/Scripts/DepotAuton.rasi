@@ -1,7 +1,7 @@
-COMMENT: drop
-COMMENT: wait 2
-COMMENT: unlatchHook
-COMMENT: wait 1
+drop
+wait 2
+unlatchHook
+wait 1
 driveMP 3
 wait 0.05
 
@@ -12,7 +12,7 @@ wait 0.1
 
 L:driveMP 16
 R:driveMP 16
-C:driveMP 13
+C:driveMP 24
 
 liftLow
 
@@ -20,7 +20,7 @@ wait 0.1
 
 L:driveMP -15
 R:driveMP -15
-C:driveMP -13
+C:driveMP -26
 
 
 turn 245
@@ -48,7 +48,7 @@ wait 0.5
 
 driveMP 45
 
-extendIntake 50
+extendIntake 25
 wait 3
 
 

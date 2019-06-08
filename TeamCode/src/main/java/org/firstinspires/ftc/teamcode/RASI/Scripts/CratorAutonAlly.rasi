@@ -1,7 +1,7 @@
-COMMENT: drop
-COMMENT: wait 2
-COMMENT: unlatchHook
-COMMENT: wait 1
+drop
+wait 1
+unlatchHook
+wait 1
 driveMP 3
 wait 0.05
 
@@ -51,7 +51,7 @@ wait 1
 
 driveMP 35
 
-extendIntake 50
+extendIntake 25
 wait 3
 
 

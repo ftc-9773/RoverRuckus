@@ -16,8 +16,8 @@
 
 
   "liftLowPos":20,
-  "liftHookPos":1520,
-  "liftScorePos":1520,
+  "liftHookPos":1420,
+  "liftScorePos":1420,
   "minLiftPosition": -15,
   "maxLiftPosition":1630,
   "transferTol": 25,
@@ -26,7 +26,7 @@
 
   "zeroToNegativePos": 20,
 
-  "kp":0.0015,
-  "ki": 0.012,
-  "kd": 0.010
+  "kp":0.00055,
+  "ki": 0.001,
+  "kd": 0.00
 }

@@ -1,0 +1,17 @@
+retractIntake
+wait 0.5
+
+turn -45
+
+wait 0.5
+
+driveMP 40
+wait 0.5
+
+turn 0
+wait 0.5
+
+driveMP -5
+wait 0.5
+
+drop

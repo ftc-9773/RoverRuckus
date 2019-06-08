@@ -147,7 +147,7 @@ public class FTCRobotV1 {
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
         isTeleop=true;
         // readSensors button objects
-        toggleLeftRightButton.recordNewValue(gp2.x);
+        toggleLeftRightButton.recordNewValue(gp2.x && gp2.left_bumper);
         // drive functions
         double x = gp1.left_stick_x;
         double y = -gp1.left_stick_y;
@@ -200,7 +200,7 @@ public class FTCRobotV1 {
         }
 
         // left/right side toggle
-        if (toggleLeftRightButton.isJustOn() && gp2.left_bumper){
+        if (toggleLeftRightButton.isJustOn() ){
             leftRightState = !leftRightState;
             if(leftRightState)lift.setLefScoreSide();
             else lift.setRightScoreSide();
@@ -226,6 +226,7 @@ public class FTCRobotV1 {
         else if(gp2.right_trigger >0.5) intake.reverseIntake();
         else {
             intake.stopIntake();
+            intake.carryPos();
         }
         if (gp2.dpad_left) intake.transferMinerals();
 

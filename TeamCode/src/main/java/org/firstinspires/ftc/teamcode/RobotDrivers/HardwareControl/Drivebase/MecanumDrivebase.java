@@ -26,6 +26,10 @@ public class MecanumDrivebase {
     static private final double DRIVE_SCALING = 3; // Must be odd
     static private final double ROTATION_SCALING = 0.8; // 0 is none
 
+    // slowdown mode stuff
+    public double slowdownScaleFactor = 0.5;
+    public boolean slowdownMode = false;
+
     static final double MAX_TRANSLATIONAL_SPEED = 1.0;
     static final double MAX_ROTATIONAL_SPEED = 1.0;
 
@@ -90,7 +94,6 @@ public class MecanumDrivebase {
     // Clean Version
     public void drive(double x, double y, double rotation, boolean scale) {
 
-
         if (scale)  {
             double[] arr = scaleDriving(x, y, rotation);
             x = arr[0];
@@ -127,8 +130,13 @@ public class MecanumDrivebase {
     }
 
 
-    public void update() { for (int i = 0; i<4; i++) { driveMotors[i].setPower(motorPowers[i]);
-        /*Log.d("Drivebase", "Wrote power " + motorPowers[i] + " to motor " + i); */} }
+    public void update() {
+        for (int i = 0; i<4; i++) {
+            if(slowdownMode) driveMotors[i].setPower(motorPowers[i]*slowdownScaleFactor);
+            else driveMotors[i].setPower(motorPowers[i]);
+        /*Log.d("Drivebase", "Wrote power " + motorPowers[i] + " to motor " + i); */
+        }
+    }
 
     public void stop() {
         for (int i=0; i<4; i++) {motorPowers[i] = 0;}
@@ -157,6 +165,10 @@ public class MecanumDrivebase {
         pos[2] = driveMotors[2].getCurrentPosition();
         pos[3] = driveMotors[3].getCurrentPosition();
         return pos;
+    }
+
+    void setSlowdownScaleFactor (double val ){
+        slowdownScaleFactor = val;
     }
 
     public double getMinPower(LinearOpMode o){
@@ -194,7 +206,8 @@ public class MecanumDrivebase {
 
     private void setMotorPowers(double pow){
         for (int i = 0; i < 4; i++){
-            driveMotors[i].setPower(( i % 2 == 0 ? -1:1) * pow);
+            if(slowdownMode) driveMotors[i].setPower(( i % 2 == 0 ? -1:1) * pow * slowdownScaleFactor);
+            else driveMotors[i].setPower(( i % 2 == 0 ? -1:1) * pow);
         }
     }
 

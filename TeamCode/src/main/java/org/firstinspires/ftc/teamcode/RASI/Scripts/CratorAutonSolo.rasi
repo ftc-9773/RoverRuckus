@@ -1,7 +1,7 @@
-COMMENT: drop
-COMMENT: wait 2
-COMMENT: unlatchHook
-COMMENT: wait 2
+drop
+wait 1
+unlatchHook
+wait 1
 
 driveMP 3
 wait 0.05
@@ -72,12 +72,12 @@ L:driveMP -20
 L:turn -45
 L:driveMP 5
 
-L:strafeTime 0.5 -0.35
-C:strafeTime 0.5 -0.35
+L:strafeTime 0.7 -0.35
+C:strafeTime 0.7 -0.35
 
 driveMP 35
 
-extendIntake 50
+extendIntake 25
 wait 3
 
 

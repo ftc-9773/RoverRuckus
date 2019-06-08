@@ -2,14 +2,15 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.CubeLift;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.IntakeV2;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 
-@TeleOp(name="TeleOpOpmode")
-public class TeleOpMain extends LinearOpMode{
+@TeleOp(name="Z_slowedTeleop")
+public class TeleOpSlowed extends LinearOpMode{
 
 
     @Override
@@ -32,6 +33,12 @@ public class TeleOpMain extends LinearOpMode{
 
         sendTelemetry("Waiting for start...");
         robot.drivebase.runWithoutEncoders();
+
+        robot.drivebase.slowdownMode = true;
+
+        boolean lastX, lastB;
+        lastX = lastB = false;
+
         // opmode start
         waitForStart();
         boolean temp = true;
@@ -55,6 +62,20 @@ public class TeleOpMain extends LinearOpMode{
             robot.intake.debugIntakeArmServos(telemetry);
             telemetry.addData ("liftPosition", robot.lift.getLiftPos());
             telemetry.update();
+
+            if( gamepad1.x && !lastX && gamepad1.left_bumper ){
+                robot.drivebase.slowdownScaleFactor-=.1;
+                robot.drivebase.slowdownScaleFactor = Range.clip(robot.drivebase.slowdownScaleFactor,0.1,1.0);
+            }
+            else if( gamepad1.b && !lastB && gamepad1.left_bumper ){
+                robot.drivebase.slowdownScaleFactor+=.1;
+                robot.drivebase.slowdownScaleFactor = Range.clip(robot.drivebase.slowdownScaleFactor,0.1,1.0);
+            }
+
+            lastX = gamepad1.x;
+            lastB = gamepad1.b;
+
+
         }
 
     }
