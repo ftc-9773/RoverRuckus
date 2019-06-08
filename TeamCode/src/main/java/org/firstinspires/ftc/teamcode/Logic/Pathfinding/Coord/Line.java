@@ -115,4 +115,39 @@ public class Line {
         double dy = p.y - p2.y;
         move(dx, dy);
     }
+
+    public void setP1(Point p){
+        this.p1 = p;
+
+        xMin = Math.min(p1.x, p2.x);
+        xMax = Math.max(p1.x, p2.x);
+        yMin = Math.min(p1.y, p2.y);
+        yMax = Math.max(p1.y, p2.y);
+
+        try {
+            m = (p1.y - p2.y) / (p1.x - p2.x);
+            b = p1.y - p1.x * m;
+        } catch (Exception e) {
+            m = Double.POSITIVE_INFINITY;
+            b = 0;
+        }
+    }
+
+    public void setP2(Point p){
+        this.p2 = p;
+
+        xMin = Math.min(p1.x, p2.x);
+        xMax = Math.max(p1.x, p2.x);
+        yMin = Math.min(p1.y, p2.y);
+        yMax = Math.max(p1.y, p2.y);
+
+        try {
+            m = (p1.y - p2.y) / (p1.x - p2.x);
+            b = p1.y - p1.x * m;
+        } catch (Exception e) {
+            m = Double.POSITIVE_INFINITY;
+            b = 0;
+        }
+
+    }
 }

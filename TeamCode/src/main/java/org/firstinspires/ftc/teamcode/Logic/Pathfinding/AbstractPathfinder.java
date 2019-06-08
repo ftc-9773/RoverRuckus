@@ -15,7 +15,7 @@ public abstract class AbstractPathfinder {
      * */
     public boolean isValidPath(Path p){
         for (Line l: p.lines) {
-            for (Polygon poly : env.immutableStuff){
+            for (Polygon poly : env.stuff){
                 for (Point pp: env.me.vertices){
                     Line newline = l;
                     newline.moveTo(pp);

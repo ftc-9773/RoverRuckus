@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.Logic.Pathfinding;
 import org.firstinspires.ftc.teamcode.Logic.Pathfinding.Coord.Line;
 import org.firstinspires.ftc.teamcode.Logic.Pathfinding.Coord.Point;
 import org.firstinspires.ftc.teamcode.Logic.Pathfinding.Coord.Polygon;
+import org.firstinspires.ftc.teamcode.Logic.Pathfinding.Coord.Rect;
 
 import java.util.ArrayList;
 
 public class Field {
-    ArrayList<Polygon> immutableStuff;
+    ArrayList<Polygon> stuff;
     ArrayList<Polygon> robots;
-    ArrayList<Polygon> otherStuff;
     ArrayList<Line> walls;
 
-    Polygon me;
+    Rect me;
 
     /**
      * Create an empty field
