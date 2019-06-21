@@ -1,0 +1,115 @@
+COMMENT:: Drop.
+drop
+wait 1
+unlatchHook
+wait 1
+
+COMMENT:: Drive away from lander so can safely turn. Turn to face the cube.
+driveMP 3.5
+wait 0.05
+liftLow
+L:turn 35
+R:turn -35
+wait 0.1
+
+COMMENT: Collect Cube, and return to original position. Drops the intake.
+COMMENT:: THE INTAKE EXTENDS 14.5 INCHES MAX, 10 INCHES MIN
+
+L:extendIntake 8
+L:wait 0.2
+L:intakeOn
+L:wait 0.8
+L:intakeOff
+L:wait 0.05
+L:extendIntake -8
+L:turn 0
+
+R:extendIntake 8
+R:wait 0.25
+R:intakeOn
+R:wait 0.8
+R:intakeOff
+R:wait 0.05
+R:extendIntake -8
+R:turn 0
+
+C:extendIntake 2
+C:wait 0.2
+C:intakeOn
+C:wait 0.8
+C:intakeOff
+C:wait 0.05
+C:extendIntake -2
+
+COMMENT:: MOVE TO THE SIDE OF THE ARENA, WITH THE BACK END OF THE ROBOT FACING THE DROPPING AREA
+
+strafeMP -2
+wait 0.2
+turn -115
+wait 0.1
+
+driveMP -30
+strafeMP 1
+wait 0.1
+
+
+turn -45
+wait 1
+strafeMP -5.5
+driveMP -48
+wait 0.1
+
+COMMENT:: COLLECT ALLIANCE MEMBERS CUBE
+
+comment: the second command aligns robot with alliance members cube.
+C:strafeTime 0.3 0.3
+C:turn -85
+C:wait 0.1
+C:intakeOn
+C:extendIntake 20
+C:wait 0.4
+C:intakeOff
+C:extendIntake -20
+C:turn -45
+C:wait 0.1
+C:strafeMP 3
+C:driveMP 5
+
+L:strafeMP 1.5
+L:turn -135
+L:wait 0.1
+L:intakeOn
+L:extendIntake 20
+L:wait 0.4
+L:intakeOff
+L:extendIntake -20
+L:turn -45
+L:strafeMP 3
+L:driveMP 5
+
+R:strafeMP 1.5
+R:turn -67.5
+R:wait 0.1
+R:intakeOn
+R:extendIntake 20
+R:wait 0.4
+R:intakeOff
+R:extendIntake -20
+R:turn -45
+R:strafeMP 3
+R:driveMP 5
+
+COMMENT:: DEPOSIT MARKER AND SCORE MINERALS IN DEPOT
+dropMarker
+wait 0.75
+strafeMP -3
+resetServo
+wait 1
+
+driveMP 35
+
+extendIntake 25
+wait 3
+
+
+end

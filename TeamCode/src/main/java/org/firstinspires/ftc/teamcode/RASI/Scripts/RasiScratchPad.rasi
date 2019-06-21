@@ -1,5 +1,4 @@
-dropMarker
+strafeMP 20
 wait 1
-resetServo
+strafeMP -20
 wait 1
-wait 10

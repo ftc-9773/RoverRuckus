@@ -58,7 +58,7 @@ public class DriveUtil {
     final static double km = (4.2 / 40) / 8.5; //Proportionality constant (torque)
     final static double ke = 12 / (150 * 40); // Proportionality constant (emf)
     final static double rw = 0.0064; // Wheel radius
-    final static double m  = 17.7; //Robot mass (kg) //Old robot mass was 17.6
+    final static double m  = 18.688; //Robot mass (kg)
     final static double tf = (4.2 / 40) * 0.2 * 4 / 8.5; //Friction torque in motor (stall torque * no load current * num motor / stall current)
     final static double OMEGA = 0.1; //The big omega (motor resistance + battery resistance)
     double omega = 0; // The small omega (motor rotational speed)
@@ -145,7 +145,7 @@ public class DriveUtil {
             v = Math.sqrt(v);
             omega = sign * v * (1 / 560) * 60; //Magic equation
             pow =  (accelerating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
-            s = Math.abs(avgDistElapsedInches(inits));
+            s = Math.abs(avgDistElapsedInchesForward(inits));
             pow = Math.max(minDistPow, pow);;
             if (sign == 1){
                 pow = distSign * Math.min(1, pow);
@@ -162,31 +162,27 @@ public class DriveUtil {
 
     // Strafe Motion Profiling
     public void strafeStraight(double dist){
-        Log.d(TAG, "Driving with MP " + dist);
-
-        //Deal with negative distances
+        double direction = -90; //Whether to go left or right
+        Log.d(TAG, "Strafing with MP " + dist);
         double distSign = Math.signum(dist);
+        //direction *= distSign;
         dist = dist * distSign;
-
         drivebase.stop();
         drivebase.update();
-
         s = 0;
         double pow;
         double sign;
         double accelerating = 1;
-        v = minDistPow;
+        v = minDistPow  * distSign;
         long[] inits = drivebase.getMotorPositions();
-
+        inits[1] *= -1;
+        inits[2] *= -1;
         Log.d(TAG, "Got inits " + inits);
-
-        driveHoldHeading(v, 0, gyro.getHeading());
-
+        driveHoldHeading(v, direction, gyro.getHeading());
+        drivebase.update();
         while((dist - s) > distTol &&  !opMode.isStopRequested()){
-
             Log.d(TAG, "dsError:" + (dist - s));
             Log.d(TAG, "Velocity: " + v);
-
             if (dist - s > dist / 2){
                 v = (2 * a * s);
                 accelerating = 1;
@@ -196,24 +192,20 @@ public class DriveUtil {
             }
             sign = Math.signum(v);
             Log.d(TAG, "V^2: " + v);
-
             v = Math.sqrt(v);
             omega = sign * v * (1 / 560) * 60; //Magic equation
             pow =  (accelerating * a * m * rw * OMEGA / km + OMEGA * ke + tf * omega / km) / 12.7; // More magical equations
-
-            s = absoluteDistElapsedInches(inits);
-            pow = Math.max(minDistPow, pow);;
-
+            s = Math.abs(avgDistElapsedInchesStrafe(inits));
+            pow = Math.max(minDistPow, pow);
             if (sign == 1){
                 pow = distSign * Math.min(1, pow);
             } else {
                 pow = distSign * Math.max(-1, pow);
             }
-
-            drivebase.drive(0, pow, 0, false);
+            driveHoldHeading(pow, direction, gyro.getHeading());
             Log.d(TAG, "Wrote power " + pow);
         }
-
+        driveHoldHeading(0, direction, gyro.getHeading());
         drivebase.stop();
         drivebase.update();
     }
@@ -232,7 +224,7 @@ public class DriveUtil {
         drivebase.runWithEncoders();
 
         while (!opMode.isStopRequested()) {
-            double error = dist - avgDistElapsedInches(initialEncoderDists);
+            double error = dist - avgDistElapsedInchesForward(initialEncoderDists);
             Log.d("encoder", "" + initialEncoderDists[0]);
             double correction = distPid.getPIDCorrection(error);
             Log.d(TAG,"error:" + error);
@@ -257,14 +249,14 @@ public class DriveUtil {
 
 
             driveHoldHeading(correction, 0, initialHeading);
-            double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
+            double distTraveled = Math.abs(avgDistElapsedInchesForward(initialEncoderDists));
             Log.d(TAG, "at position: " + distTraveled);
 
             if( Math.signum(dist) * (distTraveled - dist) > distTol)
                 break;
 
             if (System.currentTimeMillis() - lastCheckTime > 300) {
-                double currentDist = avgDistElapsedInches(initialEncoderDists);
+                double currentDist = avgDistElapsedInchesForward(initialEncoderDists);
                 if (Math.abs(lastDist - currentDist) < minExitDist)
                     break;
 
@@ -290,7 +282,7 @@ public class DriveUtil {
          drivebase.runWithEncoders();
 
          while (!opMode.isStopRequested()) {
-             double error = dist - avgDistElapsedInches(initialEncoderDists);
+             double error = dist - avgDistElapsedInchesForward(initialEncoderDists);
              Log.d("encoder", "" + initialEncoderDists[0]);
              double correction;
              correction = distPid.getPIDCorrection(error);
@@ -316,14 +308,14 @@ public class DriveUtil {
 //
 
              driveHoldHeading(correction, 0, initialHeading);
-             double distTraveled = Math.abs(avgDistElapsedInches(initialEncoderDists));
+             double distTraveled = Math.abs(avgDistElapsedInchesForward(initialEncoderDists));
              Log.d(TAG, "at position: " + distTraveled);
 
              if( Math.abs(distTraveled - dist) < distTol)
                  break;
 
              if (System.currentTimeMillis() - lastCheckTime > 300) {
-                 double currentDist = avgDistElapsedInches(initialEncoderDists);
+                 double currentDist = avgDistElapsedInchesForward(initialEncoderDists);
                  if (Math.abs(lastDist - currentDist) < minExitDist)
                      break;
 
@@ -350,7 +342,7 @@ public class DriveUtil {
         drivebase.stop();
     }
 
-    public double avgDistElapsedInches(long[] initpositions){
+    public double avgDistElapsedInchesForward(long[] initpositions){
          long[] positions = drivebase.getMotorPositions();
          double sum=0;
          for(int i = 0; i<4; i++){
@@ -362,6 +354,23 @@ public class DriveUtil {
           sum /=4;
         sum /= drivebase.COUNTS_PER_INCH;;
         Log.d(TAG, "INCHES " + sum);
+        return sum ;
+    }
+
+    public double avgDistElapsedInchesStrafe(long[] initpositions){
+        long[] positions = drivebase.getMotorPositions();
+        positions[1] *= -1;
+        positions[2] *= -1;
+        double sum=0;
+        for(int i = 0; i<4; i++){
+            double diff = (double) positions[i] - initpositions[i];
+            //Log.d(TAG, "adding motor position: " +i+" ticks: " + positions[i]  + " diff:" + diff);
+            if(i==0 ||i==2) diff *=-1;
+            sum +=diff;
+        }
+        sum /=4;
+        sum /= drivebase.COUNTS_PER_INCH;;
+        Log.d(TAG, "STRAFE INCHES " + sum);
         return sum ;
     }
 
@@ -420,7 +429,7 @@ public class DriveUtil {
          Log.d(TAG, "Error: " + error);
          double correction = headingPid.getPIDCorrection(error);
 
-         angle = Math.toRadians(angle +90);
+         angle = Math.toRadians(angle + 90);
          //angle = currHeading - angle;
 
          double x = Math.cos(angle)*magnitude;

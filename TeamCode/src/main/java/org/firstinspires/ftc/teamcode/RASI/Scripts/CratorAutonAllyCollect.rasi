@@ -1,0 +1,58 @@
+drop
+wait 1
+unlatchHook
+wait 1
+driveMP 3
+wait 0.05
+
+L:turn 35
+R:turn -35
+
+wait 0.1
+
+L:driveMP 16
+R:driveMP 16
+C:driveMP 13.5
+
+liftLow
+
+wait 0.1
+
+L:driveMP -15
+R:driveMP -15
+C:driveMP -12
+
+
+turn -115
+wait 0.1
+
+driveMP -33
+wait 0.1
+
+turn -45
+wait 0.1
+
+driveMP -3
+wait 0.1
+
+strafeTime 0.5 -0.35
+wait 1
+
+
+driveMP -40
+wait 0.1
+
+
+dropMarker
+wait 1
+resetServo
+wait 1
+
+
+driveMP 35
+
+extendIntake 25
+wait 3
+
+
+end

@@ -54,6 +54,10 @@ public class RobotV1Commands extends RasiCommands {
         robert.lift.openHookServo();
     }
 
+    public void openHook(){
+        robert.lift.openHookServo();
+    }
+
     public void liftLow(){
         robert.lift.goToLowPos();
     }
@@ -101,8 +105,8 @@ public class RobotV1Commands extends RasiCommands {
         Wait(1);
     }
 
-    public void strafeTime(double foo, double spam){
-        driver.strafeTime(foo, spam);
+    public void strafeTime(double time, double power){
+        driver.strafeTime(time, power);
     }
 
 
@@ -124,6 +128,11 @@ public class RobotV1Commands extends RasiCommands {
             robert.update();
         }
     }
+
+    public void strafeMP(double dist){
+        driver.strafeStraight(dist);
+    }
+
     public void killOpmode(){
         this.opMode.requestOpModeStop();
     }
