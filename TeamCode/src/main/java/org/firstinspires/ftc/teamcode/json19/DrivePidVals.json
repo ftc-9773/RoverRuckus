@@ -9,7 +9,7 @@
 
   "rotKp": 0.25,
   "rotKi": 0.0,
-  "rotKd": 0.35,
+  "rotKd": 0.4,
   "rotTol": 0.025,
   "Comment" : "rotTol used to be 0.074533",
   "rotExitSpeed": 0.01,

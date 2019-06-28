@@ -49,9 +49,9 @@ resetServo
 wait 1
 
 
-driveMP 35
+driveMP 40
 
-extendIntake 25
+extendIntake 35
 wait 3
 
 

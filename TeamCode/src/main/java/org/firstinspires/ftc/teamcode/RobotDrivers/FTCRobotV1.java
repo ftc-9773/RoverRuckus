@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Attachments.I
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.OdometryController;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.VoltSensor;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Point;
 import org.firstinspires.ftc.teamcode.Utilities.Geometry.Vector;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
@@ -29,6 +30,7 @@ public class FTCRobotV1 {
     public IntakeV2 intake;
     public OdometryController odometry;
     public CubeLift lift;
+    public VoltSensor voltageSensor;
 
     boolean automateLiftingSequence = false;
     boolean isTeleop = false;
@@ -147,7 +149,7 @@ public class FTCRobotV1 {
     public void runGamepadCommands(Gamepad gp1, Gamepad gp2){
         isTeleop=true;
         // readSensors button objects
-        toggleLeftRightButton.recordNewValue(gp2.x && gp2.left_bumper);
+        toggleLeftRightButton.recordNewValue(gp2.x);
         // drive functions
         double x = gp1.left_stick_x;
         double y = -gp1.left_stick_y;

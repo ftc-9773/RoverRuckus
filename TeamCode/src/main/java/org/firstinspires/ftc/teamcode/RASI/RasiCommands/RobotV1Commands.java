@@ -99,10 +99,19 @@ public class RobotV1Commands extends RasiCommands {
         robert.lift.update();
     }
 
+    public void transfer(){
+        robert.lift.goToLowPos();
+        robert.intake.goToTransfer();
+        robert.intake.transferMinerals();
+    }
 
     public void dropIntake(){
         robert.intake.setPos(5);
         Wait(1);
+    }
+
+    public void setIntakeBucketToIntake(){
+        robert.intake.setBucketIntakePos();
     }
 
     public void strafeTime(double time, double power){

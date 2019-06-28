@@ -7,10 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.RobotDrivers.FTCRobotV1;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Drivebase.MecanumDrivebase;
 import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.Gyro;
+import org.firstinspires.ftc.teamcode.RobotDrivers.HardwareControl.Sensors.VoltSensor;
 import org.firstinspires.ftc.teamcode.Utilities.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Utilities.json.SafeJsonReader;
 import org.firstinspires.ftc.teamcode.Utilities.misc.Timer;
 
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Arrays;
@@ -35,6 +37,7 @@ public class DriveUtil {
     LinearOpMode opMode;
     MecanumDrivebase drivebase;
     Gyro gyro;
+    VoltSensor voltageSensor;
 
     // information
     double ticksPerInch;
@@ -77,6 +80,7 @@ public class DriveUtil {
     public DriveUtil(FTCRobotV1 robot, LinearOpMode opMode){
         this.robot = robot;
         this.opMode = opMode;
+        this.voltageSensor = new VoltSensor(opMode.hardwareMap);
         drivebase = robot.drivebase;
         drivebase.runWithEncoders();
         gyro = robot.gyro;

@@ -1,4 +1,3 @@
-strafeMP 20
-wait 1
-strafeMP -20
+turn 90
+
 wait 1

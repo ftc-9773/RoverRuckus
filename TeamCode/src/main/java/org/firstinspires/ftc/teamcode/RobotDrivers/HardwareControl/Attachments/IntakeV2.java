@@ -196,6 +196,11 @@ public class IntakeV2 implements Attachment {
         //if(!pidEnabled)
         intakeBucketServoPosition = bucketServoIntakePosition;
     }
+
+    public void setBucketIntakePos(){
+        intakeBucketServoPosition = bucketServoIntakePosition;
+    }
+
     public void intakeOff(){
         intakeMotorPower = 0;
     }
