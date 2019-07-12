@@ -27,13 +27,13 @@ public class MyGoldDetector extends OpenCVPipeline {
     // actual box bounds:
     int[] boxOneBounds, boxTwoBounds;
 
-    double minDetectionThreshold = 0.2 ;// definitely tunable
-    double onVal = 120.0; // shouldnt need to be tuned, but I'll do this anyway
+    double minDetectionThreshold;
+    double onVal = 120.0;
     double leftCorrectPercent, rightCorrectPercent;
     final static Scalar blue = new Scalar(0,0,255);
     final static Scalar red = new Scalar(255, 0,0);
 
-    boolean returnMat = false;
+    boolean returnMat;
 
 
 
@@ -59,7 +59,7 @@ public class MyGoldDetector extends OpenCVPipeline {
 
      }
 
-
+    
     @Override
     public Mat processFrame(Mat rgba, Mat gray) {
         // clear mats from past runs
@@ -84,7 +84,7 @@ public class MyGoldDetector extends OpenCVPipeline {
         else return null;
     }
 
-    // looks at processed frame, to get
+    // looks at processed frame, to get location of gold
     public void findGold(Mat input){
         totalWidth = input.width();
         totalHeight = input.height();
@@ -92,7 +92,7 @@ public class MyGoldDetector extends OpenCVPipeline {
         boxOneBounds = scaleArray(relBoxOne, totalWidth,totalHeight);
         boxTwoBounds = scaleArray(relBoxTwo, totalWidth, totalHeight);
         // first look in box 1.
-        // iterate thruought the box
+        // iterate throughout the box
         int correctCounter =0; int counter =0;
         for (int x = boxOneBounds[0];x < boxOneBounds[2]; x++){
             for (int y = boxOneBounds[1]; y < boxOneBounds[3];y++ ){
@@ -137,7 +137,6 @@ public class MyGoldDetector extends OpenCVPipeline {
         else if (leftIsGold) position = Positions.center;
         else if (rightIsGold) position = Positions.right;
         else position = Positions.left;
-
     }
 
     private int[]scaleArray(double[] input, int scalarX, int scalarY){

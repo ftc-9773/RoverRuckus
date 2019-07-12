@@ -1,0 +1,49 @@
+COMMENT:: Drop.
+drop
+wait 0.85
+unlatchHook
+wait 1
+driveMP 3
+wait 0.1
+liftLow
+wait 0.1
+
+C:driveMP 30
+C:wait 0.1
+C:turn -180
+C:wait 0.2
+C:dropMarker
+
+
+C:wait 1.2
+C:turn -45
+C:driveMP 40
+C:extendIntake 20
+C:wait 0.5
+C:intakeOn
+C:wait 1.2
+C:intakeOff
+C:wait 0.2
+C:transfer
+C:driveMP -8
+C:wait 0.1
+C:turn -135
+
+C:wait 0.5
+C:driveMP 15
+C:wait 0.5
+C:turn 90
+C:wait 0.5
+C:liftHigh
+C:wait 1.5
+C:driveMP 2
+
+C:dropMarker
+C:wait 0.5
+C:liftLow
+C:wait 1
+C:driveMP -5
+
+
+
+

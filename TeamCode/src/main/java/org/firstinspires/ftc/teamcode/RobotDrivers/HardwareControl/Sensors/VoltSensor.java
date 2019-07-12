@@ -7,10 +7,10 @@ public class VoltSensor extends SensorInterface {
     public VoltageSensor vs;
 
     public VoltSensor(HardwareMap hwmap){
-        vs = hwmap.get(vs.getClass(), "voltageSensor");
+        //vs = hwmap.get(vs.getClass(), "voltageSensor");
     }
 
     public double getVoltage(){
-        return vs.getVoltage();
+        return 0.0;
     }
 }

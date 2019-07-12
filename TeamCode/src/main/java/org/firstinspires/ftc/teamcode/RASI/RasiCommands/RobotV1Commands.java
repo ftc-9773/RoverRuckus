@@ -13,6 +13,7 @@ public class RobotV1Commands extends RasiCommands {
     LinearOpMode opMode;
     Telemetry telemetry;
     DriveUtil driver;
+    boolean isRightSide = true;
 
     public RobotV1Commands(LinearOpMode o, FTCRobotV1 r) {
         super(o);
@@ -62,6 +63,8 @@ public class RobotV1Commands extends RasiCommands {
         robert.lift.goToLowPos();
     }
 
+    public void liftHigh() {robert.lift.goToScorePos();}
+
     public void extendIntake(double dist){
         robert.intake.transferMinerals();
         robert.intake.setPos(dist);
@@ -92,6 +95,25 @@ public class RobotV1Commands extends RasiCommands {
     public void dropMarker(){
         robert.lift.setLefScoreSide();
         robert.lift.dump();
+    }
+
+    public void toggleScorer(){
+        if (isRightSide){
+            robert.lift.setLefScoreSide();
+        } else {
+            robert.lift.setRightScoreSide();
+        }
+    }
+
+    public void fixMarkerDump(){
+        robert.lift.setRightServoPos(0.01);
+        try{wait(10);}catch(Exception e){}
+        robert.lift.setDumperPos();
+
+    }
+
+    public void bucketIntakePos(){
+        robert.intake.dropBucket();
     }
 
     public void resetServo(){

@@ -187,6 +187,17 @@ public class CubeLift implements Attachment {
         dumpState = true;
         Log.v(TAG, "Set dump state");
     }
+
+    public void setRightServoPos(double offset){
+        leftSorterPos = leftSorterUpPos + offset;
+        rightSorterUpPos = rightSorterUpPos + offset;
+    }
+
+    public void setDumperPos(){
+        leftSorterPos = leftSorterUpPos;
+        rightSorterPos = rightSorterUpPos;
+    }
+
     /**
      * Void method that moves servos to the default, non-dumping position
      */

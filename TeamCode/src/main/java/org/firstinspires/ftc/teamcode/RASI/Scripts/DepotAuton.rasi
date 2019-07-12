@@ -32,7 +32,7 @@ wait 0.1
 turn 135
 wait 0.1
 
-strafeTime 0.4 0.25
+strafeMP 3
 
 driveMP -33
 wait 0.1
@@ -42,13 +42,12 @@ wait 0.5
 
 dropMarker
 wait 0.5
-
-turn 135
+strafeMP 3
 wait 0.5
 
 driveMP 45
 
-extendIntake 25
+extendIntake 20
 wait 3
 
 

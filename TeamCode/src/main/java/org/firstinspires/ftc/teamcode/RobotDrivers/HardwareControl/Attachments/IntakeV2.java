@@ -237,6 +237,10 @@ public class IntakeV2 implements Attachment {
         intakeBucketServoPosition = bucketServoTransferPosition   ;
     }
 
+    public void dropBucket(){
+        intakeBucketServoPosition = bucketServoIntakePosition;
+    }
+
     /**
      * Switcehs into automatic control to return the intake lift to the transfer position.
      * Also lifts the bucket to the storage position, untill the lift is back in.

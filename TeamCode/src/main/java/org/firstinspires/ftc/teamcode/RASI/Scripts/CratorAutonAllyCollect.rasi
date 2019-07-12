@@ -1,58 +1,106 @@
+COMMENT:: Drop.
+toggleScorer
+wait 0.1
+fixDumperPos
+wait 0.2
 drop
-wait 1
+wait 0.8
 unlatchHook
+fixDumperPos
 wait 1
-driveMP 3
+
+COMMENT:: Drive away from lander so can safely turn. Turn to face the cube.
+driveMP 3.5
 wait 0.05
-
-L:turn 35
-R:turn -35
-
-wait 0.1
-
-L:driveMP 16
-R:driveMP 16
-C:driveMP 13.5
-
 liftLow
-
+wait 0.1
+toggleScorer
+wait 0.1
+L:turn 33
+R:turn -33
 wait 0.1
 
-L:driveMP -15
-R:driveMP -15
-C:driveMP -12
+COMMENT: Collect Cube, and return to original position. Drops the intake.
+COMMENT:: THE INTAKE EXTENDS 14.5 INCHES MAX, 10 INCHES MIN
 
+L:extendIntake 2
+L:wait 0.1
+L:extendIntake 6
+L:dropBucket
+L:wait 0.3
+L:intakeOn
+L:wait 1.5
+L:intakeOff
+L:wait 0.1
+L:transfer
+L:turn 0
 
+R:extendIntake 2
+R:wait 0.1
+R:extendIntake 6
+R:dropBucket
+R:wait 0.3
+R:intakeOn
+R:wait 1
+R:intakeOff
+R:wait 0.05
+R:transfer
+R:turn 0
+
+C:extendIntake 2
+C:dropBucket
+C:wait 0.3
+C:driveMP -1
+C:wait 0.1
+C:driveMP 1
+C:wait 0.1
+C:intakeOn
+C:wait 1
+C:intakeOff
+C:wait 0.05
+C:transfer
+
+COMMENT:: MOVE TO THE SIDE OF THE ARENA, WITH THE BACK END OF THE ROBOT FACING THE DROPPING AREA
+
+strafeMP -2
+wait 0.2
 turn -115
 wait 0.1
 
-driveMP -33
+driveMP -32
+strafeTime 0.5 0.5
 wait 0.1
+
 
 turn -45
-wait 0.1
-
-driveMP -3
-wait 0.1
-
-strafeTime 0.5 -0.35
 wait 1
-
-
-driveMP -40
+strafeTime 0.25 -0.25
+driveMP -44
 wait 0.1
 
 
+COMMENT:: DEPOSIT MARKER AND SCORE MINERALS IN DEPOT
+strafeMP -4
+driveMP 4
 dropMarker
-wait 1
+wait 0.4
 resetServo
+wait 0.5
+
+driveMP 41
+
+L:strafeMP 10
+L:wait 0.5
+L:driveMP 5
+L:wait 0.5
+L:strafeMP 5
+L:wait 0.5
+L:turn 0
+L:wait 0.5
+
+extendIntake 20
+
+
 wait 1
-
-
-driveMP 35
-
-extendIntake 25
-wait 3
-
 
 end

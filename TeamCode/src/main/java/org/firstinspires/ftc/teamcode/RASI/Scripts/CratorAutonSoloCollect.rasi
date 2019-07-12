@@ -17,7 +17,7 @@ COMMENT: Collect Cube, and return to original position. Drops the intake.
 COMMENT:: THE INTAKE EXTENDS 14.5 INCHES MAX, 10 INCHES MIN
 
 L:extendIntake 8
-L:wait 0.3
+L:wait 0.5
 L:intakeOn
 L:wait 1
 L:intakeOff
@@ -26,7 +26,7 @@ L:transfer
 L:turn 0
 
 R:extendIntake 8
-R:wait 0.3
+R:wait 0.5
 R:intakeOn
 R:wait 1
 R:intakeOff
@@ -35,7 +35,7 @@ R:transfer
 R:turn 0
 
 C:extendIntake 2
-C:wait 0.3
+C:wait 0.5
 C:intakeOn
 C:wait 1
 C:intakeOff
@@ -109,10 +109,21 @@ strafeMP -6
 resetServo
 wait 0.5
 
-driveMP 35
+driveMP 44
+wait 1
+strafeMP 8
+wait 0.3
+driveMP 4
+wait 0.5
+strafeMP 4
+wait 0.5
+turn 0
+wait 0.5
 
-extendIntake 25
-wait 3
-
-
+extendIntake 10
+wait 1
+intakeOn
+wait 0.5
+intakeOff
+wait 0.5
 end

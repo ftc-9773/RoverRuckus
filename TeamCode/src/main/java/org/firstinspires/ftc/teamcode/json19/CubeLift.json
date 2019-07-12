@@ -2,9 +2,11 @@
   "COMMENT: ": "blue is left",
   "leftSorterUpPos": 0.9,
   "leftSorterDownPos": 0.48,
+  "leftSorterFlowPos" : 0.9,
 
-  "rightSorterUpPos": 0.2,
+  "rightSorterUpPos": 0.15,
   "rightSorterDownPos": 0.55,
+  "rightSorterFlowPos" : 0.15,
 
   "minHookOpenPosition": 1085,
 
